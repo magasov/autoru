@@ -49,251 +49,223 @@
       </div>
 
       <div class="selectedBrand__right">
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-          <h2 (click)="clearSelection()" class="selected-brand__name" style="cursor: pointer;">
-            {{ selectedBrand }}
-          </h2>
-          <img
-            [src]="getSelectedBrandLogo()"
-            [alt]="selectedBrand + ' logo'"
-            class="selected-brand-logo"
-            (error)="handleImageError($event)"
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 1">
+          <div class="selectedBrand__right_one-head">
+            <h2 (click)="clearSelection()" class="selected-brand__name" style="cursor: pointer;">
+              {{ selectedBrand }}
+            </h2>
+            <img
+              [src]="getSelectedBrandLogo()"
+              [alt]="selectedBrand + ' logo'"
+              class="selected-brand-logo"
+              (error)="handleImageError($event)"
+            />
+          </div>
+          <input
+            type="text"
+            [value]="selectedBrand"
+            placeholder="Марка"
+            readonly
+          />
+          <input
+            type="text"
+            placeholder="Модель"
+            [(ngModel)]="modelSearchTerm"
+            (ngModelChange)="filterModels()"
+          />
+          <ul class="brands" *ngIf="!selectedModel">
+            <li *ngFor="let model of filteredModels" (click)="selectModel(model)">
+              <p>{{ model }}</p>
+            </li>
+            <li class="allbrands" *ngIf="!modelSearchTerm && !selectedModel">
+              <p>Все модели</p>
+            </li>
+          </ul>
+          <div class="step3" *ngIf="selectedModel">
+            <h2>Характеристики</h2>
+            <hr>
+            <p *ngIf="!selectedYear">Год выпуска</p>
+            <div *ngIf="selectedYear" class="step3-option" (click)="selectedYear = null">
+              <p>Год выпуска</p>
+              <span>{{ selectedYear }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="yearcars" *ngIf="!selectedYear">
+              <li *ngFor="let year of years" (click)="selectYear(year)">
+                {{ year }}
+              </li>
+            </ul>
+            <p *ngIf="selectedYear && !selectedBodyType">Кузов</p>
+            <div *ngIf="selectedBodyType" class="step3-option" (click)="selectedBodyType = null">
+              <p>Кузов</p>
+              <span>{{ selectedBodyType }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedYear && !selectedBodyType">
+              <li *ngFor="let bodyType of bodyTypes" (click)="selectBodyType(bodyType)">
+                {{ bodyType }}
+              </li>
+            </ul>
+            <p *ngIf="selectedBodyType && !selectedGeneration">Поколение</p>
+            <div *ngIf="selectedGeneration" class="step3-option" (click)="selectedGeneration = null">
+              <p>Поколение</p>
+              <span>{{ selectedGeneration }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedBodyType && !selectedGeneration">
+              <li *ngFor="let generation of generations" (click)="selectGeneration(generation)">
+                {{ generation }}
+              </li>
+            </ul>
+            <p *ngIf="selectedGeneration && !selectedEngine">Двигатель</p>
+            <div *ngIf="selectedEngine" class="step3-option" (click)="selectedEngine = null">
+              <p>Двигатель</p>
+              <span>{{ selectedEngine }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedGeneration && !selectedEngine">
+              <li *ngFor="let engine of engines" (click)="selectEngine(engine)">
+                {{ engine }}
+              </li>
+            </ul>
+            <p *ngIf="selectedEngine && !selectedDrivetrain">Привод</p>
+            <div *ngIf="selectedDrivetrain" class="step3-option" (click)="selectedDrivetrain = null">
+              <p>Привод</p>
+              <span>{{ selectedDrivetrain }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedEngine && !selectedDrivetrain">
+              <li *ngFor="let drivetrain of drivetrains" (click)="selectDrivetrain(drivetrain)">
+                {{ drivetrain }}
+              </li>
+            </ul>
+            <p *ngIf="selectedDrivetrain && !selectedTransmission">Коробка передач</p>
+            <div *ngIf="selectedTransmission" class="step3-option" (click)="selectedTransmission = null">
+              <p>Коробка передач</p>
+              <span>{{ selectedTransmission }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedDrivetrain && !selectedTransmission">
+              <li *ngFor="let transmission of transmissions" (click)="selectTransmission(transmission)">
+                {{ transmission }}
+              </li>
+            </ul>
+            <p *ngIf="selectedTransmission && !selectedModification">Модификация</p>
+            <div *ngIf="selectedModification" class="step3-option" (click)="selectedModification = null">
+              <p>Модификация</p>
+              <span>{{ selectedModification }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedTransmission && !selectedModification">
+              <li *ngFor="let modification of modifications" (click)="selectModification(modification)">
+                {{ modification }}
+              </li>
+            </ul>
+            <p *ngIf="selectedModification && !selectedColor">Цвет</p>
+            <div *ngIf="selectedColor" class="step3-option" (click)="selectedColor = null">
+              <p>Цвет</p>
+              <span>{{ selectedColor }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            </div>
+            <ul class="optionselect" *ngIf="selectedModification && !selectedColor">
+              <li *ngFor="let color of colors" (click)="selectColor(color)">
+                {{ color }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 2">
+          <div class="selectedBrand__right_one-head">
+            <h2>Пробег</h2>
+          </div>
+          <input
+            type="text"
+            placeholder="Км"
+            [(ngModel)]="mileage"
+            (input)="validateMileage()"
           />
         </div>
-        <input
-          type="text"
-          [value]="selectedBrand"
-          placeholder="Марка"
-          
-        />
-        <input
-          type="text"
-          placeholder="Модель"
-          [(ngModel)]="modelSearchTerm"
-          (ngModelChange)="filterModels()"
-        />
-        <ul class="brands" *ngIf="!selectedModel">
-          <li *ngFor="let model of filteredModels" (click)="selectModel(model)">
-            <p>{{ model }}</p>
-          </li>
-          <li class="allbrands" *ngIf="!modelSearchTerm && !selectedModel">
-            <p>Все модели</p>
-          </li>
-        </ul>
-        <div class="step3" *ngIf="selectedModel">
-          <h2>Характеристики</h2>
-          <hr>
 
-          
-          <p *ngIf="!selectedYear">Год выпуска</p>
-          <div *ngIf="selectedYear" class="step3-option" (click)="selectedYear = null">
-            <p>Год выпуска</p>
-            <span>{{ selectedYear }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 3">
+          <div class="selectedBrand__right_one-head">
+            <h2>Фото</h2>
+            <span style="color: #fff;">+70% к просмотрам</span>
           </div>
-          <ul class="yearcars" *ngIf="!selectedYear">
-            <li *ngFor="let year of years" (click)="selectYear(year)">
-              {{ year }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedYear && !selectedBodyType">Кузов</p>
-          <div *ngIf="selectedBodyType" class="step3-option" (click)="selectedBodyType = null">
-            <p>Кузов</p>
-            <span>{{ selectedBodyType }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedYear && !selectedBodyType">
-            <li *ngFor="let bodyType of bodyTypes" (click)="selectBodyType(bodyType)">
-              {{ bodyType }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedBodyType && !selectedGeneration">Поколение</p>
-          <div *ngIf="selectedGeneration" class="step3-option" (click)="selectedGeneration = null">
-            <p>Поколение</p>
-            <span>{{ selectedGeneration }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedBodyType && !selectedGeneration">
-            <li *ngFor="let generation of generations" (click)="selectGeneration(generation)">
-              {{ generation }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedGeneration && !selectedEngine">Двигатель</p>
-          <div *ngIf="selectedEngine" class="step3-option" (click)="selectedEngine = null">
-            <p>Двигатель</p>
-            <span>{{ selectedEngine }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedGeneration && !selectedEngine">
-            <li *ngFor="let engine of engines" (click)="selectEngine(engine)">
-              {{ engine }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedEngine && !selectedDrivetrain">Привод</p>
-          <div *ngIf="selectedDrivetrain" class="step3-option" (click)="selectedDrivetrain = null">
-            <p>Привод</p>
-            <span>{{ selectedDrivetrain }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedEngine && !selectedDrivetrain">
-            <li *ngFor="let drivetrain of drivetrains" (click)="selectDrivetrain(drivetrain)">
-              {{ drivetrain }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedDrivetrain && !selectedTransmission">Коробка передач</p>
-          <div *ngIf="selectedTransmission" class="step3-option" (click)="selectedTransmission = null">
-            <p>Коробка передач</p>
-            <span>{{ selectedTransmission }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedDrivetrain && !selectedTransmission">
-            <li *ngFor="let transmission of transmissions" (click)="selectTransmission(transmission)">
-              {{ transmission }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedTransmission && !selectedModification">Модификация</p>
-          <div *ngIf="selectedModification" class="step3-option" (click)="selectedModification = null">
-            <p>Модификация</p>
-            <span>{{ selectedModification }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedTransmission && !selectedModification">
-            <li *ngFor="let modification of modifications" (click)="selectModification(modification)">
-              {{ modification }}
-            </li>
-          </ul>
-
-          
-          <p *ngIf="selectedModification && !selectedColor">Цвет</p>
-          <div *ngIf="selectedColor" class="step3-option" (click)="selectedColor = null">
-            <p>Цвет</p>
-            <span>{{ selectedColor }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <ul class="optionselect" *ngIf="selectedModification && !selectedColor">
-            <li *ngFor="let color of colors" (click)="selectColor(color)">
-              {{ color }}
-            </li>
-          </ul>
-        </div>
+          <span>Госномер должен быть хорошо виден — он поможет проверить объявление. В поиске мы скроем его от пользователей. Также, не показывайте на фото контакты, надписи, людей, водяные знаки и посторонние предметы.</span>
+         <div class="drag-drop" onclick="document.getElementById('fileUpload').click()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24">
+      <path fill="currentColor" fill-rule="evenodd" d="M18 5h1a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h1l2-2h8zM8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" clip-rule="evenodd"></path>
+    </svg>
+    <p>Выберите или перетащите фото</p>
+    <input style="display: none;" type="file" id="fileUpload" class="file-input" multiple>
+  </div>
         </div>
 
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-          <h2>
-            Пробег
-          </h2>
-        </div>
-
-          <input
-          type="text"
-          placeholder="Км"
-          
-        />
-        </div>
-
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-                <h2>
-                    Фото
-                </h2>
-                <span>+70% к просмотрам</span>
-        </div>
-
-        <span>Госномер должен быть хорошо виден — он поможет проверить объявление. В поиске мы скроем его от пользователей. Также, не показывайте на фото контакты, надписи, людей, водяные знаки и посторонние предметы.</span>
-
-          <div class="drag-drop">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgCameraMFilled IconSvg_size_32"><path fill="currentColor" fill-rule="evenodd" d="M18 5h1a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h1l2-2h8zM8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" clip-rule="evenodd"></path></svg>
-            Выберите или перетащите фото
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 4">
+          <div class="selectedBrand__right_one-head">
+            <h2>ПТС</h2>
           </div>
-        </div>
-
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-          <h2>
-            ПТС
-          </h2>
-        </div>
-
           <div class="typedocum">
             <p class="typedocum__p">Тип документа</p>
             <div class="typedocum__list">
-                <p>Оригинал / Электронный ПТС</p>
-                <p>Дубликат</p>
-                <p>Нет ПТС</p>
+              <p (click)="selectPtsType('Оригинал / Электронный ПТС')" [class.selected]="ptsType === 'Оригинал / Электронный ПТС'">Оригинал / Электронный ПТС</p>
+              <p (click)="selectPtsType('Дубликат')" [class.selected]="ptsType === 'Дубликат'">Дубликат</p>
+              <p (click)="selectPtsType('Нет ПТС')" [class.selected]="ptsType === 'Нет ПТС'">Нет ПТС</p>
             </div>
           </div>
         </div>
 
-               <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-                <h2>
-                    Описание
-                </h2>
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 5">
+          <div class="selectedBrand__right_one-head">
+            <h2>Описание</h2>
+          </div>
+          <span style="font-size: 15px;">Убедитесь, что описание соответствует <a routerLink="/">Правилам</a>. Не указывайте ссылки, цену, контакты и не предлагайте услуги — объявление не пройдет модерацию</span>
+          <div class="addproduct__desc">
+            <textarea 
+              placeholder="Честно опишите достоинства и недостатки своего автомобиля" 
+              [(ngModel)]="description"
+              name="description.description" 
+              rows="10" 
+              maxlength="30001" 
+              style="height: 261px;"
+            ></textarea>
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgYagptLogo IconSvg_size_16"><circle cx="2" cy="2" r="2" fill="#000" transform="matrix(-1 0 0 1 16 12)"></circle><circle cx="6" cy="6" r="6" fill="#000" transform="matrix(0 -1 -1 0 12 12)"></circle></svg> Создать описание с GPT</p>
+          </div>
         </div>
 
-        <span style="font-size: 15px;">Убедитесь, что описание соответствует <a routerLink="/">Правилам</a>. Не указывайте ссылки, цену, контакты и не предлагайте услуги — объявление не пройдет модерацию</span>
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 6">
+          <div class="selectedBrand__right_one-head">
+            <h2>Контакты</h2>
+          </div>
+          <input
+            type="text"
+            placeholder="Как к вам обращаться?"
+            [(ngModel)]="contactName"
+          />
+          <input
+            type="text"
+            placeholder="Электронная почта (e-mail)"
+            [(ngModel)]="email"
+          />
+          <input
+            type="number"
+            placeholder="Номер телефона"
+            [(ngModel)]="phone"
+          />
+        </div>
 
-      <div class="addproduct__desc">
-        <textarea placeholder="Честно опишите достоинства и недостатки своего автомобиля" name="description.description" rows="10" maxlength="30001" style="height: 261px;">asd</textarea>
-        <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgYagptLogo IconSvg_size_16"><circle cx="2" cy="2" r="2" fill="#000" transform="matrix(-1 0 0 1 16 12)"></circle><circle cx="6" cy="6" r="6" fill="#000" transform="matrix(0 -1 -1 0 12 12)"></circle></svg> Создать описание с GPT</p>
+        <div class="selectedBrand__right_one" *ngIf="currentStep >= 7">
+          <div class="selectedBrand__right_one-head">
+            <h2>Цена</h2>
+          </div>
+          <input
+            type="number"
+            placeholder="Цена"
+            [(ngModel)]="price"
+          />
+        </div>
+           <button 
+        *ngIf="canProceed(currentStep)" 
+        (click)="proceedToNextStep()"
+        class="proceed-button"
+      >
+        {{ currentStep === 7 ? 'Завершить' : 'Продолжить' }}
+      </button>
       </div>
-         
-        </div>
-
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-          <h2>
-        Контакты
-          </h2>
-        </div>
-
-          <input
-          type="text"
-          placeholder="Как к вам обращаться?"
-          value=""
-        />
-
-          <input
-          type="text"
-          placeholder="Электронная почта (e-mail)"
-          value=""
-        />
-
-          <input
-          type="number"
-          placeholder="Номер телефона"
-          value=""
-        />
-        </div>
-
-        <div class="selectedBrand__right_one">
-            <div class="selectedBrand__right_one-head">
-          <h2>
-        Цена
-          </h2>
-        </div>
-
-          <input
-          type="number"
-          placeholder="Цена"
-          value=""
-
-          
-        />
-        </div>
-
-
-
-        <button >Продолжить</button>
-
-      </div>
-
+   
     </div>
   </div>
 </div>

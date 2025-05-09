@@ -26,7 +26,7 @@ export class AddcarsComponent {
     },
     {
       name: 'Hyundai',
-      logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7a9032a7849da57/logo',
+      logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7Bindingsa9032a7849da57/logo',
     },
     {
       name: 'Kia',
@@ -156,6 +156,15 @@ export class AddcarsComponent {
   selectedTransmission: string | null = null;
   selectedModification: string | null = null;
   selectedColor: string | null = null;
+  currentStep: number = 1;
+  mileage: string = '';
+  photos: File[] = [];
+  ptsType: string | null = null;
+  description: string = '';
+  contactName: string = '';
+  email: string = '';
+  phone: string = '';
+  price: number | null = null;
 
   filterBrands() {
     const search = this.searchTerm.toLowerCase().trim();
@@ -175,6 +184,7 @@ export class AddcarsComponent {
     this.filteredBrands = [...this.brands];
     this.modelSearchTerm = '';
     this.filteredModels = this.brandModels[brandName] || [];
+    this.currentStep = 1;
   }
 
   selectModel(modelName: string) {
@@ -223,6 +233,10 @@ export class AddcarsComponent {
     this.selectedColor = color;
   }
 
+  selectPtsType(type: string) {
+    this.ptsType = type;
+  }
+
   filterModels() {
     const search = this.modelSearchTerm.toLowerCase().trim();
     if (!this.selectedBrand) return;
@@ -242,6 +256,15 @@ export class AddcarsComponent {
     this.modelSearchTerm = '';
     this.filteredModels = [];
     this.filteredBrands = [...this.brands];
+    this.currentStep = 1;
+    this.mileage = '';
+    this.photos = [];
+    this.ptsType = null;
+    this.description = '';
+    this.contactName = '';
+    this.email = '';
+    this.phone = '';
+    this.price = null;
   }
 
   resetAfterBrand() {
@@ -295,5 +318,61 @@ export class AddcarsComponent {
 
   handleImageError(event: Event) {
     (event.target as HTMLImageElement).src = 'assets/placeholder-logo.png';
+  }
+
+  handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.photos = Array.from(input.files);
+    }
+  }
+
+  validateMileage() {
+    this.mileage = this.mileage.replace(/[^0-9]/g, '');
+  }
+
+  canProceed(step: number): boolean {
+    switch (step) {
+      case 1:
+        return !!(
+          this.selectedBrand &&
+          this.selectedModel &&
+          this.selectedYear &&
+          this.selectedBodyType &&
+          this.selectedGeneration &&
+          this.selectedEngine &&
+          this.selectedDrivetrain &&
+          this.selectedTransmission &&
+          this.selectedModification &&
+          this.selectedColor
+        );
+      case 2:
+        return !!this.mileage && Number(this.mileage) > 0;
+      case 3:
+        return this.photos.length > 0;
+      case 4:
+        return !!this.ptsType;
+      case 5:
+        return !!this.description && this.description.trim().length > 0;
+      case 6:
+        return !!(
+          this.contactName &&
+          this.contactName.trim().length > 0 &&
+          this.email &&
+          this.email.trim().length > 0 &&
+          this.phone &&
+          this.phone.trim().length > 0
+        );
+      case 7:
+        return !!this.price && this.price > 0;
+      default:
+        return false;
+    }
+  }
+
+  proceedToNextStep() {
+    if (this.currentStep < 7) {
+      this.currentStep++;
+    }
   }
 }
