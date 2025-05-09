@@ -49,7 +49,8 @@
       </div>
 
       <div class="selectedBrand__right">
-        <div class="selectedBrand__right-head">
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
           <h2 (click)="clearSelection()" class="selected-brand__name" style="cursor: pointer;">
             {{ selectedBrand }}
           </h2>
@@ -60,12 +61,11 @@
             (error)="handleImageError($event)"
           />
         </div>
-
         <input
           type="text"
           [value]="selectedBrand"
           placeholder="Марка"
-          readonly
+          
         />
         <input
           type="text"
@@ -73,7 +73,6 @@
           [(ngModel)]="modelSearchTerm"
           (ngModelChange)="filterModels()"
         />
-
         <ul class="brands" *ngIf="!selectedModel">
           <li *ngFor="let model of filteredModels" (click)="selectModel(model)">
             <p>{{ model }}</p>
@@ -82,7 +81,6 @@
             <p>Все модели</p>
           </li>
         </ul>
-
         <div class="step3" *ngIf="selectedModel">
           <h2>Характеристики</h2>
           <hr>
@@ -183,7 +181,119 @@
             </li>
           </ul>
         </div>
+        </div>
+
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+          <h2>
+            Пробег
+          </h2>
+        </div>
+
+          <input
+          type="text"
+          placeholder="Км"
+          
+        />
+        </div>
+
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+                <h2>
+                    Фото
+                </h2>
+                <span>+70% к просмотрам</span>
+        </div>
+
+        <span>Госномер должен быть хорошо виден — он поможет проверить объявление. В поиске мы скроем его от пользователей. Также, не показывайте на фото контакты, надписи, людей, водяные знаки и посторонние предметы.</span>
+
+          <div class="drag-drop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgCameraMFilled IconSvg_size_32"><path fill="currentColor" fill-rule="evenodd" d="M18 5h1a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h1l2-2h8zM8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" clip-rule="evenodd"></path></svg>
+            Выберите или перетащите фото
+          </div>
+        </div>
+
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+          <h2>
+            ПТС
+          </h2>
+        </div>
+
+          <div class="typedocum">
+            <p class="typedocum__p">Тип документа</p>
+            <div class="typedocum__list">
+                <p>Оригинал / Электронный ПТС</p>
+                <p>Дубликат</p>
+                <p>Нет ПТС</p>
+            </div>
+          </div>
+        </div>
+
+               <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+                <h2>
+                    Описание
+                </h2>
+        </div>
+
+        <span style="font-size: 15px;">Убедитесь, что описание соответствует <a routerLink="/">Правилам</a>. Не указывайте ссылки, цену, контакты и не предлагайте услуги — объявление не пройдет модерацию</span>
+
+      <div class="addproduct__desc">
+        <textarea placeholder="Честно опишите достоинства и недостатки своего автомобиля" name="description.description" rows="10" maxlength="30001" style="height: 261px;">asd</textarea>
+        <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgYagptLogo IconSvg_size_16"><circle cx="2" cy="2" r="2" fill="#000" transform="matrix(-1 0 0 1 16 12)"></circle><circle cx="6" cy="6" r="6" fill="#000" transform="matrix(0 -1 -1 0 12 12)"></circle></svg> Создать описание с GPT</p>
       </div>
+         
+        </div>
+
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+          <h2>
+        Контакты
+          </h2>
+        </div>
+
+          <input
+          type="text"
+          placeholder="Как к вам обращаться?"
+          value=""
+        />
+
+          <input
+          type="text"
+          placeholder="Электронная почта (e-mail)"
+          value=""
+        />
+
+          <input
+          type="number"
+          placeholder="Номер телефона"
+          value=""
+        />
+        </div>
+
+        <div class="selectedBrand__right_one">
+            <div class="selectedBrand__right_one-head">
+          <h2>
+        Цена
+          </h2>
+        </div>
+
+          <input
+          type="number"
+          placeholder="Цена"
+          value=""
+
+          
+        />
+        </div>
+
+
+
+        <button >Продолжить</button>
+
+      </div>
+
     </div>
   </div>
 </div>

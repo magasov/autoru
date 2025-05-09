@@ -178,166 +178,308 @@
 
     &__right {
       display: flex;
-      position: relative;
-      padding: 24px;
-      border: 1px solid #0000000f;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px #0000000a;
       flex-direction: column;
-      gap: 15px;
-      width: 584px;
+      gap: 20px;
 
-      &-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        h2 {
-          font-size: 24px;
-          font-weight: 700;
-          line-height: 28px;
-        }
-
-        img {
-          width: 52px;
-        }
-      }
-
-      input {
-        height: 60px;
-        border: 1px solid #0000001f;
-        border-radius: 8px;
-        padding: 0 12px;
+      button {
+        height: 58px;
         font-size: 15px;
-        color: #000000de;
-        position: relative;
+        line-height: 24px;
+        color: #0c78ed;
+        background: #e2effd;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
 
         &:hover {
-          border-color: #157ee180;
-        }
-
-        &:focus {
-          outline: none;
-          border: 1px solid #2882db;
+          color: #fff;
+          background: #2284ef;
         }
       }
 
-      .brands {
-        list-style: none;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        cursor: pointer;
-        gap: 20px;
-
-        p {
-          font-size: 15px;
-          &:hover {
-            color: #e81111;
-          }
-        }
-
-        .allbrands {
-          color: #0c78ed;
-        }
-      }
-
-      .step3 {
+      &_one {
         display: flex;
+        position: relative;
+        padding: 24px;
+        border: 1px solid #0000000f;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px #0000000a;
         flex-direction: column;
-        gap: 16px;
-        margin-top: 30px;
+        gap: 15px;
+        width: 584px;
 
-        h2 {
-          font-size: 24px;
-          font-weight: 700;
-          line-height: 28px;
-        }
-
-        hr {
-          border: 0;
-          height: 1px;
-          background: #f3f4f6;
-        }
-
-        p {
-          color: #1c212899;
-          font-size: 15px;
-          line-height: 20px;
-        }
-
-        .step3-option {
+        &-head {
           display: flex;
-          align-items: center;
           justify-content: space-between;
-          cursor: pointer;
+          align-items: center;
+
+          h2 {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 28px;
+          }
+
+          img {
+            width: 52px;
+          }
 
           span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-
-            svg {
-              color: #0000001a;
-            }
-          }
-        }
-
-        .yearcars {
-          margin-top: 10px;
-          list-style: none;
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 20px;
-
-          li {
-            padding: 8px 25px;
-            border: 1px solid #0000001f;
+            padding: 5px 10px;
+            color: #fff;
+            background: #36b455;
+            font-size: 12px;
+            cursor: pointer;
             border-radius: 50px;
-            width: max-content;
-            cursor: pointer;
-            &:hover {
-              background: #e1eefc;
-            }
-          }
-
-          .yearall {
-            color: #0c78ed;
           }
         }
 
-        .colors {
-          list-style: none;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
+        span {
+          font-size: 13px;
+          margin-top: 5px;
+          color: #1c212899;
 
-          li {
-            cursor: pointer;
+          a {
+            color: #0c78ed;
+
             &:hover {
               color: red;
             }
           }
         }
 
-        .optionselect {
-          list-style: none;
-          padding: 0;
-          max-height: 300px;
-          overflow-y: auto;
+        .drag-drop {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 222px;
+          gap: 5px;
+          cursor: pointer;
+          border-radius: 8px;
+          color: #0c78ed;
+          font-size: 15px;
 
-          li {
+          &:hover {
+            background: #e1eefc;
+          }
+        }
+
+        .typedocum {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 10px;
+
+          .typedocum__p {
+            font-weight: 600;
+          }
+
+          &__list {
             display: flex;
-            align-items: center;
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-
-            &:hover {
-              background-color: #f5f5f5;
-            }
+            gap: 10px;
 
             p {
-              margin: 0;
+              padding: 10px 15px;
+              border-radius: 50px;
+              border: 1px solid #0000001f;
+              cursor: pointer;
+
+              &:hover {
+                background: #0c78ed;
+                border: 1px solid #0c78ed;
+                color: #fff;
+              }
+            }
+          }
+        }
+
+        .addproduct__desc {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+
+          textarea {
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            margin: 0;
+            resize: none;
+            touch-action: manipulation;
+            vertical-align: top;
+            overflow-wrap: anywhere;
+            color: #000000de;
+            border: 1px solid #0000001f;
+            outline: none;
+            padding: 16px;
+
+            &:focus {
+              outline: none;
+              border: 1px solid #2882db;
+            }
+
+            &:hover {
+              border: 1px solid #2882db;
+            }
+          }
+
+          p {
+            position: absolute;
+            bottom: 15px;
+            display: flex;
+            align-items: center;
+            background: #eceef0;
+            right: 15px;
+            font-size: 13px;
+            gap: 6px;
+            padding: 0 10px;
+            border-radius: 8px;
+            min-width: 32px;
+            height: 32px;
+            min-height: 32px;
+            cursor: pointer;
+
+            &:hover {
+              background: #d4d6d8;
+            }
+          }
+        }
+
+        input {
+          height: 56px;
+          border: 1px solid #0000001f;
+          border-radius: 8px;
+          padding: 0 12px;
+          font-size: 15px;
+          color: #000000de;
+          position: relative;
+
+          &:hover {
+            border-color: #157ee180;
+          }
+
+          &:focus {
+            outline: none;
+            border: 1px solid #2882db;
+          }
+        }
+
+        .brands {
+          list-style: none;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          cursor: pointer;
+          gap: 20px;
+
+          p {
+            font-size: 15px;
+            &:hover {
+              color: #e81111;
+            }
+          }
+
+          .allbrands {
+            color: #0c78ed;
+          }
+        }
+
+        .step3 {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          margin-top: 30px;
+
+          h2 {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 28px;
+          }
+
+          hr {
+            border: 0;
+            height: 1px;
+            background: #f3f4f6;
+          }
+
+          p {
+            color: #1c212899;
+            font-size: 15px;
+            line-height: 20px;
+          }
+
+          .step3-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+
+            span {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+
+              svg {
+                color: #0000001a;
+              }
+            }
+          }
+
+          .yearcars {
+            margin-top: 10px;
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+
+            li {
+              padding: 8px 25px;
+              border: 1px solid #0000001f;
+              border-radius: 50px;
+              width: max-content;
+              cursor: pointer;
+              &:hover {
+                background: #e1eefc;
+              }
+            }
+
+            .yearall {
+              color: #0c78ed;
+            }
+          }
+
+          .colors {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            li {
+              cursor: pointer;
+              &:hover {
+                color: red;
+              }
+            }
+          }
+
+          .optionselect {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+
+            li {
+              display: flex;
+              align-items: center;
+              padding: 10px;
+              cursor: pointer;
+              border-bottom: 1px solid #eee;
+
+              &:hover {
+                background-color: #f5f5f5;
+              }
+
+              p {
+                margin: 0;
+              }
             }
           }
         }
