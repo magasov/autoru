@@ -265,6 +265,23 @@
           line-height: 20px;
         }
 
+        .step3-option {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          cursor: pointer;
+
+          span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            svg {
+              color: #0000001a;
+            }
+          }
+        }
+
         .yearcars {
           margin-top: 10px;
           list-style: none;

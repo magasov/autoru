@@ -87,7 +87,40 @@
           <h2>Характеристики</h2>
           <hr>
           <p *ngIf="!selectedYear">Год выпуска</p>
-         
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Год выпуска</p>
+            <span>{{selectedYear}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Кузов</p>
+            <span>Седан <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Поколение</p>
+            <span>||| <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Двигатель</p>
+            <span>Бензин <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Привод</p>
+            <span>Полный <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Коробка передач</p>
+            <span>Робот <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Модификация</p>
+            <span>150 л.с. (2.0 AMT) <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <div *ngIf="selectedYear" class="step3-option">
+            <p>Цвет</p>
+            <span>Черный <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+
+
           <ul class="yearcars" *ngIf="!selectedYear">
             <li *ngFor="let year of years" (click)="selectYear(year)">
               {{ year }}
