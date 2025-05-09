@@ -26,7 +26,7 @@ export class AddcarsComponent {
     },
     {
       name: 'Hyundai',
-      logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7Bindingsa9032a7849da57/logo',
+      logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7a9032a7849da57/logo',
     },
     {
       name: 'Kia',
