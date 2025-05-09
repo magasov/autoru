@@ -2,27 +2,80 @@
   <div class="addcars">
     <div class="addcars__header">
       <a routerLink="/">
-        <img src="/assets/icons/logo.svg" alt="logo">
+        <img src="/assets/icons/logo.svg" alt="logo" />
       </a>
       <a routerLink="/">Закрыть</a>
     </div>
 
-    <div class="addcars__main">
+    <div class="addcars__main" *ngIf="!selectedBrand">
       <div class="addcars__main-head">
         <h2>Продайте свой автомобиль</h2>
         <p>Объявление смогут увидеть 3 000 000 человек ежедневно</p>
       </div>
 
       <div class="main_margins">
-        <input type="text" placeholder="Марка" [(ngModel)]="searchTerm" (ngModelChange)="filterBrands()">
+        <input
+          type="text"
+          placeholder="Марка"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterBrands()"
+        />
 
         <ul class="brands">
-          <li *ngFor="let brand of filteredBrands">
-            <img [src]="brand.logo" alt="carbrands">
+          <li
+            *ngFor="let brand of filteredBrands"
+            (click)="selectBrand(brand.name)"
+          >
+            <img [src]="brand.logo" alt="carbrands" />
             <p>{{ brand.name }}</p>
           </li>
           <li class="allbrands" *ngIf="!searchTerm">
             <p>Все марки</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="selectedBrand" *ngIf="selectedBrand">
+      <div class="selectedBrand__left">
+        <img
+          src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
+          alt="image"
+        />
+
+        <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
+        <input type="text" placeholder="VIN" />
+        <hr />
+        <p>Сбросить все</p>
+      </div>
+
+      <div class="selectedBrand__right">
+        <div class="selectedBrand__left-head">
+          <p (click)="clearSelection()" class="selected-brand__name">
+            {{ selectedBrand }}
+          </p>
+
+          <img
+            [src]="getSelectedBrandLogo()"
+            [alt]="selectedBrand + ' logo'"
+            class="selected-brand-logo"
+            (error)="handleImageError($event)"
+          />
+        </div>
+
+        <input
+          type="text"
+          placeholder="Модель"
+          [(ngModel)]="modelSearchTerm"
+          (ngModelChange)="filterModels()"
+        />
+
+        <ul class="brands">
+          <li *ngFor="let model of filteredModels">
+            <p>{{ model }}</p>
+          </li>
+          <li class="allbrands" *ngIf="!modelSearchTerm">
+            <p>Все модели</p>
           </li>
         </ul>
       </div>
