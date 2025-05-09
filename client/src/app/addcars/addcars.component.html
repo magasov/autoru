@@ -37,16 +37,31 @@
     </div>
 
     <div class="selectedBrand" *ngIf="selectedBrand">
-      <div class="selectedBrand__left">
-        <img
-          src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
-          alt="image"
-        />
-        <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
-        <input type="text" placeholder="VIN" />
-        <hr />
-        <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
-      </div>
+<div class="selectedBrand__left">
+  <ng-container *ngIf="currentStep === 1">
+    <img
+      src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
+      alt="image"
+    />
+    <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
+    <input type="text" placeholder="VIN" />
+    <hr />
+    <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
+  </ng-container>
+
+  <ng-container *ngIf="currentStep >= 2">
+    <span [ngClass]="{ 'passed': currentStep > 1 }">Характеристики</span>
+  <span [ngClass]="{ 'passed': currentStep > 2 }">Пробег</span>
+  <span [ngClass]="{ 'passed': currentStep > 3 }">Фото</span>
+  <span [ngClass]="{ 'passed': currentStep > 4 }">ПТС</span>
+  <span [ngClass]="{ 'passed': currentStep > 5 }">Описание</span>
+  <span [ngClass]="{ 'passed': currentStep > 6 }">Контакты</span>
+  <span [ngClass]="{ 'passed': currentStep > 7 }">Цена</span>
+  <span [ngClass]="{ 'passed': currentStep > 8 }">СТС</span>
+    <hr>
+    <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
+  </ng-container>
+</div>
 
       <div class="selectedBrand__right">
         <div class="selectedBrand__right_one" *ngIf="currentStep >= 1">

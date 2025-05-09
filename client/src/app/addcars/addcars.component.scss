@@ -150,6 +150,17 @@
         }
       }
 
+      span {
+        font-size: 15px;
+        line-height: 20px;
+        color: #1c212899;
+        cursor: pointer;
+      }
+
+      .passed {
+        color: #000;
+      }
+
       input {
         height: 42px;
         border-radius: 8px;
@@ -172,6 +183,7 @@
       hr {
         border: 0;
         height: 1px;
+        width: 110px;
         background-color: #4954681a;
       }
     }

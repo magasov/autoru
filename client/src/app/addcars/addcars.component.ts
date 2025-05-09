@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-addcars',
   standalone: true,
-  imports: [RouterLink, FormsModule, NgFor, NgIf],
+  imports: [RouterLink, FormsModule, NgFor, NgIf, NgClass],
   templateUrl: './addcars.component.html',
   styleUrls: ['./addcars.component.scss'],
 })
