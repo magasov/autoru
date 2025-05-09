@@ -1,1 +1,31 @@
-<p>addcars works!</p>
+<div class="container">
+  <div class="addcars">
+    <div class="addcars__header">
+      <a routerLink="/">
+        <img src="/assets/icons/logo.svg" alt="logo">
+      </a>
+      <a routerLink="/">Закрыть</a>
+    </div>
+
+    <div class="addcars__main">
+      <div class="addcars__main-head">
+        <h2>Продайте свой автомобиль</h2>
+        <p>Объявление смогут увидеть 3 000 000 человек ежедневно</p>
+      </div>
+
+      <div class="main_margins">
+        <input type="text" placeholder="Марка" [(ngModel)]="searchTerm" (ngModelChange)="filterBrands()">
+
+        <ul class="brands">
+          <li *ngFor="let brand of filteredBrands">
+            <img [src]="brand.logo" alt="carbrands">
+            <p>{{ brand.name }}</p>
+          </li>
+          <li class="allbrands" *ngIf="!searchTerm">
+            <p>Все марки</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

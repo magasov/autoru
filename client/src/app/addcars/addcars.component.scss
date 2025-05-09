@@ -1,0 +1,118 @@
+.addcars {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 75px;
+    padding: 0 55px;
+
+    a {
+      color: red;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__main {
+    padding: 24px 36px 36px;
+    width: 584px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &-head {
+      h2 {
+        font-weight: 700;
+        font-size: 34px;
+        line-height: 36px;
+      }
+
+      p {
+        margin: 8px 0;
+        font-size: 15px;
+        line-height: 20px;
+      }
+    }
+    .main_margins {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      input {
+        height: 58px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0 12px;
+        border: 1px solid #0000001f;
+        border-radius: 8px;
+        font-size: 15px;
+        color: #000000de;
+
+        &:focus {
+          outline: none;
+          border: 1px solid #2882db;
+        }
+      }
+
+      .brands {
+        display: grid;
+        list-style: none;
+        gap: 8px;
+        grid-template-columns: repeat(4, 1fr);
+
+        li {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: #4954681a;
+          padding: 8px 4px;
+          border-radius: 8px;
+          color: #1c212899;
+          font-size: 13px;
+          line-height: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          cursor: pointer;
+
+          img {
+            width: 48px;
+            height: 48px;
+          }
+
+          &:hover {
+            background: #0c78ed;
+            color: #fff;
+          }
+        }
+
+        .allbrands {
+          background: transparent;
+
+          &:hover {
+            background: none;
+
+            p {
+              color: red;
+            }
+          }
+
+          p {
+            color: #0c78ed;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}
