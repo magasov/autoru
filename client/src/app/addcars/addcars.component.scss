@@ -143,6 +143,11 @@
           color: #0c78ed;
           cursor: pointer;
         }
+
+        &:last-child {
+          cursor: pointer;
+          color: #0c78ed;
+        }
       }
 
       input {
@@ -162,6 +167,12 @@
         &:hover {
           border: 1px solid #2882db;
         }
+      }
+
+      hr {
+        border: 0;
+        height: 1px;
+        background-color: #4954681a;
       }
     }
 
