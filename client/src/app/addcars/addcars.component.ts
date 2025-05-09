@@ -25,7 +25,7 @@ export class AddcarsComponent {
       logo: 'http://localhost:4200/assets/carbrands/dealer_logo-1.png',
     },
     {
-      name: 'Hundai',
+      name: 'Hyundai',
       logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7a9032a7849da57/logo',
     },
     {
@@ -109,7 +109,6 @@ export class AddcarsComponent {
       'TT',
       'e-tron',
     ],
-
     Bmw: [
       '1 серии',
       '2 серии',
@@ -292,7 +291,7 @@ export class AddcarsComponent {
       'Octavia RS',
       'Rapid',
       'Roomster',
-      'Superb',
+      'SuperAdvisors',
       'Yeti',
     ],
     Volkswagen: [
@@ -322,11 +321,25 @@ export class AddcarsComponent {
     ],
   };
 
+  
+  years: string[] = [
+    '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017',
+    '2016', '2015', '2014', '2013', '2012', '2011', 'Старше'
+  ];
+
+  
+  colors: string[] = [
+    'Белый', 'Черный', 'Серебристый', 'Серый', 'Синий', 'Красный', 'Зеленый',
+    'Желтый', 'Оранжевый', 'Коричневый', 'Другой'
+  ];
+
   searchTerm: string = '';
   filteredBrands = [...this.brands];
   selectedBrand: string | null = null;
   modelSearchTerm: string = '';
   filteredModels: string[] = [];
+  selectedModel: string | null = null;
+  selectedYear: string | null = null; 
 
   filterBrands() {
     const search = this.searchTerm.toLowerCase().trim();
@@ -341,17 +354,30 @@ export class AddcarsComponent {
 
   selectBrand(brandName: string) {
     this.selectedBrand = brandName;
+    this.selectedModel = null;
+    this.selectedYear = null; 
     this.searchTerm = '';
     this.filteredBrands = [...this.brands];
     this.modelSearchTerm = '';
     this.filteredModels = this.brandModels[brandName] || [];
   }
 
+  selectModel(modelName: string) {
+    this.selectedModel = modelName;
+    this.selectedYear = null; 
+    this.modelSearchTerm = modelName;
+    this.filteredModels = [];
+  }
+
+  selectYear(year: string) {
+    this.selectedYear = year; 
+  }
+
   filterModels() {
     const search = this.modelSearchTerm.toLowerCase().trim();
     if (!this.selectedBrand) return;
-    if (!search) {
-      this.filteredModels = this.brandModels[this.selectedBrand] || [];
+    if (!search || this.selectedModel) {
+      this.filteredModels = this.selectedModel ? [] : this.brandModels[this.selectedBrand] || [];
     } else {
       this.filteredModels = (this.brandModels[this.selectedBrand] || []).filter(
         (model) => model.toLowerCase().includes(search)
@@ -361,6 +387,8 @@ export class AddcarsComponent {
 
   clearSelection() {
     this.selectedBrand = null;
+    this.selectedModel = null;
+    this.selectedYear = null; 
     this.modelSearchTerm = '';
     this.filteredModels = [];
   }

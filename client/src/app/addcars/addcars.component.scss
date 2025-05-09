@@ -122,7 +122,7 @@
 
   .selectedBrand {
     display: flex;
-    gap: 100px;
+    gap: 60px;
     margin-top: 60px;
 
     &__left {
@@ -184,7 +184,7 @@
       border-radius: 16px;
       box-shadow: 0 4px 24px #0000000a;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
       width: 584px;
 
       &-head {
@@ -238,6 +238,68 @@
 
         .allbrands {
           color: #0c78ed;
+        }
+      }
+
+      .step3 {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 30px;
+
+        h2 {
+          font-size: 24px;
+          font-weight: 700;
+          line-height: 28px;
+        }
+
+        hr {
+          border: 0;
+          height: 1px;
+          background: #f3f4f6;
+        }
+
+        p {
+          color: #1c212899;
+          font-size: 15px;
+          line-height: 20px;
+        }
+
+        .yearcars {
+          margin-top: 10px;
+          list-style: none;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+
+          li {
+            padding: 8px 25px;
+            border: 1px solid #0000001f;
+            border-radius: 50px;
+            width: max-content;
+            cursor: pointer;
+            &:hover {
+              background: #e1eefc;
+            }
+          }
+
+          .yearall {
+            color: #0c78ed;
+          }
+        }
+
+        .colors {
+          list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+
+          li {
+            cursor: pointer;
+            &:hover {
+              color: red;
+            }
+          }
         }
       }
     }

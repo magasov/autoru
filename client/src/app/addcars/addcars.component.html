@@ -26,7 +26,7 @@
             *ngFor="let brand of filteredBrands"
             (click)="selectBrand(brand.name)"
           >
-            <img [src]="brand.logo" alt="carbrands" />
+            <img [src]="brand.logo" [alt]="brand.name + ' logo'" (error)="handleImageError($event)" />
             <p>{{ brand.name }}</p>
           </li>
           <li class="allbrands" *ngIf="!searchTerm">
@@ -42,19 +42,17 @@
           src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
           alt="image"
         />
-
         <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
         <input type="text" placeholder="VIN" />
         <hr />
-        <p>Сбросить все</p>
+        <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
       </div>
 
       <div class="selectedBrand__right">
         <div class="selectedBrand__right-head">
-          <h2 (click)="clearSelection()" class="selected-brand__name">
+          <h2 (click)="clearSelection()" class="selected-brand__name" style="cursor: pointer;">
             {{ selectedBrand }}
           </h2>
-
           <img
             [src]="getSelectedBrandLogo()"
             [alt]="selectedBrand + ' logo'"
@@ -65,8 +63,9 @@
 
         <input
           type="text"
-          value='{{ selectedBrand }}'
+          [value]="selectedBrand"
           placeholder="Марка"
+          readonly
         />
         <input
           type="text"
@@ -75,16 +74,36 @@
           (ngModelChange)="filterModels()"
         />
 
-        <ul class="brands">
-          <li *ngFor="let model of filteredModels">
+        <ul class="brands" *ngIf="!selectedModel">
+          <li *ngFor="let model of filteredModels" (click)="selectModel(model)">
             <p>{{ model }}</p>
           </li>
-          <li class="allbrands" *ngIf="!modelSearchTerm">
+          <li class="allbrands" *ngIf="!modelSearchTerm && !selectedModel">
             <p>Все модели</p>
           </li>
         </ul>
 
-        <!-- <div class="step3"></div> -->
+        <div class="step3" *ngIf="selectedModel">
+          <h2>Характеристики</h2>
+          <hr>
+          <p *ngIf="!selectedYear">Год выпуска</p>
+         
+          <ul class="yearcars" *ngIf="!selectedYear">
+            <li *ngFor="let year of years" (click)="selectYear(year)">
+              {{ year }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="step3" *ngIf="selectedYear">
+          <h3>Цвет</h3>
+          <hr>
+          <ul class="colors">
+            <li *ngFor="let color of colors">
+              {{ color }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
