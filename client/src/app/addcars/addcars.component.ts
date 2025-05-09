@@ -14,6 +14,7 @@ export class AddcarsComponent {
  
   brands = [
     { name: 'Lada (ВАЗ)', logo: 'https://avatars.mds.yandex.net/get-verba/216201/2a0000018dc08f7b4ccd9af125955b697894/logo' },
+    
     { name: 'Audi', logo: 'https://avatars.mds.yandex.net/get-verba/3587101/2a00000179af710f40b85f9c3aedb68201fd/logo' },
     { name: 'Bmw', logo: 'http://localhost:4200/assets/carbrands/dealer_logo-1.png' },
     { name: 'Hundai', logo: 'https://avatars.mds.yandex.net/get-verba/1030388/2a00000179b3bf9ed4cee7a9032a7849da57/logo' },
