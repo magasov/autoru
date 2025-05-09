@@ -86,53 +86,99 @@
         <div class="step3" *ngIf="selectedModel">
           <h2>Характеристики</h2>
           <hr>
+
+          
           <p *ngIf="!selectedYear">Год выпуска</p>
-          <div *ngIf="selectedYear" class="step3-option">
+          <div *ngIf="selectedYear" class="step3-option" (click)="selectedYear = null">
             <p>Год выпуска</p>
-            <span>{{selectedYear}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+            <span>{{ selectedYear }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
           </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Кузов</p>
-            <span>Седан <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Поколение</p>
-            <span>||| <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Двигатель</p>
-            <span>Бензин <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Привод</p>
-            <span>Полный <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Коробка передач</p>
-            <span>Робот <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Модификация</p>
-            <span>150 л.с. (2.0 AMT) <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-          <div *ngIf="selectedYear" class="step3-option">
-            <p>Цвет</p>
-            <span>Черный <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24 AccordionSectionHeader__tick AccordionSectionHeader__tick_closed TechAccordionSectionHeader__icon"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
-          </div>
-
-
           <ul class="yearcars" *ngIf="!selectedYear">
             <li *ngFor="let year of years" (click)="selectYear(year)">
               {{ year }}
             </li>
           </ul>
-        </div>
 
-        <div class="step3" *ngIf="selectedYear">
-          <h3>Цвет</h3>
-          <hr>
-          <ul class="colors">
-            <li *ngFor="let color of colors">
+          
+          <p *ngIf="selectedYear && !selectedBodyType">Кузов</p>
+          <div *ngIf="selectedBodyType" class="step3-option" (click)="selectedBodyType = null">
+            <p>Кузов</p>
+            <span>{{ selectedBodyType }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedYear && !selectedBodyType">
+            <li *ngFor="let bodyType of bodyTypes" (click)="selectBodyType(bodyType)">
+              {{ bodyType }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedBodyType && !selectedGeneration">Поколение</p>
+          <div *ngIf="selectedGeneration" class="step3-option" (click)="selectedGeneration = null">
+            <p>Поколение</p>
+            <span>{{ selectedGeneration }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedBodyType && !selectedGeneration">
+            <li *ngFor="let generation of generations" (click)="selectGeneration(generation)">
+              {{ generation }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedGeneration && !selectedEngine">Двигатель</p>
+          <div *ngIf="selectedEngine" class="step3-option" (click)="selectedEngine = null">
+            <p>Двигатель</p>
+            <span>{{ selectedEngine }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedGeneration && !selectedEngine">
+            <li *ngFor="let engine of engines" (click)="selectEngine(engine)">
+              {{ engine }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedEngine && !selectedDrivetrain">Привод</p>
+          <div *ngIf="selectedDrivetrain" class="step3-option" (click)="selectedDrivetrain = null">
+            <p>Привод</p>
+            <span>{{ selectedDrivetrain }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedEngine && !selectedDrivetrain">
+            <li *ngFor="let drivetrain of drivetrains" (click)="selectDrivetrain(drivetrain)">
+              {{ drivetrain }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedDrivetrain && !selectedTransmission">Коробка передач</p>
+          <div *ngIf="selectedTransmission" class="step3-option" (click)="selectedTransmission = null">
+            <p>Коробка передач</p>
+            <span>{{ selectedTransmission }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedDrivetrain && !selectedTransmission">
+            <li *ngFor="let transmission of transmissions" (click)="selectTransmission(transmission)">
+              {{ transmission }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedTransmission && !selectedModification">Модификация</p>
+          <div *ngIf="selectedModification" class="step3-option" (click)="selectedModification = null">
+            <p>Модификация</p>
+            <span>{{ selectedModification }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedTransmission && !selectedModification">
+            <li *ngFor="let modification of modifications" (click)="selectModification(modification)">
+              {{ modification }}
+            </li>
+          </ul>
+
+          
+          <p *ngIf="selectedModification && !selectedColor">Цвет</p>
+          <div *ngIf="selectedColor" class="step3-option" (click)="selectedColor = null">
+            <p>Цвет</p>
+            <span>{{ selectedColor }} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChevronDownM IconSvg_size_24"><path fill="currentColor" d="m12 16.5 7-7-1.379-1.461L12 13.659 6.379 8.04 5 9.499z"></path></svg></span>
+          </div>
+          <ul class="optionselect" *ngIf="selectedModification && !selectedColor">
+            <li *ngFor="let color of colors" (click)="selectColor(color)">
               {{ color }}
             </li>
           </ul>
