@@ -73,6 +73,14 @@ header {
       font-size: 11px;
       color: #1c212899;
 
+      &:hover {
+        color: #e60000;
+
+        svg {
+          color: #e60000;
+        }
+      }
+
       svg {
         color: #111;
       }

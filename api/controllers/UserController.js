@@ -24,7 +24,7 @@ const generateCode = () => {
 const sendVerificationEmail = async (email, code) => {
   try {
     const mailOptions = {
-      from: EMAIL_USER,
+      from: `"Autoru Magasov" <${EMAIL_USER}>`,
       to: email,
       subject: "Код верификации",
       text: `Ваш код верификации: ${code}`,
