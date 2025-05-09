@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -369,6 +369,18 @@ export class AddcarsComponent {
         return false;
     }
   }
+
+  @HostListener('window:scroll', ['$event'])
+    onWindowScroll() {
+        const header = document.querySelector('.addcars__header');
+        if (header) {
+            if (window.scrollY >= 150) {
+                header.classList.add('sticky');
+            } else {
+                header.classList.remove('sticky');
+            }
+        }
+    }
 
   proceedToNextStep() {
     if (this.currentStep < 7) {

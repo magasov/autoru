@@ -1,13 +1,12 @@
-.addcars {
-  display: flex;
-  flex-direction: column;
-  padding: 0 55px;
+.addcars__header {
+  background: #fff;
+  z-index: 2;
 
-  &__header {
+  &-padding {
+    height: 68px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 75px;
 
     a {
       color: red;
@@ -17,6 +16,18 @@
       }
     }
   }
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  box-shadow: 0 1px 4px #0000000f;
+}
+
+.addcars {
+  display: flex;
+  flex-direction: column;
+  padding: 0 55px;
 
   &__main {
     padding: 24px 36px 36px;
@@ -130,6 +141,9 @@
       width: 204px;
       flex-direction: column;
       gap: 20px;
+      position: sticky;
+      height: max-content;
+      top: 100px;
 
       img {
         width: 72px;
