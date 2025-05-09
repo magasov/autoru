@@ -1,0 +1,56 @@
+footer {
+  display: flex;
+  padding: 36px 0;
+  border-top: 1px solid #f3f4f6;
+  margin-top: 60px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15px;
+
+  &__one {
+    display: flex;
+    justify-content: space-between;
+
+    &-text {
+      display: flex;
+      gap: 20px;
+
+      a,
+      p {
+        color: #00000080;
+      }
+
+      a {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+
+    &-socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    &-partners {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    &-project {
+      p {
+        font-size: 13px;
+        color: #1c212899;
+
+        a {
+          color: rgb(76, 76, 160);
+        }
+      }
+    }
+  }
+}

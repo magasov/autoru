@@ -2,11 +2,12 @@ import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-addcars',
   standalone: true,
-  imports: [RouterLink, FormsModule, NgFor, NgIf, NgClass],
+  imports: [RouterLink, FormsModule, NgFor, NgIf, NgClass, FooterComponent],
   templateUrl: './addcars.component.html',
   styleUrls: ['./addcars.component.scss'],
 })
