@@ -164,5 +164,71 @@
         }
       }
     }
+
+    &__right {
+      display: flex;
+      position: relative;
+      padding: 24px;
+      border: 1px solid #0000000f;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #0000000a;
+      flex-direction: column;
+      gap: 20px;
+      width: 584px;
+
+      &-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          font-size: 24px;
+          font-weight: 700;
+          line-height: 28px;
+        }
+
+        img {
+          width: 52px;
+        }
+      }
+
+      input {
+        height: 60px;
+        border: 1px solid #0000001f;
+        border-radius: 8px;
+        padding: 0 12px;
+        font-size: 15px;
+        color: #000000de;
+        position: relative;
+
+        &:hover {
+          border-color: #157ee180;
+        }
+
+        &:focus {
+          outline: none;
+          border: 1px solid #2882db;
+        }
+      }
+
+      .brands {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        cursor: pointer;
+        gap: 20px;
+
+        p {
+          font-size: 15px;
+          &:hover {
+            color: #e81111;
+          }
+        }
+
+        .allbrands {
+          color: #0c78ed;
+        }
+      }
+    }
   }
 }

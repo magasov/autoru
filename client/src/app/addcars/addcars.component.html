@@ -50,10 +50,10 @@
       </div>
 
       <div class="selectedBrand__right">
-        <div class="selectedBrand__left-head">
-          <p (click)="clearSelection()" class="selected-brand__name">
+        <div class="selectedBrand__right-head">
+          <h2 (click)="clearSelection()" class="selected-brand__name">
             {{ selectedBrand }}
-          </p>
+          </h2>
 
           <img
             [src]="getSelectedBrandLogo()"
@@ -63,6 +63,11 @@
           />
         </div>
 
+        <input
+          type="text"
+          value='{{ selectedBrand }}'
+          placeholder="Марка"
+        />
         <input
           type="text"
           placeholder="Модель"
