@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
+import axios from 'axios';
 
 @Component({
   selector: 'app-addcars',
@@ -166,6 +167,8 @@ export class AddcarsComponent {
   email: string = '';
   phone: string = '';
   price: number | null = null;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   filterBrands() {
     const search = this.searchTerm.toLowerCase().trim();
@@ -266,6 +269,8 @@ export class AddcarsComponent {
     this.email = '';
     this.phone = '';
     this.price = null;
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 
   resetAfterBrand() {
@@ -356,13 +361,9 @@ export class AddcarsComponent {
       case 5:
         return !!this.description && this.description.trim().length > 0;
       case 6:
-        return !!(
+      return !!(
           this.contactName &&
-          this.contactName.trim().length > 0 &&
-          this.email &&
-          this.email.trim().length > 0 &&
-          this.phone &&
-          this.phone.trim().length > 0
+          this.phone && this.email
         );
       case 7:
         return !!this.price && this.price > 0;
@@ -372,20 +373,64 @@ export class AddcarsComponent {
   }
 
   @HostListener('window:scroll', ['$event'])
-    onWindowScroll() {
-        const header = document.querySelector('.addcars__header');
-        if (header) {
-            if (window.scrollY >= 150) {
-                header.classList.add('sticky');
-            } else {
-                header.classList.remove('sticky');
-            }
-        }
+  onWindowScroll() {
+    const header = document.querySelector('.addcars__header');
+    if (header) {
+      if (window.scrollY >= 150) {
+        header.classList.add('sticky');
+      } else {
+        header.classList.remove('sticky');
+      }
     }
+  }
 
   proceedToNextStep() {
     if (this.currentStep < 7) {
       this.currentStep++;
+    }
+  }
+
+  async submitPost() {
+    this.errorMessage = null;
+    this.successMessage = null;
+
+    const formData = new FormData();
+    formData.append('brand', this.selectedBrand!);
+    formData.append('model', this.selectedModel!);
+    formData.append('year', this.selectedYear!);
+    formData.append('bodyType', this.selectedBodyType!);
+    formData.append('generation', this.selectedGeneration!);
+    formData.append('engine', this.selectedEngine!);
+    formData.append('drivetrain', this.selectedDrivetrain!);
+    formData.append('transmission', this.selectedTransmission!);
+    formData.append('modification', this.selectedModification!);
+    formData.append('color', this.selectedColor!);
+    formData.append('mileage', this.mileage);
+    formData.append('ptsType', this.ptsType!);
+    formData.append('description', this.description);
+    formData.append('contactName', this.contactName);
+    formData.append('email', this.email);
+    formData.append('phone', this.phone);
+    formData.append('price', this.price!.toString());
+
+    this.photos.forEach((photo) => {
+      formData.append('photos', photo);
+    });
+
+    try {
+      const response = await axios.post('http://localhost:8080/posts', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      this.successMessage = 'Объявление успешно создано!';
+      this.clearSelection();
+      console.log('Response:', response.data);
+    } catch (error: any) {
+      this.errorMessage = error.response?.data?.message || 'Ошибка при создании объявления';
+      console.error('Error:', error);
     }
   }
 }

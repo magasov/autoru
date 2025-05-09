@@ -1,16 +1,27 @@
-  <div class="addcars__header">
-     <div class="addcars__header-padding container">
-         <a routerLink="/">
-        <img src="/assets/icons/logo.svg" alt="logo" />
-      </a>
-      <a routerLink="/">Закрыть</a>
-     </div>
-    </div>
+<style>
+  .success-message {
+    color: green;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+</style>
+
+<div class="addcars__header">
+  <div class="addcars__header-padding container">
+    <a routerLink="/">
+      <img src="/assets/icons/logo.svg" alt="logo" />
+    </a>
+    <a routerLink="/">Закрыть</a>
+  </div>
+</div>
 
 <div class="container">
   <div class="addcars">
-  
-
     <div class="addcars__main" *ngIf="!selectedBrand">
       <div class="addcars__main-head">
         <h2>Продайте свой автомобиль</h2>
@@ -41,31 +52,30 @@
     </div>
 
     <div class="selectedBrand" *ngIf="selectedBrand">
-<div class="selectedBrand__left">
-  <ng-container *ngIf="currentStep === 1">
-    <img
-      src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
-      alt="image"
-    />
-    <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
-    <input type="text" placeholder="VIN" />
-    <hr />
-    <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
-  </ng-container>
+      <div class="selectedBrand__left">
+        <ng-container *ngIf="currentStep === 1">
+          <img
+            src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/hint_da522e807e1e13103e9a1653fe01830e.png"
+            alt="image"
+          />
+          <p>Укажите <span>VIN</span>, а мы заполним объявление за вас</p>
+          <input type="text" placeholder="VIN" />
+          <hr />
+          <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
+        </ng-container>
 
-  <ng-container *ngIf="currentStep >= 2">
-    <span [ngClass]="{ 'passed': currentStep > 1 }">Характеристики</span>
-  <span [ngClass]="{ 'passed': currentStep > 2 }">Пробег</span>
-  <span [ngClass]="{ 'passed': currentStep > 3 }">Фото</span>
-  <span [ngClass]="{ 'passed': currentStep > 4 }">ПТС</span>
-  <span [ngClass]="{ 'passed': currentStep > 5 }">Описание</span>
-  <span [ngClass]="{ 'passed': currentStep > 6 }">Контакты</span>
-  <span [ngClass]="{ 'passed': currentStep > 7 }">Цена</span>
-  <span [ngClass]="{ 'passed': currentStep > 8 }">СТС</span>
-    <hr>
-    <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
-  </ng-container>
-</div>
+        <ng-container *ngIf="currentStep >= 2">
+          <span [ngClass]="{ 'passed': currentStep > 1 }">Характеристики</span>
+          <span [ngClass]="{ 'passed': currentStep > 2 }">Пробег</span>
+          <span [ngClass]="{ 'passed': currentStep > 3 }">Фото</span>
+          <span [ngClass]="{ 'passed': currentStep > 4 }">ПТС</span>
+          <span [ngClass]="{ 'passed': currentStep > 5 }">Описание</span>
+          <span [ngClass]="{ 'passed': currentStep > 6 }">Контакты</span>
+          <span [ngClass]="{ 'passed': currentStep > 7 }">Цена</span>
+          <hr>
+          <p (click)="clearSelection()" style="cursor: pointer;">Сбросить все</p>
+        </ng-container>
+      </div>
 
       <div class="selectedBrand__right">
         <div class="selectedBrand__right_one" *ngIf="currentStep >= 1">
@@ -274,16 +284,19 @@
             [(ngModel)]="price"
           />
         </div>
-           <button 
-        *ngIf="canProceed(currentStep)" 
-        (click)="proceedToNextStep()"
-        class="proceed-button"
-      >
-        {{ currentStep === 7 ? 'Завершить' : 'Продолжить' }}
-      </button>
-      </div>
 
-   
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+        <button 
+          *ngIf="canProceed(currentStep)" 
+          (click)="currentStep === 7 ? submitPost() : proceedToNextStep()"
+          class="proceed-button"
+        >
+          {{ currentStep === 7 ? 'Сохранить' : 'Продолжить' }}
+        </button>
+       
+      </div>
     </div>
   </div>
 </div>
