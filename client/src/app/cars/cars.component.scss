@@ -385,6 +385,11 @@
 
   &__ads {
     flex: 3;
-    background: blue;
+    height: max-content;
+    position: sticky;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 }
