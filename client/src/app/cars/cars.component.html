@@ -176,7 +176,7 @@
                 <div class="fulldesctop__info">
                     <div class="fulldesctop__info-one">
                         <h3>{{post?.price | number:'1.0-0'}} ₽</h3>
-                        <p>Mercedes-Benz CLS AMG 63 AMG S II (W218) Рестайлинг</p>
+                        <p>{{post?.brand + ' ' + post?.model + ' ' + post?.generation + ' ' + post?.modification + ' ' + post?.mileage}}</p>
                         <button class="phone__btn">Показать телефон</button>
                         <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChatMOutline IconSvg_size_24 OpenChatByOfferButton__icon OpenChatByOfferButton__icon_color_grey"><path fill="currentColor" fill-rule="evenodd" d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z" clip-rule="evenodd"></path></svg> Написать</button>
                         <div  (click)="setDesctop(false)" class="close">
