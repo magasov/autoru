@@ -113,7 +113,7 @@ export const getPostById = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Объявление не найдено" });
     }
-    res.status(200).json({ message: "Объявление получено", post });
+    res.status(200).json({ post });
   } catch (error) {
     res.status(500).json({ message: "Ошибка сервера", error: error.message });
   }
