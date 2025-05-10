@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, model } from '@angular/core';
 import axios from 'axios';
 
 @Injectable({
@@ -16,7 +16,9 @@ export class PostService {
      
       return posts.map((post: any) => ({
         id: post._id,
-        name: `${post.brand} ${post.model} ${post.generation || ''}`.trim(),
+        name: post.brand,
+        model: post.model,
+        generation: post.generation,
         price: `${post.price.toLocaleString('ru-RU')} ₽`,
         year: post.year,
         mileage: `${post.mileage.toLocaleString('ru-RU')} км`,

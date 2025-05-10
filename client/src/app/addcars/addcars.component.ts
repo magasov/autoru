@@ -1,9 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import axios from 'axios';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-addcars',
@@ -13,6 +14,29 @@ import axios from 'axios';
   styleUrls: ['./addcars.component.scss'],
 })
 export class AddcarsComponent {
+    user: { email: string; name: string } | null = null;
+    constructor(private authService: AuthService, private router: Router) {}
+
+
+   ngOnInit(): void {
+  if (!this.authService.isAuthenticated()) {
+    this.router.navigate(['/login']);
+    return;
+  }
+
+  this.authService.getMe().then(
+    (response) => {
+      this.user = response.user;
+      this.contactName = this.user?.name || 'Частное лицо';
+      this.email = this.user?.email || '';
+    },
+    (error) => {
+      this.errorMessage = error.message || 'Ошибка при загрузке данных профиля';
+      this.router.navigate(['/login']);
+    }
+  );
+}
+
   brands = [
     {
       name: 'Lada (ВАЗ)',

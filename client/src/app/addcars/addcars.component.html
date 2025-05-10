@@ -253,26 +253,25 @@
           </div>
         </div>
 
-        <div class="selectedBrand__right_one" *ngIf="currentStep >= 6">
-          <div class="selectedBrand__right_one-head">
-            <h2>Контакты</h2>
-          </div>
-          <input
-            type="text"
-            placeholder="Как к вам обращаться?"
-            [(ngModel)]="contactName"
-          />
-          <input
-            type="text"
-            placeholder="Электронная почта (e-mail)"
-            [(ngModel)]="email"
-          />
-          <input
-            type="number"
-            placeholder="Номер телефона"
-            [(ngModel)]="phone"
-          />
-        </div>
+       <div class="selectedBrand__right_one" *ngIf="currentStep >= 6">
+  <div class="selectedBrand__right_one-head">
+    <h2>Контакты</h2>
+  </div>
+  <input
+    type="text"
+    placeholder="Как к вам обращаться?"
+    [(ngModel)]="contactName"
+  />
+  <input
+    type="text"
+    placeholder="Электронная почта (e-mail)"
+    [(ngModel)]="email"
+  />
+  <input
+    type="text"
+    placeholder="Номер телефона"
+  />
+</div>
 
         <div class="selectedBrand__right_one" *ngIf="currentStep >= 7">
           <div class="selectedBrand__right_one-head">
