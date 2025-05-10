@@ -145,6 +145,13 @@
                 </div>
             </div>
 
+            <div class="cars__main-desc">
+                <h2>Комментарий продавца</h2>
+                <span class="desc">
+                    {{post?.description}}
+                </span>
+            </div>
+
             <div class="fulldesctop" *ngIf="desctop">
                 <img  *ngIf="post && post.photos && post.photos.length > 0"
                         [src]="'http://localhost:8080/' + post.photos[currentImageIndex]"

@@ -387,7 +387,9 @@ export class AddcarsComponent {
       case 6:
       return !!(
           this.contactName &&
-          this.phone && this.email
+          this.email
+          && 
+          this.phone 
         );
       case 7:
         return !!this.price && this.price > 0;

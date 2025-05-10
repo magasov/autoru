@@ -235,43 +235,44 @@
           </div>
         </div>
 
-        <div class="selectedBrand__right_one" *ngIf="currentStep >= 5">
-          <div class="selectedBrand__right_one-head">
-            <h2>Описание</h2>
-          </div>
-          <span style="font-size: 15px;">Убедитесь, что описание соответствует <a routerLink="/">Правилам</a>. Не указывайте ссылки, цену, контакты и не предлагайте услуги — объявление не пройдет модерацию</span>
-          <div class="addproduct__desc">
-            <textarea 
-              placeholder="Честно опишите достоинства и недостатки своего автомобиля" 
-              [(ngModel)]="description"
-              name="description.description" 
-              rows="10" 
-              maxlength="30001" 
-              style="height: 261px;"
-            ></textarea>
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgYagptLogo IconSvg_size_16"><circle cx="2" cy="2" r="2" fill="#000" transform="matrix(-1 0 0 1 16 12)"></circle><circle cx="6" cy="6" r="6" fill="#000" transform="matrix(0 -1 -1 0 12 12)"></circle></svg> Создать описание с GPT</p>
-          </div>
-        </div>
+    <div class="selectedBrand__right_one" *ngIf="currentStep >= 5">
+  <div class="selectedBrand__right_one-head">
+    <h2>Описание</h2>
+  </div>
+  <span style="font-size: 15px;">Убедитесь, что описание соответствует <a routerLink="/">Правилам</a>. Не указывайте ссылки, цену, контакты и не предлагайте услуги — объявление не пройдет модерацию</span>
+  <div class="addproduct__desc">
+    <textarea 
+      placeholder="Честно опишите достоинства и недостатки своего автомобиля" 
+      [(ngModel)]="description"
+      name="description.description" 
+      rows="10" 
+      maxlength="30001" 
+      style="height: 261px; white-space: pre-wrap;"
+    ></textarea>
+    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgYagptLogo IconSvg_size_16"><circle cx="2" cy="2" r="2" fill="#000" transform="matrix(-1 0 0 1 16 12)"></circle><circle cx="6" cy="6" r="6" fill="#000" transform="matrix(0 -1 -1 0 12 12)"></circle></svg> Создать описание с GPT</p>
+  </div>
+</div>
 
        <div class="selectedBrand__right_one" *ngIf="currentStep >= 6">
-  <div class="selectedBrand__right_one-head">
-    <h2>Контакты</h2>
-  </div>
-  <input
-    type="text"
-    placeholder="Как к вам обращаться?"
-    [(ngModel)]="contactName"
-  />
-  <input
-    type="text"
-    placeholder="Электронная почта (e-mail)"
-    [(ngModel)]="email"
-  />
-  <input
-    type="text"
-    placeholder="Номер телефона"
-  />
-</div>
+        <div class="selectedBrand__right_one-head">
+          <h2>Контакты</h2>
+        </div>
+        <input
+          type="text"
+          placeholder="Как к вам обращаться?"
+          [(ngModel)]="contactName"
+        />
+        <input
+          type="text"
+          placeholder="Электронная почта (e-mail)"
+          [(ngModel)]="email"
+        />
+        <input
+          type="text"
+          placeholder="Номер телефона"
+           [(ngModel)]="phone"
+        />
+      </div>
 
         <div class="selectedBrand__right_one" *ngIf="currentStep >= 7">
           <div class="selectedBrand__right_one-head">
