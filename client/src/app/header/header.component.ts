@@ -28,7 +28,6 @@ export class HeaderComponent implements OnInit {
       this.authService.getMe().then(
         (response) => {
           this.user = response.user; 
-          console.log(response);
           
           
         },

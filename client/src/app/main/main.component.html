@@ -1,35 +1,65 @@
 <div class="container">
-    <div class="main">
-      <h1>
-        <img src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/feed_c04da74e5a216d9a42d478bf295acb2d.svg" alt="img"> Рекомендации
-      </h1>
-      <div class="products">
-        <div class="cart" *ngFor="let product of products; let i = index">
-          <div class="cart__one" (mouseenter)="startSlider(i)" (mouseleave)="stopSlider(i)">
-            <img [src]="product.images[product.activeImageIndex]" alt="image">
-            <div class="image__points">
-              <span *ngFor="let image of product.images.slice(0, 5); let imgIndex = index" 
-                    [class.active]="imgIndex === product.activeImageIndex"
-                    (mouseenter)="setActiveImage(i, imgIndex)"></span>
-            </div>
-            <div class="image__points-slider">
-              <span *ngFor="let image of product.images.slice(0, 5); let imgIndex = index" 
-                    [class.active]="imgIndex === product.activeImageIndex"
-                    (mouseenter)="setActiveImage(i, imgIndex)"></span>
-            </div>
-            <div class="favorite">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgFavoriteMOutline IconSvg_size_24 ButtonFavorite__icon PersonalizedFeedOfferItem__favoriteIcon-S602N">
-                <path fill="currentColor" fill-rule="evenodd" d="M18.893 11.69A3.6 3.6 0 0 0 20 9.088C20 7.095 18.397 5.5 16.444 5.5a3.54 3.54 0 0 0-2.842 1.432L12 9.077l-1.602-2.145A3.54 3.54 0 0 0 7.556 5.5C5.603 5.5 4 7.095 4 9.088c0 1.027.424 1.948 1.108 2.603L12 19.48zM12 22.5l-8.276-9.365A5.6 5.6 0 0 1 2 9.088C2 6.002 4.487 3.5 7.556 3.5c1.093 0 2.113.318 2.973.867A5.6 5.6 0 0 1 12 5.735a5.6 5.6 0 0 1 1.47-1.368 5.5 5.5 0 0 1 2.974-.867C19.513 3.5 22 6.002 22 9.088a5.6 5.6 0 0 1-1.723 4.045z" clip-rule="evenodd"></path>
-              </svg>
-            </div>
+  <div class="main">
+    <h1>
+      <img
+        src="https://yastatic.net/s3/vertis-front-deploy/_autoru-frontend/feed_c04da74e5a216d9a42d478bf295acb2d.svg"
+        alt="img"
+      />
+      Рекомендации
+    </h1>
+    <div class="products">
+      <div class="cart" *ngFor="let product of products; let i = index">
+        <a
+          class="cart__one"
+          [routerLink]="['/cars', product.id]"
+          (mouseenter)="startSlider(i)"
+          (mouseleave)="stopSlider(i)"
+        >
+          <img [src]="product.images[product.activeImageIndex]" alt="image" />
+          <div class="image__points">
+            <span
+              *ngFor="
+                let image of product.images.slice(0, 5);
+                let imgIndex = index
+              "
+              [class.active]="imgIndex === product.activeImageIndex"
+              (mouseenter)="setActiveImage(i, imgIndex)"
+            ></span>
           </div>
-          <div class="cart__two">
-            <p class="price">{{ product.price }}</p>
-           <p class="name">{{ product.name }} {{ product.model}}</p>
-
-            <span>{{ product.year }} / {{ product.mileage }}</span>
+          <div class="image__points-slider">
+            <span
+              *ngFor="
+                let image of product.images.slice(0, 5);
+                let imgIndex = index
+              "
+              [class.active]="imgIndex === product.activeImageIndex"
+              (mouseenter)="setActiveImage(i, imgIndex)"
+            ></span>
           </div>
+          <div class="favorite" (click)="toggleFavorite($event)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="IconSvg IconSvg_name_SvgFavoriteMOutline IconSvg_size_24 ButtonFavorite__icon PersonalizedFeedOfferItem__favoriteIcon-S602N"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M18.893 11.69A3.6 3.6 0 0 0 20 9.088C20 7.095 18.397 5.5 16.444 5.5a3.54 3.54 0 0 0-2.842 1.432L12 9.077l-1.602-2.145A3.54 3.54 0 0 0 7.556 5.5C5.603 5.5 4 7.095 4 9.088c0 1.027.424 1.948 1.108 2.603L12 19.48zM12 22.5l-8.276-9.365A5.6 5.6 0 0 1 2 9.088C2 6.002 4.487 3.5 7.556 3.5c1.093 0 2.113.318 2.973.867A5.6 5.6 0 0 1 12 5.735a5.6 5.6 0 0 1 1.47-1.368 5.5 5.5 0 0 1 2.974-.867C19.513 3.5 22 6.002 22 9.088a5.6 5.6 0 0 1-1.723 4.045z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </div>
+        </a>
+        <div class="cart__two">
+          <p class="price">{{ product.price }}</p>
+          <p class="name">{{ product.name }} {{ product.model }}</p>
+          <span>{{ product.year }} / {{ product.mileage }}</span>
         </div>
       </div>
     </div>
   </div>
+</div>

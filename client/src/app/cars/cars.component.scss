@@ -314,6 +314,7 @@
         display: flex;
         flex-direction: column;
         gap: 1px;
+        user-select: none;
 
         &-one {
           height: 470px;

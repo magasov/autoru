@@ -451,7 +451,6 @@ export class AddcarsComponent {
 
       this.successMessage = 'Объявление успешно создано!';
       this.clearSelection();
-      console.log('Response:', response.data);
     } catch (error: any) {
       this.errorMessage = error.response?.data?.message || 'Ошибка при создании объявления';
       console.error('Error:', error);

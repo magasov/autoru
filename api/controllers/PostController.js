@@ -108,7 +108,7 @@ export const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate(
       "userId",
-      "email name"
+      "email name avatar"
     );
     if (!post) {
       return res.status(404).json({ message: "Объявление не найдено" });

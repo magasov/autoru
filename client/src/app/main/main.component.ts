@@ -1,17 +1,20 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router'; 
 import { PostService } from '../services/post.service'; 
 
 @Component({
   selector: 'app-main',
-  imports: [NgFor],
+  imports: [NgFor,RouterLink],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
   products: any[] = [];
+  
+  
 
-  constructor(private postService: PostService) {} 
+  constructor(private postService: PostService, private router: Router) {} 
 
   ngOnInit(): void {
     this.fetchPosts();
@@ -19,7 +22,11 @@ export class MainComponent implements OnInit {
 
   async fetchPosts(): Promise<void> {
     this.products = await this.postService.fetchPosts(); 
+
+  console.log(this.products);
   }
+
+  
 
   startSlider(index: number) {
     this.stopSlider(index);
@@ -43,5 +50,11 @@ export class MainComponent implements OnInit {
   setActiveImage(productIndex: number, imageIndex: number) {
     this.products[productIndex].activeImageIndex = imageIndex;
     this.startSlider(productIndex);
+  }
+
+
+  toggleFavorite(event: Event) {
+    event.stopPropagation(); 
+    
   }
 }

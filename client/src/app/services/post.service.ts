@@ -12,8 +12,6 @@ export class PostService {
     try {
       const response = await axios.get(`${this.BASE_API_URL}/posts`);
       const posts = response.data.posts || [];
-
-     
       return posts.map((post: any) => ({
         id: post._id,
         name: post.brand,

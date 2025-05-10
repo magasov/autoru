@@ -9,11 +9,11 @@
             <div class="cars__main-header">
                 <div class="cars__main-header-navigate">
                     <a routerLink="/">Продажа автомобилей</a>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgChevronRightS IconSvg_size_12 CardBreadcrumbs__arrow"><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" ><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
                     <a routerLink="/">С пробегом</a>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgChevronRightS IconSvg_size_12 CardBreadcrumbs__arrow"><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" ><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
                     <a routerLink="/">{{post?.brand}}</a>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="IconSvg IconSvg_name_SvgChevronRightS IconSvg_size_12 CardBreadcrumbs__arrow"><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" ><path fill="currentColor" fill-rule="evenodd" d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path></svg>
                     <a routerLink="/">{{post?.model}}</a>
                 </div>
 
@@ -46,7 +46,7 @@
 
             <div class="cars__main-user">
                 <div class="cars__main-user-left">
-                    <img src="//avatars.mds.yandex.net/get-autoru-users/42279/d810585c9ca8d7c9ce201937247be1aa/100x100">
+                    <img [src]="post?.userId?.avatar">
                     <div class="user__info">
                         <p>{{post?.contactName}}</p>
                         <span>Назрань, 105-й массив</span>

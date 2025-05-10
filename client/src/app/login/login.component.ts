@@ -112,7 +112,6 @@ export class LoginComponent implements OnInit {
       
       try {
         const userData = await this.authService.getMe();
-        console.log('Данные пользователя:', userData.user);
         setTimeout(() => {
           this.router.navigate(['/profile']);
         }, 1000);

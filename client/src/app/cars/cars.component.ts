@@ -11,6 +11,8 @@ interface Post {
     _id: string;
     email: string;
     name: string;
+    avatar: string,
+
   };
   brand: string;
   model: string;
@@ -42,6 +44,7 @@ interface Post {
 
 export class CarsComponent implements OnInit {
   post: Post | null = null;
+  
   loading: boolean = true;
   error: string | null = null;
   currentImageIndex: number = 0; 
@@ -61,6 +64,8 @@ export class CarsComponent implements OnInit {
   async fetchPost(id: string): Promise<void> {
     try {
       const response = await axios.get(`http://localhost:8080/posts/${id}`);
+      console.log(response);
+      
       this.post = response.data.post;
       this.loading = false;
     } catch (err) {
