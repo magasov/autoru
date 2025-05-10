@@ -44,6 +44,7 @@ interface Post {
 })
 export class CarsComponent implements OnInit {
   post: Post | null = null;
+  desctop: boolean = false;
   loading: boolean = true;
   error: string | null = null;
   currentImageIndex: number = 0;
@@ -53,6 +54,10 @@ export class CarsComponent implements OnInit {
     private titleService: Title, 
     private metaService: Meta   
   ) {}
+
+  setDesctop(boolean: boolean): void {
+    this.desctop = boolean;
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

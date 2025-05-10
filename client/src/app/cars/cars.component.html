@@ -122,7 +122,9 @@
                         <img
                         *ngIf="post && post.photos && post.photos.length > 0"
                         [src]="'http://localhost:8080/' + post.photos[currentImageIndex]"
+                    
                         [alt]="post.brand + ' ' + post.model"
+                        (click)="setDesctop(true)"
                         />
                         <div class="iconleftandright left" (click)="prevImage()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="41" viewBox="0 0 24 41" class="IconSvg IconSvg_name_SvgArrowGallery IconSvg_size_36 ImageGalleryDesktop__left-nav-icon"><defs><filter id="arrow-gallery_svg__a" width="133.3%" height="118.9%" x="-16.7%" y="-6.8%" filterUnits="objectBoundingBox"><feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset><feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"></feGaussianBlur><feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"></feColorMatrix><feMerge><feMergeNode in="shadowMatrixOuter1"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs><path fill="#FFF" fill-rule="evenodd" d="M19.7 1.9 2.8 18.5l16.9 16.6c.5.4.5 1.2 0 1.6s-1.2.4-1.6 0L.3 19.4q-.3-.45-.3-.9c0-.3.1-.6.3-.8L18 .3c.5-.4 1.2-.4 1.6 0 .5.5.5 1.2.1 1.6" filter="url(#arrow-gallery_svg__a)" opacity="0.8" transform="matrix(-1 0 0 1 22.075 1)"></path></svg>
@@ -140,8 +142,75 @@
                         [class.active]="i === currentImageIndex"
                         />
                     </div>
-                    </div>
+                </div>
             </div>
+
+            <div class="fulldesctop" *ngIf="desctop">
+                <img  *ngIf="post && post.photos && post.photos.length > 0"
+                        [src]="'http://localhost:8080/' + post.photos[currentImageIndex]"
+                        [alt]="post.brand + ' ' + post.model" class="fulldesctop__selects" alt="">
+
+                <div class="fulldesctop__select">
+                    <div *ngFor="let photo of post?.photos; let i = index" class="fulldesctop__select-img" [class.active]="i === currentImageIndex" (click)="setImage(i)">
+                        <img
+                        [src]="'http://localhost:8080/' + photo"
+                        [alt]="post?.brand + ' ' + post?.model"
+                        
+                        
+                        />
+                    </div>
+                </div>
+
+                <div class="fulldesctop__image-items">
+                     <div class="images__item" *ngFor="let photo of post?.photos; let i = index" (mouseenter)="setImage(i)">
+                           <img
+                        [src]="'http://localhost:8080/' + photo"
+                        [alt]="post?.brand + ' ' + post?.model"
+                        width="675"
+                        height="900"
+                        
+                        />
+                     </div>
+                </div>
+
+                <div class="fulldesctop__info">
+                    <div class="fulldesctop__info-one">
+                        <h3>{{post?.price | number:'1.0-0'}} ₽</h3>
+                        <p>Mercedes-Benz CLS AMG 63 AMG S II (W218) Рестайлинг</p>
+                        <button class="phone__btn">Показать телефон</button>
+                        <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChatMOutline IconSvg_size_24 OpenChatByOfferButton__icon OpenChatByOfferButton__icon_color_grey"><path fill="currentColor" fill-rule="evenodd" d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z" clip-rule="evenodd"></path></svg> Написать</button>
+                        <div  (click)="setDesctop(false)" class="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" ><path fill="currentColor" d="m20.707 4.707-1.414-1.414L12 10.586 4.707 3.293 3.293 4.707 10.586 12l-7.293 7.293 1.414 1.414L12 13.414l7.293 7.293 1.414-1.414L13.414 12z"></path></svg>
+                    </div>
+                    </div>
+                    <div class="fulldesctop__info-one">
+                        <h2>Отчет по автомобилю</h2>
+                        
+                        <div class="otchet__main">
+                            <div class="otchet__main-p">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgCheckCircleMOutline IconSvg_size_24 VinReportIcon VinReportIcon_theme_default VinReportIcon_type_ok VinReportPromoForGallery__icon"><path fill="currentColor" d="M12 4c4.411 0 8 3.589 8 8s-3.589 8-8 8-8-3.589-8-8 3.589-8 8-8m0-2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2m4.172 6L11 13.172l-2.586-2.586L7 12l4 4 6.586-6.586z"></path></svg>
+                                <p>Данные о ДТП не найдены</p>
+                            </div>
+                            <div class="otchet__main-p">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgLockerM IconSvg_size_24 VinReportIcon VinReportIcon_theme_default VinReportIcon_type_closed VinReportPromoForGallery__icon"><path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m3-9v-1a3 3 0 1 0-6 0v1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1m-2 0h-2v-1a1 1 0 0 1 2 0z"></path></svg>
+                                <p>24 записи в истории пробегов</p>
+                            </div>
+                            <div class="otchet__main-p">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgLockerM IconSvg_size_24 VinReportIcon VinReportIcon_theme_default VinReportIcon_type_closed VinReportPromoForGallery__icon"><path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m3-9v-1a3 3 0 1 0-6 0v1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1m-2 0h-2v-1a1 1 0 0 1 2 0z"></path></svg>
+                                <p>Ещё 9 размещений на Авто.ру</p>
+                            </div>
+                            <div class="otchet__main-p">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgLockerM IconSvg_size_24 VinReportIcon VinReportIcon_theme_default VinReportIcon_type_closed VinReportPromoForGallery__icon"><path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m3-9v-1a3 3 0 1 0-6 0v1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1m-2 0h-2v-1a1 1 0 0 1 2 0z"></path></svg>
+                                <p>Ещё 33 записи в истории эксплуатации</p>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    </div>
+
+                   
+                 
+                </div>
         </div>
         <div class="cars__ads">
             <div class="cars__ads-one">
@@ -170,4 +239,5 @@
           
         </div>
     </div>
-</div>
+        </div>
+
