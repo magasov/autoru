@@ -1,6 +1,9 @@
 <app-header />
+<div class="loading" *ngIf="loading">
+    <span class="loader"></span>
+</div>
 
-<div class="container">
+<div *ngIf="!loading" class="container">
     <div class="cars">
         <div class="cars__header" *ngIf="headerstickey" >
             
@@ -64,7 +67,7 @@
                 </div>
                 <div class="cars__main-title-one">
                     <div class="cars__main-title-one-price">
- <h2>{{post?.price | number:'1.0-0'}} ₽</h2>
+                        <h2>{{post?.price | number:'1.0-0'}} ₽</h2>
 
 
                         <span>Выше оценки на 17%</span>
@@ -283,7 +286,7 @@
                  
                 </div>
         </div>
-        <div class="cars__ads">
+      <div class="cars__ads" [ngClass]="adssticky ? 'ads__active' : ''">
             <div class="cars__ads-one">
             <p>Тут могла быть ваша реклама</p>
             <p>Тут могла быть ваша реклама</p>
@@ -369,7 +372,8 @@
       </div>
     </div>
         </div>
-    </div>
+</div>
+
 
 
 <app-footer />

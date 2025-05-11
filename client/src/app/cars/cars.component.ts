@@ -52,6 +52,7 @@ export class CarsComponent implements OnInit {
   desctop: boolean = false;
   loading: boolean = true;
   headerstickey: boolean = false;
+  adssticky: boolean = false;
   error: string | null = null;
   currentImageIndex: number = 0;
 
@@ -66,7 +67,10 @@ export class CarsComponent implements OnInit {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    this.headerstickey = scrollPosition > 200;
+    this.headerstickey = scrollPosition > 500;
+    this.adssticky = scrollPosition > 500;
+    console.log(this.adssticky);
+    
   }
 
   setDesctop(boolean: boolean): void {
