@@ -2,8 +2,37 @@
 
 <div class="container">
     <div class="cars">
-        <div class="cars__header">
-            head
+        <div class="cars__header" *ngIf="headerstickey" >
+            
+               <div class="container">
+                <div class="cars__main-user headsticky">
+                    <div class="cars__main-user-left">
+                        <img [src]="post?.userId?.avatar">
+                        <div class="user__info">
+                            <p>{{post?.contactName}}</p>
+                            <span>Назрань, 105-й массив</span>
+                        </div>
+                    </div>
+                <div class="cars__main-user-right">
+                    <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChatMOutline IconSvg_size_24 OpenChatByOfferButton__icon OpenChatByOfferButton__icon_color_green"><path fill="currentColor" fill-rule="evenodd" d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z" clip-rule="evenodd"></path></svg> Написать</a>
+                    <button>Показать телефон</button>
+                    <div class="cars__main-user-price">
+                    <p>{{post?.price | number:'1.0-0'}} ₽</p>
+                    </div>
+
+                    <div class="sticky__bar">
+                        <div class="favorite">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgFavoriteMOutline IconSvg_size_24 ButtonFavorite__icon CardStickyBar__favoriteButtonIcon-UdSXj"><path fill="currentColor" fill-rule="evenodd" d="M18.893 11.69A3.6 3.6 0 0 0 20 9.088C20 7.095 18.397 5.5 16.444 5.5a3.54 3.54 0 0 0-2.842 1.432L12 9.077l-1.602-2.145A3.54 3.54 0 0 0 7.556 5.5C5.603 5.5 4 7.095 4 9.088c0 1.027.424 1.948 1.108 2.603L12 19.48zM12 22.5l-8.276-9.365A5.6 5.6 0 0 1 2 9.088C2 6.002 4.487 3.5 7.556 3.5c1.093 0 2.113.318 2.973.867A5.6 5.6 0 0 1 12 5.735a5.6 5.6 0 0 1 1.47-1.368 5.5 5.5 0 0 1 2.974-.867C19.513 3.5 22 6.002 22 9.088a5.6 5.6 0 0 1-1.723 4.045z" clip-rule="evenodd"></path></svg>
+                        </div>
+
+                        <div class="sravn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgCompare IconSvg_size_24 CardStickyBar__compareButtonIcon-_5nt_ ButtonCompare__icon"><path fill="currentColor" fill-rule="evenodd" d="m16 12-1.414-1.414L17.172 8H3V6h14.172l-2.586-2.586L16 2l5 5zm-8 0 1.414 1.414L6.828 16H21v2H6.828l2.586 2.586L8 22l-5-5z" clip-rule="evenodd"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+               </div>
+            </div>
         </div>
         <div class="cars__main">
             <div class="cars__main-header">

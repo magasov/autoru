@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { ActivatedRoute } from '@angular/router'; 
 import { Title, Meta } from '@angular/platform-browser'; 
@@ -51,6 +51,7 @@ export class CarsComponent implements OnInit {
   post: Post | null = null;
   desctop: boolean = false;
   loading: boolean = true;
+  headerstickey: boolean = false;
   error: string | null = null;
   currentImageIndex: number = 0;
 
@@ -61,6 +62,12 @@ export class CarsComponent implements OnInit {
     private postService: PostService, 
     private router: Router
   ) {}
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.headerstickey = scrollPosition > 200;
+  }
 
   setDesctop(boolean: boolean): void {
     this.desctop = boolean;
