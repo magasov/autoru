@@ -61,6 +61,7 @@ export class CarsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    window.scrollTo(0,0)
     if (id) {
       this.fetchPost(id);
     } else {
