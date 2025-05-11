@@ -6,6 +6,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import axios from 'axios';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FooterComponent } from "../footer/footer.component";
 
 interface Post {
   _id: string;
@@ -38,7 +39,7 @@ interface Post {
 
 @Component({
   selector: 'app-cars',
-  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule],
+  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule, FooterComponent],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
   standalone: true
