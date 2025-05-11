@@ -22,8 +22,6 @@ export class MainComponent implements OnInit {
 
   async fetchPosts(): Promise<void> {
     this.products = await this.postService.fetchPosts(); 
-
-  console.log(this.products);
   }
 
   

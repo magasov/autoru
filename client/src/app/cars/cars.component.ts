@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
-import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router'; 
 import { Title, Meta } from '@angular/platform-browser'; 
 import axios from 'axios';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from "../footer/footer.component";
+import { Router, RouterLink } from '@angular/router'; 
+import { PostService } from '../services/post.service'; 
 
 interface Post {
   _id: string;
@@ -45,6 +46,8 @@ interface Post {
   standalone: true
 })
 export class CarsComponent implements OnInit {
+  products: any[] = [];
+
   post: Post | null = null;
   desctop: boolean = false;
   loading: boolean = true;
@@ -54,7 +57,9 @@ export class CarsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private titleService: Title, 
-    private metaService: Meta   
+    private metaService: Meta   ,
+    private postService: PostService, 
+    private router: Router
   ) {}
 
   setDesctop(boolean: boolean): void {
@@ -63,6 +68,9 @@ export class CarsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    this.fetchPosts();
+    
+
     window.scrollTo(0,0)
     if (id) {
       this.fetchPost(id);
@@ -70,6 +78,11 @@ export class CarsComponent implements OnInit {
       this.error = 'No post ID provided';
       this.loading = false;
     }
+  }
+
+  async fetchPosts(): Promise<void> {
+    this.products = await this.postService.fetchPosts(); 
+
   }
 
   async fetchPost(id: string): Promise<void> {
@@ -135,6 +148,36 @@ buttons: string[] = [
       this.currentImageIndex =
         (this.currentImageIndex - 1 + this.post.photos.length) % this.post.photos.length;
     }
+  }
+
+  startSlider(index: number) {
+    this.stopSlider(index);
+    this.products[index].intervalId = setInterval(() => {
+      this.nextImages(index);
+    }, 2000);
+  }
+
+  stopSlider(index: number) {
+    if (this.products[index].intervalId) {
+      clearInterval(this.products[index].intervalId);
+      this.products[index].intervalId = null;
+    }
+  }
+
+  nextImages(index: number) {
+    const product = this.products[index];
+    product.activeImageIndex = (product.activeImageIndex + 1) % product.images.length;
+  }
+
+  setActiveImage(productIndex: number, imageIndex: number) {
+    this.products[productIndex].activeImageIndex = imageIndex;
+    this.startSlider(productIndex);
+  }
+
+
+  toggleFavorite(event: Event) {
+    event.stopPropagation(); 
+    
   }
 
   nextImage(): void {

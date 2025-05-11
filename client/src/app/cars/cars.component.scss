@@ -658,3 +658,148 @@
     gap: 20px;
   }
 }
+
+.cars__recommendation {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 70px;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 32px;
+    grid-column: 1 / -1;
+  }
+
+  .products {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+
+    .cart {
+      display: flex;
+      flex-direction: column;
+      max-width: 287px;
+      gap: 8px;
+      cursor: pointer;
+
+      &:hover {
+        .favorite {
+          background: #fff;
+          color: red;
+        }
+      }
+
+      &__one {
+        width: 100%;
+        height: 215px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        display: flex;
+
+        &:hover {
+          .image__points {
+            opacity: 1;
+          }
+        }
+
+        .favorite {
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          color: #fff;
+          transition: all 0.3s ease;
+          padding: 10px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background: #eceef0;
+            color: #d6090b;
+          }
+        }
+
+        .image__points {
+          opacity: 0;
+          width: 100%;
+          position: absolute;
+          bottom: 3px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          span {
+            flex: 1;
+            height: 3px;
+            background: #fff;
+          }
+
+          .active {
+            background: #d6090b;
+          }
+        }
+
+        .image__points-slider {
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          span {
+            flex: 1;
+            height: 100%;
+          }
+        }
+
+        img {
+          object-fit: cover;
+          width: 100%;
+        }
+      }
+
+      &__two {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .price {
+          font-size: 20px;
+          font-weight: 700;
+          color: #333;
+          font-family: Arial;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .name {
+          font-size: 17px;
+          line-height: 20px;
+          margin-bottom: 2px;
+          color: #000;
+          text-transform: capitalize;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        span {
+          font-size: 15px;
+          line-height: 20px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          color: #1c212899;
+        }
+      }
+    }
+  }
+}
