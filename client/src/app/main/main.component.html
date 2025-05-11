@@ -14,6 +14,7 @@
           [routerLink]="['/cars', product.id]"
           (mouseenter)="startSlider(i)"
           (mouseleave)="stopSlider(i)"
+          target="_blank"
         >
           <img [src]="product.images[product.activeImageIndex]" alt="image" />
           <div class="image__points">

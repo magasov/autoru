@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser'; 
 import axios from 'axios';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface Post {
   _id: string;
@@ -37,7 +38,7 @@ interface Post {
 
 @Component({
   selector: 'app-cars',
-  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule],
+  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
   standalone: true
@@ -85,6 +86,21 @@ export class CarsComponent implements OnInit {
       this.loading = false;
       console.error(err);
     }
+  }
+
+buttons: string[] = [
+    'Ещё продаётся?',
+    'Обмен возможен?',
+    'Торг возможен?',
+    'Где и когда можно посмотреть?'
+  ];
+
+  selectedIndex: number = 0;
+  messageText: string = this.buttons[this.selectedIndex];
+
+  onSelect(index: number): void {
+    this.selectedIndex = index;
+    this.messageText = this.buttons[index];
   }
 
   

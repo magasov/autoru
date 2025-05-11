@@ -399,6 +399,70 @@
         font-size: 15px;
         line-height: 21px;
       }
+
+      .cars__main-sms {
+        display: flex;
+        flex-direction: column;
+        background: #4954681a;
+        border-radius: 12px;
+        position: relative;
+
+        textarea {
+          border: 0;
+          font-size: 15px;
+          line-height: 15px;
+          grid-area: 1 / 1 / 2 / 2;
+          box-sizing: border-box;
+          padding: 0;
+          border-radius: 12px;
+          height: 112px;
+          padding: 20px 15px;
+          resize: none;
+          border: none;
+          outline: none;
+          background: #0000;
+
+          &:focus {
+            outline: 1px solid #000;
+          }
+        }
+
+        .input__bottom {
+          width: calc(100% - 30px);
+          padding: 10px 13px;
+          position: absolute;
+          bottom: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          &-one {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            button {
+              padding: 0 10px;
+              background: #fff;
+              cursor: pointer;
+              border-radius: 50px;
+              font-size: 13px;
+              height: 32px;
+              border: 1px solid #0000001a;
+            }
+
+            .active {
+              background: #000;
+              color: #fff;
+              border: 1px solid #000;
+            }
+          }
+
+          .send {
+            cursor: pointer;
+          }
+        }
+      }
     }
 
     .fulldesctop {

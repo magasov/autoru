@@ -151,6 +151,41 @@
                     {{post?.description}}
                 </span>
             </div>
+            
+         <div class="cars__main-desc">
+  <h2>Спросите у продавца</h2>
+
+  <div class="cars__main-sms">
+    <textarea [(ngModel)]="messageText"></textarea>
+
+    <div class="input__bottom">
+      <div class="input__bottom-one">
+        <button 
+          *ngFor="let btn of buttons; let i = index"
+          (click)="onSelect(i)"
+          [class.active]="selectedIndex === i"
+        >
+          {{ btn }}
+        </button>
+      </div>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="send"
+      >
+        <path
+          fill="currentColor"
+          d="M4.5 2H3l.823 6.526a2 2 0 0 0 1.565 1.705L14.631 12 5.4 13.709a2 2 0 0 0-1.578 1.71L3 22h1.5L23 12.291v-.581z"
+        ></path>
+      </svg>
+    </div>
+  </div>
+</div>
+
 
             <div class="fulldesctop" *ngIf="desctop">
                 <img  *ngIf="post && post.photos && post.photos.length > 0"
