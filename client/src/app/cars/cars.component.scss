@@ -9,11 +9,23 @@
     width: 100%;
     left: 0;
     top: 0;
+    animation: slideDown 0.3s ease-out forwards;
 
     .headsticky {
       background: #ffff;
       border-radius: 0 0 16px 16px;
       box-shadow: 0 5px 14px #dddfe2;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
 
