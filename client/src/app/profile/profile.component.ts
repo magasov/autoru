@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { NgIf } from '@angular/common';
+import { HeaderComponent } from "../header/header.component";
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [NgIf],
+  imports: [HeaderComponent, RouterLink],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  user: { email: string; name: string; isVerified: boolean } | null = null;
+  user: { email: string; name: string; avatar: string; isVerified: boolean } | null = null;
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}

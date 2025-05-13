@@ -1,12 +1,32 @@
-<div class="profile-container">
-  <div *ngIf="user" class="profile-card">
-    <h2>Профиль пользователя</h2>
-    <div class="profile-info">
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Имя:</strong> {{ user.name || 'Не указано' }}</p>
-      <p><strong>Верифицирован:</strong> {{ user.isVerified ? 'Да' : 'Нет' }}</p>
+<app-header />
+
+<div class="container">
+  <div class="profile">
+    <div class="profile__left"></div>
+    <div class="profile__right">
+      <div class="profile__right-head">
+        <img [src]="user?.avatar" alt="avatar">
+        <p>{{user?.name}}</p>
+      </div>
+
+      <div class="profile__right-main">
+        <ul>
+          <li>
+            0
+            <span>Подписчиков</span>
+          </li>
+          <li>
+            0
+            <span>Подписок</span>
+          </li>
+          <li>
+            1
+            <span>Запись</span>
+          </li>
+        </ul>
+
+        <a routerLink="/">Редактировать профиль</a>
+      </div>
     </div>
-    <button class="logout-btn" (click)="logout()">Выйти</button>
   </div>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 </div>
