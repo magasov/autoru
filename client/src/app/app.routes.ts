@@ -5,11 +5,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { AddcarsComponent } from './addcars/addcars.component';
 import { AuthGuard } from './auth.guard';
 import { CarsComponent } from './cars/cars.component';
+import { CarsallComponent } from './carsall/carsall.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'profile', component: ProfileComponent},
    { path: 'addcars', component: AddcarsComponent, canActivate: [AuthGuard] },
-   { path: 'cars/:id', component: CarsComponent }
+   { path: 'cars/:id', component: CarsComponent },
+   { path: 'carsall/:name', component: CarsallComponent }
 ];

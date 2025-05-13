@@ -1,15 +1,16 @@
+import { Component } from '@angular/core';
+import { HeaderComponent } from "../header/header.component";
+import { Router, RouterLink } from '@angular/router';
 import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router'; 
 import { PostService } from '../services/post.service'; 
 
 @Component({
-  selector: 'app-main',
-  imports: [NgFor,RouterLink],
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  selector: 'app-carsall',
+  imports: [HeaderComponent, RouterLink,NgFor],
+  templateUrl: './carsall.component.html',
+  styleUrl: './carsall.component.scss'
 })
-export class MainComponent implements OnInit {
+export class CarsallComponent {
   products: any[] = [];
   
   constructor(private postService: PostService, private router: Router) {} 

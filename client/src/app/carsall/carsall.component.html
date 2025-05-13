@@ -1,0 +1,92 @@
+<app-header />
+
+<div class="container">
+    <div class="carsall">
+        <div class="carsall__left">
+            <div class="carsall__left-navigate">
+                <a routerLink="/">Продажа автомобилей</a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+                    <path fill="currentColor" fill-rule="evenodd"
+                        d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path>
+                </svg>
+                <a routerLink="/">Mercedes Benz</a>
+            </div>
+
+            <div class="carsall__left-title">
+                <h1>Купить Mercedes-Benz</h1>
+                <span>в Москве</span>
+            </div>  
+
+            <div class="carsall__left-model">
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
+                <a routerLink="/carsall/:name/:model">Все модели - 9</a>
+            </div>
+
+            <div class="products">
+                <div class="cart" *ngFor="let product of products; let i = index">
+                  <a
+                    class="cart__one"
+                    [routerLink]="['/cars', product.id]"
+                    (mouseenter)="startSlider(i)"
+                    (mouseleave)="stopSlider(i)"
+                    target="_blank"
+                  >
+                    <img [src]="product.images[product.activeImageIndex]" alt="image" />
+                    <div class="image__points-slider">
+                      <span
+                        *ngFor="
+                          let image of product.images.slice(0, 5);
+                          let imgIndex = index
+                        "
+                        [class.active]="imgIndex === product.activeImageIndex"
+                        (mouseenter)="setActiveImage(i, imgIndex)"
+                      ></span>
+                    </div>
+                  </a>
+                  <div class="cart__two">
+                   <div class="cart__two-head">
+                    <h3>{{product.name }} {{product.model}} {{product.generation}}</h3>
+                    <p class="price">
+                        {{product.price}}
+                    </p>
+                    <span>{{product.year}}</span>
+                    <span>{{product.mileage}}</span>
+                   </div>
+          
+                   <div class="main__cart">
+                    <div class="cart__two-main">
+                        <span>{{product.modification}} / {{product.engine}}</span>
+                        <span>{{product.drivetrain}}</span>
+                       </div>
+                       <div class="cart__two-main">
+                        <span>{{product.engine}}</span>
+                        <span>{{product.color}}</span>
+                       </div>
+                       <div class="cart__two-main">
+                        <span>{{product.bodyType}}</span>
+                       
+                       </div>
+                       <div class="cart__two-main city">
+                        <span>Москва</span>
+                       </div>
+                   </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <div class="carsall__right">
+            Реклама
+        </div>
+    </div>
+</div>
