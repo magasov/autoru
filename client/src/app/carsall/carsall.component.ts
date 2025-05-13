@@ -1,29 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
-import { Router, RouterLink } from '@angular/router';
-import { NgFor } from '@angular/common';
-import { PostService } from '../services/post.service'; 
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { NgFor, NgIf } from '@angular/common';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-carsall',
-  imports: [HeaderComponent, RouterLink,NgFor],
+  imports: [HeaderComponent, RouterLink, NgFor, NgIf],
   templateUrl: './carsall.component.html',
-  styleUrl: './carsall.component.scss'
+  styleUrls: ['./carsall.component.scss']
 })
-export class CarsallComponent {
+export class CarsallComponent implements OnInit {
   products: any[] = [];
-  
-  constructor(private postService: PostService, private router: Router) {} 
+  brand: string | null = null;
+  model: string | null = null;
+
+  constructor(
+    private postService: PostService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.fetchPosts();
+    
+    this.route.paramMap.subscribe(params => {
+      this.brand = params.get('brand'); 
+      this.model = params.get('model'); 
+      this.fetchPosts();
+    });
   }
 
   async fetchPosts(): Promise<void> {
-    this.products = await this.postService.fetchPosts(); 
+    let allProducts = await this.postService.fetchPosts();
+
+    
+    if (this.brand) {
+      allProducts = allProducts.filter(product =>
+        product.name.toLowerCase() === this.brand!.toLowerCase()
+      );
+    }
+
+    
+    if (this.model) {
+      allProducts = allProducts.filter(product =>
+        product.model.toLowerCase() === this.model!.toLowerCase()
+      );
+    }
+
+    this.products = allProducts;
   }
 
   
+  get uniqueModels(): { model: string, count: number }[] {
+    const modelCounts = this.products.reduce((acc, product) => {
+      const model = product.model;
+      acc[model] = (acc[model] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
+
+    return Object.keys(modelCounts).map(model => ({
+      model,
+      count: modelCounts[model]
+    }));
+  }
 
   startSlider(index: number) {
     this.stopSlider(index);
@@ -49,9 +88,7 @@ export class CarsallComponent {
     this.startSlider(productIndex);
   }
 
-
   toggleFavorite(event: Event) {
-    event.stopPropagation(); 
-    
+    event.stopPropagation();
   }
 }

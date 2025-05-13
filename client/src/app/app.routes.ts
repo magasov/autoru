@@ -13,5 +13,6 @@ export const routes: Routes = [
     {path: 'profile', component: ProfileComponent},
    { path: 'addcars', component: AddcarsComponent, canActivate: [AuthGuard] },
    { path: 'cars/:id', component: CarsComponent },
-   { path: 'carsall/:name', component: CarsallComponent }
+   { path: 'carsall/:brand', component: CarsallComponent },
+   { path: 'carsall/:brand/:model', component: CarsallComponent },
 ];

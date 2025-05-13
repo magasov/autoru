@@ -1,4 +1,4 @@
-import { Injectable, model } from '@angular/core';
+import { Injectable } from '@angular/core';
 import axios from 'axios';
 
 @Injectable({
@@ -8,9 +8,13 @@ export class PostService {
   private readonly BASE_API_URL = 'http://localhost:8080';
   private readonly BASE_IMAGE_URL = 'http://localhost:8080/';
 
-  async fetchPosts(): Promise<any[]> {
+  async fetchPosts(brand?: string): Promise<any[]> {
     try {
-      const response = await axios.get(`${this.BASE_API_URL}/posts`);
+      
+      const url = brand 
+        ? `${this.BASE_API_URL}/posts?brand=${encodeURIComponent(brand)}`
+        : `${this.BASE_API_URL}/posts`;
+      const response = await axios.get(url);
       const posts = response.data.posts || [];
       return posts.map((post: any) => ({
         id: post._id,
@@ -31,8 +35,7 @@ export class PostService {
       }));
     } catch (error) {
       console.error('Error', error);
-      return []; 
+      return [];
     }
   }
-  
 }

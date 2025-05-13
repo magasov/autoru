@@ -9,27 +9,24 @@
                     <path fill="currentColor" fill-rule="evenodd"
                         d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path>
                 </svg>
-                <a routerLink="/">Mercedes Benz</a>
+                <a [routerLink]="['/carsall', brand || '']">{{brand ? (brand) : 'Все бренды'}}</a>
+                <svg *ngIf="model" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+                    <path fill="currentColor" fill-rule="evenodd"
+                        d="m9.879 8-4.47-4.469 1.061-1.06L12 8l-5.53 5.53-1.06-1.06z" clip-rule="evenodd"></path>
+                </svg>
+                <a *ngIf="model" [routerLink]="['/carsall', brand, model]">{{model}}</a>
             </div>
 
             <div class="carsall__left-title">
-                <h1>Купить Mercedes-Benz</h1>
+                <h1>Купить {{brand ? (brand) : 'автомобиль'}} {{model ? (model) : ''}}</h1>
                 <span>в Москве</span>
             </div>  
 
             <div class="carsall__left-model">
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">C-Класс <span></span> <p>9</p></a>
-                <a routerLink="/carsall/:name/:model">Все модели - 9</a>
+                <a *ngFor="let item of uniqueModels" [routerLink]="['/carsall', brand, item.model]">
+                    {{item.model}} <span></span> <p>{{item.count}}</p>
+                </a>
+                <a [routerLink]="['/carsall', brand]">Все модели - {{products.length}}</a>
             </div>
 
             <div class="products">
@@ -44,10 +41,7 @@
                     <img [src]="product.images[product.activeImageIndex]" alt="image" />
                     <div class="image__points-slider">
                       <span
-                        *ngFor="
-                          let image of product.images.slice(0, 5);
-                          let imgIndex = index
-                        "
+                        *ngFor="let image of product.images.slice(0, 5); let imgIndex = index"
                         [class.active]="imgIndex === product.activeImageIndex"
                         (mouseenter)="setActiveImage(i, imgIndex)"
                       ></span>
@@ -55,10 +49,8 @@
                   </a>
                   <div class="cart__two">
                    <div class="cart__two-head">
-                    <h3>{{product.name }} {{product.model}} {{product.generation}}</h3>
-                    <p class="price">
-                        {{product.price}}
-                    </p>
+                    <h3>{{product.name}} {{product.model}} {{product.generation}}</h3>
+                    <p class="price">{{product.price}}</p>
                     <span>{{product.year}}</span>
                     <span>{{product.mileage}}</span>
                    </div>
@@ -74,7 +66,6 @@
                        </div>
                        <div class="cart__two-main">
                         <span>{{product.bodyType}}</span>
-                       
                        </div>
                        <div class="cart__two-main city">
                         <span>Москва</span>
