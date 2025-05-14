@@ -19,6 +19,11 @@ import {
   getPostById,
   updatePost,
 } from "./controllers/PostController.js";
+import {
+  addToFavorites,
+  getUserFavorites,
+  removeFromFavorites,
+} from "./controllers/FavoriteController.js";
 
 dotenv.config();
 
@@ -78,6 +83,10 @@ app.get("/posts", getAllPosts);
 app.get("/posts/:id", getPostById);
 app.put("/posts/:id", checkAuth, upload, updatePost);
 app.delete("/posts/:id", checkAuth, deletePost);
+
+app.post("/favorites", checkAuth, addToFavorites);
+app.get("/favorites", checkAuth, getUserFavorites);
+app.delete("/favorites/:postId", checkAuth, removeFromFavorites);
 
 app.use("/uploads", express.static("uploads"));
 

@@ -1,45 +1,110 @@
 <div class="favorite">
-    <div class="favorite__header">
-        <h2>Избранное</h2>
-
-        <div class="close">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m20.707 4.707-1.414-1.414L12 10.586 4.707 3.293 3.293 4.707 10.586 12l-7.293 7.293 1.414 1.414L12 13.414l7.293 7.293 1.414-1.414L13.414 12z"></path></svg>
-        </div>
+  <div class="favorite__header">
+    <h2>Избранное</h2>
+    <div class="close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="m20.707 4.707-1.414-1.414L12 10.586 4.707 3.293 3.293 4.707 10.586 12l-7.293 7.293 1.414 1.414L12 13.414l7.293 7.293 1.414-1.414L13.414 12z"
+        ></path>
+      </svg>
     </div>
+  </div>
 
-    <div class="favorite__main">
-        <div class="favorite__main-one">
-            <div class="favorite__main-one-head">
-                <h3>Mercedes CLS</h3>
-                <p>3 000 000 p</p>
+  <div class="favorite__main">
+    <div
+      class="favorite__main-one"
+      *ngFor="let favorite of favorites"
+    >
+      <div class="favorite__main-one-head">
+        <h3>{{ favorite.title }}</h3>
+        <p>{{ favorite.price }}</p>
+      </div>
+
+      <a
+        routerLink="/"
+        class="favorite__main-one-main"
+      >
+        <img
+          [src]="favorite.image"
+          alt="{{ favorite.title }}"
+        />
+
+        <div class="favorite__main-one-main-flex">
+          <div class="favorite__bottom">
+            <div class="favorite__bottom-p">
+              <p>{{ favorite.engine }}</p>
+              <p>{{ favorite.year }}</p>
             </div>
-
-            <div class="favorite__main-one-main">
-                <img src="https://avatars.mds.yandex.net/get-autoru-vos/4338488/385816f31face02d7b359d2e887a0f34/320x240" alt="">
-
-                <div class="favorite__main-one-main-flex">
-                    <div class="favorite__bottom">
-                        <div class="favorite__bottom-p">
-                            <p>4.4 л / 625 л.с.</p>
-                            <p>2021</p>
-                        </div>
-                        <div class="favorite__bottom-p">
-                            <p>4.4 л / 625 л.с.</p>
-                            <p>20 278 км</p>
-                        </div>
-                        <div class="favorite__bottom-p">
-                            <p>4.4 л / 625 л.с.</p>
-                            <p>2021</p>
-                        </div>
-                    </div>
-
-                    <div class="favorite__top">
-                        <button>Показать телефон</button>
-                        <button class="favorite__top-2">Написать в чат</button>
-                        <button>Купить в кредит</button>
-                    </div>
-                </div>
+            <div class="favorite__bottom-p">
+              <p>{{ favorite.drive }}</p>
+              <p>{{ favorite.mileage }}</p>
             </div>
+            <div class="favorite__bottom-p">
+              <p>{{ favorite.body }}</p>
+              <p>{{ favorite.color }}</p>
+            </div>
+          </div>
+
+          <div class="favorite__top">
+            <button>Показать телефон</button>
+            <button class="favorite__top-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="HeaderFavoritesPopupItem__chatBtnIcon"
+              >
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Написать в чат
+            </button>
+            <button class="favorite__top-3">Купить в кредит</button>
+          </div>
         </div>
+      </a>
+
+      <div
+        class="favorite__func"
+        (click)="removeFromFavorites(favorite._id)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="none"
+          viewBox="0 0 16 16"
+          class="IconSvg IconSvg_name_SvgFavoriteSFilled IconSvg_size_16 ButtonFavorite__icon"
+        >
+          <g clip-path="url(#favorite_s_filled_svg__a)">
+            <path
+              fill="currentColor"
+              d="M11.556 1C14.01 1 16 2.975 16 5.412c0 1.256-.53 2.39-1.378 3.193L8 16 1.38 8.606A4.38 4.38 0 0 1 0 5.412C0 2.975 1.99 1 4.444 1 5.898 1 7.19 1.693 8 2.764A4.45 4.45 0 0 1 11.556 1"
+            ></path>
+          </g>
+          <defs>
+            <clipPath id="favorite_s_filled_svg__a">
+              <path
+                fill="#fff"
+                d="M0 0h16v16H0z"
+              ></path>
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
     </div>
+  </div>
 </div>

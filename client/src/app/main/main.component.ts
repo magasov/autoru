@@ -1,28 +1,37 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router'; 
-import { PostService } from '../services/post.service'; 
+import { Router, RouterLink } from '@angular/router';
+import { PostService } from '../services/post.service';
+import { FavoriteService } from '../services/favorite.service';
 
 @Component({
   selector: 'app-main',
-  imports: [NgFor,RouterLink],
+  imports: [NgFor, RouterLink, NgIf],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
   products: any[] = [];
-  
-  constructor(private postService: PostService, private router: Router) {} 
+
+  constructor(
+    private postService: PostService,
+    private favoriteService: FavoriteService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchPosts();
   }
 
   async fetchPosts(): Promise<void> {
-    this.products = await this.postService.fetchPosts(); 
+    this.products = await this.postService.fetchPosts();
+    
+    const favoritePostIds = await this.favoriteService.getUserFavorites();
+    this.products = this.products.map((product) => ({
+      ...product,
+      isFavorite: favoritePostIds.includes(product.id),
+    }));
   }
-
-  
 
   startSlider(index: number) {
     this.stopSlider(index);
@@ -48,9 +57,21 @@ export class MainComponent implements OnInit {
     this.startSlider(productIndex);
   }
 
+  async toggleFavorite(event: Event, product: any) {
+    event.stopPropagation();
+    event.preventDefault(); 
 
-  toggleFavorite(event: Event) {
-    event.stopPropagation(); 
-    
+    try {
+      if (product.isFavorite) {
+        await this.favoriteService.removeFromFavorites(product.id);
+        product.isFavorite = false;
+      } else {
+        await this.favoriteService.addToFavorites(product.id);
+        product.isFavorite = true;
+      }
+    } catch (error) {
+      console.error('Error toggling favorite', error);
+      
+    }
   }
 }
