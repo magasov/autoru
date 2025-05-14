@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PostService } from '../services/post.service';
 import { FavoriteService } from '../services/favorite.service';
+import { FavoriteComponent } from "../favorite/favorite.component";
 
 @Component({
   selector: 'app-main',
-  imports: [NgFor, RouterLink, NgIf],
+  imports: [NgFor, RouterLink, NgIf, FavoriteComponent],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })

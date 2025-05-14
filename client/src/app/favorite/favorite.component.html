@@ -1,7 +1,7 @@
-<div class="favorite">
+<div class="favorite" *ngIf="isPopup">
   <div class="favorite__header">
     <h2>Избранное</h2>
-    <div class="close">
+    <div class="close" (click)="closePopup()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

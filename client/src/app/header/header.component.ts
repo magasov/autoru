@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { NgIf } from '@angular/common';
-import { FavoriteComponent } from '../favorite/favorite.component';
+import { PopupService } from '../services/popup-service.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, NgIf, FavoriteComponent],
+  imports: [RouterLink, NgIf],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   isAuthenticated: boolean = false;
   isPopup: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private popupService: PopupService) {}
 
   ngOnInit(): void {
     this.checkAuthStatus();
@@ -44,6 +44,10 @@ export class HeaderComponent implements OnInit {
 
   setIsPopup() {
     this.isPopup = !this.isPopup;
+  }
+
+  setIsPopupFavorite(): void {
+    this.popupService.setIsPopup(true); 
   }
 
   logout(): void {

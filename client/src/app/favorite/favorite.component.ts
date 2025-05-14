@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FavoriteService } from '../services/favorite.service'; 
 import { CommonModule, NgIf } from '@angular/common';
+import { PopupService } from '../services/popup-service.service';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-favorite',
@@ -13,11 +15,24 @@ import { RouterLink } from '@angular/router';
 export class FavoriteComponent implements OnInit {
   favorites: any[] = []; 
   isPopup: boolean = false;
+  private popupSubscription: Subscription | undefined;
+  
 
-  constructor(private favoriteService: FavoriteService) {}
+  constructor(private favoriteService: FavoriteService, private popupService: PopupService) {}
 
   ngOnInit(): void {
-    this.loadFavorites(); 
+   
+    this.popupSubscription = this.popupService.isPopup$.subscribe((value) => {
+      this.isPopup = value;
+      if (value) {
+        this.loadFavorites();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+   
+    this.popupSubscription?.unsubscribe();
   }
 
   
@@ -58,5 +73,9 @@ export class FavoriteComponent implements OnInit {
     } catch (error) {
       console.error('Ошибка удаления из избранного:', error);
     }
+  }
+
+  closePopup(): void {
+    this.popupService.setIsPopup(false);
   }
 }
