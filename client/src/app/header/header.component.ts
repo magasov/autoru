@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { NgIf } from '@angular/common';
+import { FavoriteComponent } from '../favorite/favorite.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink, NgIf, FavoriteComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
