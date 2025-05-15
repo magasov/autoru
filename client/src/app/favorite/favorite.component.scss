@@ -7,6 +7,11 @@
   z-index: 2;
   background: #fff;
   box-shadow: 0 0 14px #f3f4f6;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+}
 
   &__header {
     display: flex;

@@ -80,8 +80,8 @@
   </div>
 </div>
 
-<div class="notification__fav" *ngIf="isNotification">
-  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="18" viewBox="0 0 22.8 17.6" class="IconSvg IconSvg_name_SvgNotifierSuccess IconSvg_size_24 Notifier__icon"><path fill="#56B947" d="M22.1.7c-1-1-2.5-1-3.4 0L7.6 11.8 4.1 8.2c-.9-.9-2.5-.9-3.4 0s-.9 2.5 0 3.4l5.2 5.2c.5.5 1.1.7 1.7.7s1.3-.2 1.7-.7L22.1 4.1c1-.9 1-2.4 0-3.4"></path></svg> В избранном {{favoritelength}} предложение <span (click)="setIsPopupFavorite()">Перейти в избранное</span>
+<div class="notification__fav" *ngIf="isNotification" >
+   В избранном {{favoritelength}} предложение <span (click)="setIsPopupFavorite()">Перейти в избранное</span>
 </div>
 
 <app-favorite />

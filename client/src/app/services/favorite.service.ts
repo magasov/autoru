@@ -45,6 +45,7 @@ export class FavoriteService {
       const response = await axios.get(`${this.BASE_API_URL}/favorites`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+      console.log(response.data.favorites.length);
 
       return response.data.favorites.map((fav: any) => fav.postId._id);
 

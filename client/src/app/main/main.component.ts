@@ -36,7 +36,8 @@ export class MainComponent implements OnInit {
     this.products = await this.postService.fetchPosts();
     
     const favoritePostIds = await this.favoriteService.getUserFavorites();
-    this.favoritelength = favoritePostIds.length + 1
+    this.favoritelength = favoritePostIds.length
+    
 
     this.products = this.products.map((product) => ({
       ...product,
@@ -77,6 +78,7 @@ export class MainComponent implements OnInit {
   async toggleFavorite(event: Event, product: any) {
     event.stopPropagation();
     event.preventDefault(); 
+    this.fetchPosts()
 
     try {
       if (product.isFavorite) {
