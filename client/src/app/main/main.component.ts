@@ -1,8 +1,9 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PostService } from '../services/post.service';
 import { FavoriteService } from '../services/favorite.service';
+import { PopupService } from '../services/popup-service.service';
 import { FavoriteComponent } from "../favorite/favorite.component";
 
 @Component({
@@ -13,26 +14,37 @@ import { FavoriteComponent } from "../favorite/favorite.component";
 })
 export class MainComponent implements OnInit {
   products: any[] = [];
+  favoritelength: number = 0;
 
   constructor(
     private postService: PostService,
     private favoriteService: FavoriteService,
-    private router: Router
+    private router: Router,
+    private popupService: PopupService,
+    private cdr: ChangeDetectorRef 
   ) {}
 
   ngOnInit(): void {
     this.fetchPosts();
   }
 
+  get isNotification(): boolean {
+    return this.favoriteService.isNotification;
+  }
+
   async fetchPosts(): Promise<void> {
     this.products = await this.postService.fetchPosts();
     
     const favoritePostIds = await this.favoriteService.getUserFavorites();
+    this.favoritelength = favoritePostIds.length + 1
+
     this.products = this.products.map((product) => ({
       ...product,
       isFavorite: favoritePostIds.includes(product.id),
     }));
   }
+
+  
 
   startSlider(index: number) {
     this.stopSlider(index);
@@ -58,6 +70,10 @@ export class MainComponent implements OnInit {
     this.startSlider(productIndex);
   }
 
+  setIsPopupFavorite(): void {
+    this.popupService.setIsPopup(true); 
+  }
+
   async toggleFavorite(event: Event, product: any) {
     event.stopPropagation();
     event.preventDefault(); 
@@ -70,9 +86,9 @@ export class MainComponent implements OnInit {
         await this.favoriteService.addToFavorites(product.id);
         product.isFavorite = true;
       }
+      this.cdr.detectChanges(); 
     } catch (error) {
       console.error('Error toggling favorite', error);
-      
     }
   }
 }

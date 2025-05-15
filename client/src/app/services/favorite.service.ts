@@ -6,6 +6,7 @@ import axios from 'axios';
 })
 export class FavoriteService {
   private readonly BASE_API_URL = 'http://localhost:8080';
+  isNotification: boolean = false;
 
   async addToFavorites(postId: string): Promise<any> {
     try {
@@ -14,6 +15,11 @@ export class FavoriteService {
         { postId },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } } 
       );
+      this.isNotification = true
+      setTimeout(() => {
+      this.isNotification = false
+
+      }, 4000)
       return response.data;
     } catch (error) {
       console.error('Error adding to favorites', error);
@@ -39,7 +45,10 @@ export class FavoriteService {
       const response = await axios.get(`${this.BASE_API_URL}/favorites`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+
       return response.data.favorites.map((fav: any) => fav.postId._id);
+
+      
     } catch (error) {
       console.error('Error fetching favorites', error);
       return [];
