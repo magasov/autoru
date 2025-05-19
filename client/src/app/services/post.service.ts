@@ -38,4 +38,17 @@ export class PostService {
       return [];
     }
   }
+
+  async deletePost(postId: string): Promise<void> {
+    try {
+      const response = await axios.delete(
+        `${this.BASE_API_URL}/posts/${postId}`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при удалении поста:', error);
+      throw error;
+    }
+  }
 }

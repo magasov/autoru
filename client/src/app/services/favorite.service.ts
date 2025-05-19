@@ -25,7 +25,7 @@ export class FavoriteService {
       console.error('Error adding to favorites', error);
       throw error;
     }
-  }
+  } 
 
   async removeFromFavorites(postId: string): Promise<any> {
     try {
