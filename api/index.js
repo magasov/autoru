@@ -5,6 +5,7 @@ import multer from "multer";
 import cors from "cors";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import { createServer } from "http";
 
 import {
   getMe,
@@ -24,10 +25,16 @@ import {
   getUserFavorites,
   removeFromFavorites,
 } from "./controllers/FavoriteController.js";
+import {
+  initializeWebSocket,
+  getChatHistory,
+  getUserChats,
+} from "./controllers/ChatController.js";
 
 dotenv.config();
 
 const app = express();
+const server = createServer(app); // Создаём HTTP-сервер для WebSocket
 app.use(express.json());
 app.use(cors());
 
@@ -88,7 +95,12 @@ app.post("/favorites", checkAuth, addToFavorites);
 app.get("/favorites", checkAuth, getUserFavorites);
 app.delete("/favorites/:postId", checkAuth, removeFromFavorites);
 
+app.get("/chat/history", checkAuth, getChatHistory);
+app.get("/chat/chats", checkAuth, getUserChats);
+
 app.use("/uploads", express.static("uploads"));
+
+initializeWebSocket(server);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -100,7 +112,7 @@ async function start() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Успешное подключение к базе данных");
 
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);
     });
   } catch (err) {
