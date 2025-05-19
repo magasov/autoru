@@ -59,7 +59,7 @@ export class CarsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private titleService: Title, 
-    private metaService: Meta   ,
+    private metaService: Meta  ,
     private postService: PostService, 
     private router: Router
   ) {}

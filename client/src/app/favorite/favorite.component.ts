@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class FavoriteComponent implements OnInit {
   favorites: any[] = []; 
   isPopup: boolean = false;
+  isLoading: boolean = true;
   private popupSubscription: Subscription | undefined;
   
 
@@ -59,6 +60,8 @@ export class FavoriteComponent implements OnInit {
         body: fav.postId.bodyType,
         color: fav.postId.color,
       }));
+      this.isLoading = false
+
     } catch (error) {
       console.error('Ошибка загрузки избранного:', error);
       this.favorites = [];
