@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { ActivatedRoute } from '@angular/router'; 
 import { Title, Meta } from '@angular/platform-browser'; 
@@ -9,7 +9,6 @@ import { FooterComponent } from "../footer/footer.component";
 import { Router, RouterLink } from '@angular/router'; 
 import { PostService } from '../services/post.service'; 
 import { AuthService } from '../services/auth.service';
-import { ChatService } from '../services/chat.service';
 
 interface Post {
   _id: string;
@@ -42,68 +41,59 @@ interface Post {
 
 @Component({
   selector: 'app-cars',
-  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule,FooterComponent],
+  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule, FooterComponent],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
   standalone: true
 })
-export class CarsComponent implements OnInit, OnDestroy {
+export class CarsComponent implements OnInit {
   user: { email: string; name: string; avatar: string; isVerified: boolean } | null = null;
   products: any[] = [];
   post: Post | null = null;
   desctop: boolean = false;
   loading: boolean = true;
-  author: boolean = false;
+  author: boolean = true;
   headerstickey: boolean = false;
   adssticky: boolean = false;
   error: string | null = null;
   currentImageIndex: number = 0;
-  buttons: string[] = [
-    'Ещё продаётся?',
-    'Обмен возможен?',
-    'Торг возможен?',
-    'Где и когда можно посмотреть?'
-  ];
-  selectedIndex: number = 0;
-  messageText: string = this.buttons[this.selectedIndex];
+  
 
   constructor(
     private route: ActivatedRoute,
     private titleService: Title, 
-    private metaService: Meta,
+    private metaService: Meta  ,
     private postService: PostService, 
     private router: Router,
-    private authService: AuthService,
-    private chatService: ChatService
+    private authService: AuthService
   ) {}
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.fetchPosts();
-    window.scrollTo(0, 0);
-
-    if (id) {
-      this.fetchPost(id);
-      this.chatService.connectWebSocket();
-    } else {
-      this.error = 'No post ID provided';
-      this.loading = false;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.chatService.disconnectWebSocket();
-  }
-
   @HostListener('window:scroll', [])
+  
   onWindowScroll() {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.headerstickey = scrollPosition > 500;
     this.adssticky = scrollPosition > 500;
+    console.log(this.adssticky);
+    
   }
 
   setDesctop(boolean: boolean): void {
     this.desctop = boolean;
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.fetchPosts();
+    
+
+    window.scrollTo(0,0)
+    if (id) {
+      this.fetchPost(id);
+    } else {
+      this.error = 'No post ID provided';
+      this.loading = false;
+    }
   }
 
   async fetchPosts(): Promise<void> {
@@ -121,11 +111,16 @@ export class CarsComponent implements OnInit, OnDestroy {
   
         try {
           const currentUser = await this.authService.getMe();
+  
           this.author = currentUser.user._id === this.post.userId._id;
+            console.log(currentUser.user._id);
+          
+          console.log('Автор:', this.author);
         } catch (err) {
           this.author = false; 
         }
       }
+  
     } catch (err) {
       this.error = 'Failed to load post data';
       this.loading = false;
@@ -148,44 +143,42 @@ export class CarsComponent implements OnInit, OnDestroy {
       console.error(error);
     }
   }
+  
+  
+
+  buttons: string[] = [
+    'Ещё продаётся?',
+    'Обмен возможен?',
+    'Торг возможен?',
+    'Где и когда можно посмотреть?'
+  ];
+
+  selectedIndex: number = 0;
+  messageText: string = this.buttons[this.selectedIndex];
 
   onSelect(index: number): void {
     this.selectedIndex = index;
     this.messageText = this.buttons[index];
   }
 
-  sendMessage(): void {
-    if (!this.post || !this.messageText.trim()) {
-      alert('Сообщение не может быть пустым или пост не загружен');
-      return;
-    }
-
-    const recipientId = this.post.userId._id;
-    const postId = this.post._id;
-
-    try {
-      this.chatService.sendMessage(recipientId, postId, this.messageText);
-      alert('Сообщение отправлено');
-      this.messageText = '';
-      this.selectedIndex = -1;
-    } catch (error) {
-      alert('Ошибка при отправке сообщения');
-      console.error(error);
-    }
-  }
-
+  
   private setMetaTags(): void {
     if (!this.post) return;
 
+    
     const title = `Купить б/у ${this.post.brand} ${this.post.model} ${this.post.generation} ${this.post.modification} ${this.post.engine} ${this.post.transmission} в Назрани: ${this.post.color} БМВ ${this.post.model} ${this.post.bodyType} ${this.post.year} года по цене ${this.formatPrice(this.post.price)} на OushAuto.ру`;
 
+    
     const shortDescription = this.post.description.length > 100 
       ? this.post.description.substring(0, 100) + '...' 
       : this.post.description;
 
     const metaDescription = `Продается ${this.post.brand} ${this.post.model} ${this.post.year}, ${this.post.color}, ${this.post.bodyType}, ${this.post.engine}, ${this.formatPrice(this.post.price)}. ${shortDescription}`;
 
+    
     this.titleService.setTitle(title);
+
+    
     this.metaService.updateTag({ name: 'description', content: metaDescription });
     this.metaService.updateTag({ name: 'keywords', content: `${this.post.brand}, ${this.post.model}, б/у, купить, ${this.post.year}, ${this.post.color}, автомобиль, Назрань` });
     this.metaService.updateTag({ name: 'og:title', content: title });
@@ -225,8 +218,10 @@ export class CarsComponent implements OnInit, OnDestroy {
     this.startSlider(productIndex);
   }
 
+
   toggleFavorite(event: Event) {
     event.stopPropagation(); 
+    
   }
 
   nextImage(): void {
