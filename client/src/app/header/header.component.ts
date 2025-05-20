@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { NgIf } from '@angular/common';
 import { PopupService } from '../services/popup-service.service';
+import { IsPopupMessageService } from '../services/ispopupmessage.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,7 @@ export class HeaderComponent implements OnInit {
   isAuthenticated: boolean = false;
   isPopup: boolean = false;
 
-  constructor(private authService: AuthService, private popupService: PopupService) {}
+  constructor(private authService: AuthService, private popupService: PopupService,private popupService2: IsPopupMessageService) {}
 
   ngOnInit(): void {
     this.checkAuthStatus();
@@ -44,6 +45,11 @@ export class HeaderComponent implements OnInit {
 
   setIsPopup() {
     this.isPopup = !this.isPopup;
+  }
+
+  toggleMessage(event: Event) {
+    event.preventDefault(); 
+    this.popupService2.toggle();
   }
 
   setIsPopupFavorite(): void {
