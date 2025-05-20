@@ -47,7 +47,7 @@ export const initializeWebSocket = (server) => {
         if (postId) {
           const post = await Post.findById(postId);
           if (post) {
-            valid_PostId = post._id;
+            validPostId = post._id;
           } else {
             console.warn(`Post with ID ${postId} not found`);
           }

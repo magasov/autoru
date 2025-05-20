@@ -1,4 +1,3 @@
-// cars.component.ts
 import { Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -66,6 +65,7 @@ export class CarsComponent implements OnInit {
     'Где и когда можно посмотреть?',
   ];
   selectedIndex: number = 0;
+  notification: string | null = null; // Добавляем переменную для уведомления
 
   constructor(
     private route: ActivatedRoute,
@@ -149,12 +149,13 @@ export class CarsComponent implements OnInit {
       return;
     }
     try {
-      // Navigate to messages page with recipientId
-      await this.router.navigate(['/messages'], {
-        queryParams: { recipientId: this.post.userId._id },
-      });
+      // Отправляем сообщение с postId, но не перенаправляем
+      await this.chatService.startChatWithPost(this.post._id, this.messageText || 'Начало чата');
+      this.notification = 'Чат начат! Перейдите в раздел сообщений, чтобы продолжить.';
+      this.messageText = '';
+      setTimeout(() => (this.notification = null), 3000); // Уведомление исчезает через 3 секунды
     } catch (error) {
-      console.error('Error navigating to chat:', error);
+      console.error('Error starting chat:', error);
       alert('Ошибка при открытии чата');
     }
   }
@@ -171,10 +172,9 @@ export class CarsComponent implements OnInit {
     }
     try {
       await this.chatService.startChatWithPost(this.post._id, this.messageText);
+      this.notification = 'Сообщение отправлено!';
       this.messageText = '';
-      await this.router.navigate(['/messages'], {
-        queryParams: { recipientId: this.post.userId._id },
-      });
+      setTimeout(() => (this.notification = null), 3000); // Уведомление исчезает через 3 секунды
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Ошибка при отправке сообщения');

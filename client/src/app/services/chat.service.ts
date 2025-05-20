@@ -1,4 +1,3 @@
-// src/app/services/chat.service.ts
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Observable, Subject } from 'rxjs';
@@ -13,6 +12,7 @@ export interface Chat {
   price: string;
   lastMessage: string;
   recipientId: string;
+  postId?: string; // Добавляем postId в интерфейс Chat
 }
 
 export interface Message {
@@ -21,6 +21,7 @@ export interface Message {
   recipient: string;
   content: string;
   time: string;
+  postId?: string; // Добавляем postId в интерфейс Message
 }
 
 @Injectable({
@@ -66,6 +67,7 @@ export class ChatService {
             hour: '2-digit',
             minute: '2-digit',
           }),
+          postId: message.postId || null, // Добавляем postId
         };
         this.messageSubject.next(formattedMessage);
         await this.updateChatList(message);
@@ -96,15 +98,12 @@ export class ChatService {
       this.chats = response.data.chats;
       this.chatsSubject.next(this.chats);
       console.log(response);
-      
       return this.chats;
     } catch (error: any) {
       console.error('Error fetching chats:', error);
       return [];
     }
   }
-
-  
 
   async updateChatList(message: any) {
     const recipientId =
@@ -128,13 +127,13 @@ export class ChatService {
     return this.chatsSubject.asObservable();
   }
 
-  async sendMessage(recipientId: string, content: string): Promise<void> {
+  async sendMessage(recipientId: string, content: string, postId?: string): Promise<void> {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       throw new Error('WebSocket is not connected');
     }
-    const message = { recipientId, content };
+    const message = { recipientId, content, postId }; // Добавляем postId в сообщение
     this.ws.send(JSON.stringify(message));
-    await this.fetchChats(); // Refresh chats after sending a message
+    await this.fetchChats(); // Обновляем список чатов после отправки
   }
 
   async getMessages(recipientId: string): Promise<Message[]> {
@@ -156,6 +155,7 @@ export class ChatService {
           hour: '2-digit',
           minute: '2-digit',
         }),
+        postId: msg.postId || null, // Добавляем postId
       }));
     } catch (error: any) {
       console.error('Error fetching messages:', error);
@@ -169,12 +169,13 @@ export class ChatService {
       if (!token) {
         throw new Error('Token not found');
       }
-      // Fetch post to get userId
+      // Получаем данные поста, чтобы определить recipientId
       const postResponse = await axios.get(`${this.apiUrl}/posts/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const recipientId = postResponse.data.post.userId._id;
-      await this.sendMessage(recipientId, content);
+      // Отправляем сообщение с postId
+      await this.sendMessage(recipientId, content, postId);
     } catch (error: any) {
       console.error('Error starting chat:', error);
       throw new Error(error.response?.data?.message || 'Server error');
