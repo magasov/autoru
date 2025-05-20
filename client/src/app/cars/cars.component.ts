@@ -1,3 +1,4 @@
+// cars.component.ts
 import { Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -148,15 +149,13 @@ export class CarsComponent implements OnInit {
       return;
     }
     try {
-      // Set the default message in the textarea if needed
-      this.messageText = this.buttons[this.selectedIndex];
-      // Optionally, you can initiate a chat with an empty message or a default one
-      // For example, start a chat with a default message
-      await this.chatService.startChatWithPost(this.post._id, this.messageText);
-      alert('Чат начат! Напишите сообщение ниже.');
+      // Navigate to messages page with recipientId
+      await this.router.navigate(['/messages'], {
+        queryParams: { recipientId: this.post.userId._id },
+      });
     } catch (error) {
-      console.error('Error starting chat:', error);
-      alert('Ошибка при начале чата');
+      console.error('Error navigating to chat:', error);
+      alert('Ошибка при открытии чата');
     }
   }
 
@@ -172,8 +171,10 @@ export class CarsComponent implements OnInit {
     }
     try {
       await this.chatService.startChatWithPost(this.post._id, this.messageText);
-      alert('Сообщение отправлено!');
-      this.messageText = ''; // Clear the textarea
+      this.messageText = '';
+      await this.router.navigate(['/messages'], {
+        queryParams: { recipientId: this.post.userId._id },
+      });
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Ошибка при отправке сообщения');

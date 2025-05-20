@@ -1,28 +1,21 @@
 import mongoose from "mongoose";
 
-const MessageSchema = new mongoose.Schema(
-  {
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    recipient: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    content: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    chatId: {
-      type: String,
-      required: true,
-    },
+const messageSchema = new mongoose.Schema({
+  sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  recipient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  { timestamps: true }
-);
+  content: { type: String, required: true },
+  chatId: { type: String, required: true },
+  postId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+    required: false,
+  }, // Add postId field
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
 
-export default mongoose.model("Message", MessageSchema);
+export default mongoose.model("Message", messageSchema);

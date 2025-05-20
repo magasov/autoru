@@ -1,4 +1,3 @@
-// controllers/ChatController.js
 import { WebSocketServer } from "ws";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
@@ -26,7 +25,7 @@ export const initializeWebSocket = (server) => {
 
     ws.on("message", async (data) => {
       try {
-        const { recipientId, content } = JSON.parse(data);
+        const { recipientId, content, postId } = JSON.parse(data); // Add postId
 
         if (!recipientId || !content) {
           ws.send(
@@ -43,18 +42,31 @@ export const initializeWebSocket = (server) => {
           return;
         }
 
+        // Validate postId if provided
+        let validPostId = null;
+        if (postId) {
+          const post = await Post.findById(postId);
+          if (post) {
+            valid_PostId = post._id;
+          } else {
+            console.warn(`Post with ID ${postId} not found`);
+          }
+        }
+
         const message = new Message({
           sender: userId,
           recipient: recipientId,
           content,
           chatId: [userId, recipientId].sort().join("_"),
+          postId: validPostId, // Save postId if valid
         });
 
         await message.save();
 
         const populatedMessage = await Message.findById(message._id)
-          .populate("sender", "email name")
-          .populate("recipient", "email name");
+          .populate("sender", "email name avatar")
+          .populate("recipient", "email name avatar")
+          .populate("postId", "brand model price photos"); // Populate post details
 
         const recipientWs = clients.get(recipientId);
         if (recipientWs) {
@@ -95,8 +107,9 @@ export const getMessages = async (req, res) => {
         { sender: recipientId, recipient: userId },
       ],
     })
-      .populate("sender", "email name")
-      .populate("recipient", "email name")
+      .populate("sender", "email name avatar")
+      .populate("recipient", "email name avatar")
+      .populate("postId", "brand model price photos") // Populate post details
       .sort({ createdAt: 1 });
 
     res.status(200).json({ messages });
@@ -122,11 +135,15 @@ export const getChats = async (req, res) => {
     })
       .populate({
         path: "sender",
-        select: "email name",
+        select: "email name avatar",
       })
       .populate({
         path: "recipient",
-        select: "email name",
+        select: "email name avatar",
+      })
+      .populate({
+        path: "postId",
+        select: "brand model price photos",
       })
       .sort({ createdAt: -1 });
 
@@ -165,33 +182,13 @@ export const getChats = async (req, res) => {
               minute: "2-digit",
             }
           ),
-          avatar: "https://example.com/default-avatar.png",
-          carName: "Unknown Car",
-          price: "0 ₽",
+          avatar: recipient.avatar || "https://example.com/default-avatar.png",
+          carName: message.postId
+            ? `${message.postId.brand} ${message.postId.model}`
+            : "Unknown Car",
+          price: message.postId ? `${message.postId.price} ₽` : "0 ₽",
+          postId: message.postId?._id.toString() || null, // Include postId
         });
-      }
-    }
-
-    const recipientIds = Array.from(chatMap.values()).map(
-      (chat) => chat.recipientId
-    );
-    console.log("ID получателей:", recipientIds);
-
-    // Находим посты только если есть recipientIds
-    let posts = [];
-    if (recipientIds.length > 0) {
-      posts = await Post.find({ userId: { $in: recipientIds } });
-    }
-    console.log("Найдено постов:", posts.length);
-
-    for (const post of posts) {
-      const chat = chatMap.get(post.userId.toString());
-      if (chat) {
-        chat.carName = post.title || "Unknown Car";
-        chat.price = post.price ? `${post.price} ₽` : "0 ₽";
-        chat.avatar = post.photos?.[0]
-          ? `http://localhost:8080/uploads/${post.photos[0]}`
-          : chat.avatar;
       }
     }
 
