@@ -41,7 +41,7 @@
       <div
         class="chat"
         *ngFor="let chat of chats"
-        (click)="selectChat(chat)"
+        (click)="selectChat(chat); setClass()"
       >
         <img [src]="chat.avatar" alt="avatar" />
         <div class="chat__right">

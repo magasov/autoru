@@ -34,6 +34,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     try {
       const userData = await this.authService.getMe();
       
+      
       this.userId = userData.user._id;
       this.chatsSubscription = this.chatService.getChatsObservable().subscribe((chats) => {
         this.chats = chats;
@@ -92,7 +93,6 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   async selectChat(chat: Chat) {
     this.selectedChat = chat;
-    this.isChatSelect = true;
     try {
       this.messages = await this.chatService.getMessages(chat.recipientId);
     } catch (error) {
