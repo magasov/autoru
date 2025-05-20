@@ -3,7 +3,6 @@ import Message from "../models/Message.js";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 
-// Создаём Map для хранения WebSocket-соединений
 const clients = new Map();
 
 export const initializeWebSocket = (server) => {
@@ -19,13 +18,13 @@ export const initializeWebSocket = (server) => {
       return;
     }
 
-    // Сохраняем WebSocket-соединение для пользователя
     clients.set(userId, ws);
     console.log(`Клиент ${userId} подключён`);
 
     ws.on("message", async (data) => {
       try {
-        const { recipientId, content, postId } = JSON.parse(data); // Add postId
+        const { recipientId, content, postId } = JSON.parse(data);
+        console.log("Получено сообщение:", { recipientId, content, postId });
 
         if (!recipientId || !content) {
           ws.send(
@@ -42,14 +41,28 @@ export const initializeWebSocket = (server) => {
           return;
         }
 
-        // Validate postId if provided
+        const chatId = [userId, recipientId].sort().join("_");
+
         let validPostId = null;
         if (postId) {
           const post = await Post.findById(postId);
           if (post) {
             validPostId = post._id;
+            console.log(`Валидный postId: ${validPostId}`);
           } else {
             console.warn(`Post with ID ${postId} not found`);
+          }
+        } else {
+          const existingChat = await Message.findOne({ chatId })
+            .sort({ createdAt: 1 })
+            .select("postId");
+          if (existingChat && existingChat.postId) {
+            validPostId = existingChat.postId;
+            console.log(
+              `Используется postId из существующего чата: ${validPostId}`
+            );
+          } else {
+            console.log("Чат новый, postId не передан и не найден");
           }
         }
 
@@ -57,16 +70,17 @@ export const initializeWebSocket = (server) => {
           sender: userId,
           recipient: recipientId,
           content,
-          chatId: [userId, recipientId].sort().join("_"),
-          postId: validPostId, // Save postId if valid
+          chatId,
+          postId: validPostId,
         });
 
         await message.save();
+        console.log("Сообщение сохранено:", message);
 
         const populatedMessage = await Message.findById(message._id)
           .populate("sender", "email name avatar")
           .populate("recipient", "email name avatar")
-          .populate("postId", "brand model price photos"); // Populate post details
+          .populate("postId", "brand model price photos");
 
         const recipientWs = clients.get(recipientId);
         if (recipientWs) {
@@ -109,7 +123,7 @@ export const getMessages = async (req, res) => {
     })
       .populate("sender", "email name avatar")
       .populate("recipient", "email name avatar")
-      .populate("postId", "brand model price photos") // Populate post details
+      .populate("postId", "brand model price photos")
       .sort({ createdAt: 1 });
 
     res.status(200).json({ messages });
@@ -123,7 +137,6 @@ export const getChats = async (req, res) => {
     const { userId } = req.user;
     console.log("Получение чатов для userId:", userId);
 
-    // Проверяем, существует ли пользователь
     const user = await User.findById(userId);
     if (!user) {
       console.log("Пользователь не найден:", userId);
@@ -187,7 +200,7 @@ export const getChats = async (req, res) => {
             ? `${message.postId.brand} ${message.postId.model}`
             : "Unknown Car",
           price: message.postId ? `${message.postId.price} ₽` : "0 ₽",
-          postId: message.postId?._id.toString() || null, // Include postId
+          postId: message.postId?._id.toString() || null,
         });
       }
     }

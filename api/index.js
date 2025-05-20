@@ -1,4 +1,3 @@
-// index.js
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -79,10 +78,8 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-// Initialize WebSocket
 initializeWebSocket(server);
 
-// Routes
 app.get("/", (req, res) => {
   res.send("Сервер работает!");
 });
@@ -101,7 +98,6 @@ app.post("/favorites", checkAuth, addToFavorites);
 app.get("/favorites", checkAuth, getUserFavorites);
 app.delete("/favorites/:postId-", checkAuth, removeFromFavorites);
 
-// Chat route
 app.get("/messages", checkAuth, getMessages);
 app.get("/chats", checkAuth, getChats);
 app.get("/users/:id", checkAuth, getUser);

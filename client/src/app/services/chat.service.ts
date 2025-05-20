@@ -12,7 +12,7 @@ export interface Chat {
   price: string;
   lastMessage: string;
   recipientId: string;
-  postId?: string; // Добавляем postId в интерфейс Chat
+  postId?: string; 
 }
 
 export interface Message {
@@ -21,7 +21,7 @@ export interface Message {
   recipient: string;
   content: string;
   time: string;
-  postId?: string; // Добавляем postId в интерфейс Message
+  postId?: string; 
 }
 
 @Injectable({
@@ -67,7 +67,7 @@ export class ChatService {
             hour: '2-digit',
             minute: '2-digit',
           }),
-          postId: message.postId || null, // Добавляем postId
+          postId: message.postId || null, 
         };
         this.messageSubject.next(formattedMessage);
         await this.updateChatList(message);
@@ -79,7 +79,7 @@ export class ChatService {
         console.log('WebSocket closed');
       };
 
-      // Fetch initial chats
+      
       await this.fetchChats();
     } catch (error) {
       console.error('Failed to initialize WebSocket:', error);
@@ -111,7 +111,7 @@ export class ChatService {
     const chats = await this.fetchChats();
     const chatIndex = chats.findIndex((chat) => chat.recipientId === recipientId);
     if (chatIndex === -1) {
-      // New chat, fetch updated chats
+      
       await this.fetchChats();
     } else {
       this.chats = chats;
@@ -127,14 +127,40 @@ export class ChatService {
     return this.chatsSubject.asObservable();
   }
 
-  async sendMessage(recipientId: string, content: string, postId?: string): Promise<void> {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      throw new Error('WebSocket is not connected');
-    }
-    const message = { recipientId, content, postId }; // Добавляем postId в сообщение
-    this.ws.send(JSON.stringify(message));
-    await this.fetchChats(); // Обновляем список чатов после отправки
+ async sendMessage(recipientId: string, content: string, postId?: string): Promise<void> {
+  if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+    throw new Error('WebSocket is not connected');
   }
+  
+  const existingMessages = await this.getMessages(recipientId);
+  if (existingMessages.length > 0) {
+    
+    this.ws.send(JSON.stringify({ recipientId, content }));
+  } else {
+    
+    this.ws.send(JSON.stringify({ recipientId, content, postId }));
+  }
+  await this.fetchChats(); 
+}
+
+async startChatWithPost(postId: string, content: string): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token not found');
+    }
+    
+    const postResponse = await axios.get(`${this.apiUrl}/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const recipientId = postResponse.data.post.userId._id;
+    
+    await this.sendMessage(recipientId, content, postId);
+  } catch (error: any) {
+    console.error('Error starting chat:', error);
+    throw new Error(error.response?.data?.message || 'Server error');
+  }
+}
 
   async getMessages(recipientId: string): Promise<Message[]> {
     try {
@@ -155,7 +181,7 @@ export class ChatService {
           hour: '2-digit',
           minute: '2-digit',
         }),
-        postId: msg.postId || null, // Добавляем postId
+        postId: msg.postId || null, 
       }));
     } catch (error: any) {
       console.error('Error fetching messages:', error);
@@ -163,24 +189,7 @@ export class ChatService {
     }
   }
 
-  async startChatWithPost(postId: string, content: string): Promise<void> {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token not found');
-      }
-      // Получаем данные поста, чтобы определить recipientId
-      const postResponse = await axios.get(`${this.apiUrl}/posts/${postId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const recipientId = postResponse.data.post.userId._id;
-      // Отправляем сообщение с postId
-      await this.sendMessage(recipientId, content, postId);
-    } catch (error: any) {
-      console.error('Error starting chat:', error);
-      throw new Error(error.response?.data?.message || 'Server error');
-    }
-  }
+
 
   disconnectWebSocket() {
     if (this.ws) {

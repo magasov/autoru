@@ -65,7 +65,7 @@ export class CarsComponent implements OnInit {
     'Где и когда можно посмотреть?',
   ];
   selectedIndex: number = 0;
-  notification: string | null = null; // Добавляем переменную для уведомления
+  notification: string | null = null; 
 
   constructor(
     private route: ActivatedRoute,
@@ -142,44 +142,47 @@ export class CarsComponent implements OnInit {
     }
   }
 
-  async startChat(): Promise<void> {
-    if (!this.post || !this.authService.isAuthenticated()) {
-      alert('Пожалуйста, войдите в систему, чтобы начать чат');
-      this.router.navigate(['/login']);
-      return;
-    }
-    try {
-      // Отправляем сообщение с postId, но не перенаправляем
-      await this.chatService.startChatWithPost(this.post._id, this.messageText || 'Начало чата');
-      this.notification = 'Чат начат! Перейдите в раздел сообщений, чтобы продолжить.';
-      this.messageText = '';
-      setTimeout(() => (this.notification = null), 3000); // Уведомление исчезает через 3 секунды
-    } catch (error) {
-      console.error('Error starting chat:', error);
-      alert('Ошибка при открытии чата');
-    }
-  }
+ 
 
-  async sendMessage(): Promise<void> {
-    if (!this.post || !this.authService.isAuthenticated()) {
-      alert('Пожалуйста, войдите в систему, чтобы отправить сообщение');
-      this.router.navigate(['/login']);
-      return;
-    }
-    if (!this.messageText.trim()) {
-      alert('Введите сообщение');
-      return;
-    }
-    try {
-      await this.chatService.startChatWithPost(this.post._id, this.messageText);
-      this.notification = 'Сообщение отправлено!';
-      this.messageText = '';
-      setTimeout(() => (this.notification = null), 3000); // Уведомление исчезает через 3 секунды
-    } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Ошибка при отправке сообщения');
-    }
+async sendMessage(): Promise<void> {
+  if (!this.post || !this.authService.isAuthenticated()) {
+    alert('Пожалуйста, войдите в систему, чтобы отправить сообщение');
+    this.router.navigate(['/login']);
+    return;
   }
+  if (!this.messageText.trim()) {
+    alert('Введите сообщение');
+    return;
+  }
+  try {
+    console.log('Отправка сообщения с postId:', this.post._id); 
+    await this.chatService.startChatWithPost(this.post._id, this.messageText);
+    this.notification = 'Сообщение отправлено!';
+    this.messageText = '';
+    setTimeout(() => (this.notification = null), 3000);
+  } catch (error) {
+    console.error('Error sending message:', error);
+    alert('Ошибка при отправке сообщения');
+  }
+}
+
+async startChat(): Promise<void> {
+  if (!this.post || !this.authService.isAuthenticated()) {
+    alert('Пожалуйста, войдите в систему, чтобы начать чат');
+    this.router.navigate(['/login']);
+    return;
+  }
+  try {
+    console.log('Начало чата с postId:', this.post._id); 
+    await this.chatService.startChatWithPost(this.post._id, this.messageText || 'Начало чата');
+    this.notification = 'Чат начат! Перейдите в раздел сообщений, чтобы продолжить.';
+    this.messageText = '';
+    setTimeout(() => (this.notification = null), 3000);
+  } catch (error) {
+    console.error('Error starting chat:', error);
+    alert('Ошибка при открытии чата');
+  }
+}
 
   onSelect(index: number): void {
     this.selectedIndex = index;

@@ -1,4 +1,3 @@
-// src/app/message/message.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ChatService, Chat, Message } from '../services/chat.service';
