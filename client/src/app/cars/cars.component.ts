@@ -1,14 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { HeaderComponent } from "../header/header.component";
-import { ActivatedRoute } from '@angular/router'; 
-import { Title, Meta } from '@angular/platform-browser'; 
+import { HeaderComponent } from '../header/header.component';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import axios from 'axios';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FooterComponent } from "../footer/footer.component";
-import { Router, RouterLink } from '@angular/router'; 
-import { PostService } from '../services/post.service'; 
+import { FooterComponent } from '../footer/footer.component';
+import { PostService } from '../services/post.service';
 import { AuthService } from '../services/auth.service';
+import { ChatService } from '../services/chat.service';
 
 interface Post {
   _id: string;
@@ -44,7 +44,7 @@ interface Post {
   imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule, FooterComponent],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
-  standalone: true
+  standalone: true,
 })
 export class CarsComponent implements OnInit {
   user: { email: string; name: string; avatar: string; isVerified: boolean } | null = null;
@@ -52,30 +52,37 @@ export class CarsComponent implements OnInit {
   post: Post | null = null;
   desctop: boolean = false;
   loading: boolean = true;
-  author: boolean = true;
+  author: boolean = false;
   headerstickey: boolean = false;
   adssticky: boolean = false;
   error: string | null = null;
   currentImageIndex: number = 0;
-  
+  messageText: string = '';
+  buttons: string[] = [
+    'Ещё продаётся?',
+    'Обмен возможен?',
+    'Торг возможен?',
+    'Где и когда можно посмотреть?',
+  ];
+  selectedIndex: number = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private titleService: Title, 
-    private metaService: Meta  ,
-    private postService: PostService, 
+    private titleService: Title,
+    private metaService: Meta,
+    private postService: PostService,
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private chatService: ChatService
+  ) {
+    this.messageText = this.buttons[this.selectedIndex];
+  }
 
   @HostListener('window:scroll', [])
-  
   onWindowScroll() {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.headerstickey = scrollPosition > 500;
     this.adssticky = scrollPosition > 500;
-    console.log(this.adssticky);
-    
   }
 
   setDesctop(boolean: boolean): void {
@@ -85,9 +92,7 @@ export class CarsComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.fetchPosts();
-    
-
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
     if (id) {
       this.fetchPost(id);
     } else {
@@ -97,7 +102,7 @@ export class CarsComponent implements OnInit {
   }
 
   async fetchPosts(): Promise<void> {
-    this.products = await this.postService.fetchPosts(); 
+    this.products = await this.postService.fetchPosts();
   }
 
   async fetchPost(id: string): Promise<void> {
@@ -105,22 +110,16 @@ export class CarsComponent implements OnInit {
       const response = await axios.get(`http://localhost:8080/posts/${id}`);
       this.post = response.data.post;
       this.loading = false;
-  
+
       if (this.post) {
         this.setMetaTags();
-  
         try {
           const currentUser = await this.authService.getMe();
-  
           this.author = currentUser.user._id === this.post.userId._id;
-            console.log(currentUser.user._id);
-          
-          console.log('Автор:', this.author);
         } catch (err) {
-          this.author = false; 
+          this.author = false;
         }
       }
-  
     } catch (err) {
       this.error = 'Failed to load post data';
       this.loading = false;
@@ -130,10 +129,8 @@ export class CarsComponent implements OnInit {
 
   async deletePost(): Promise<void> {
     if (!this.post) return;
-  
     const confirmed = confirm('Вы уверены, что хотите удалить объявление?');
     if (!confirmed) return;
-  
     try {
       await this.postService.deletePost(this.post._id);
       alert('Объявление удалено');
@@ -143,54 +140,70 @@ export class CarsComponent implements OnInit {
       console.error(error);
     }
   }
-  
-  
 
-  buttons: string[] = [
-    'Ещё продаётся?',
-    'Обмен возможен?',
-    'Торг возможен?',
-    'Где и когда можно посмотреть?'
-  ];
+  async startChat(): Promise<void> {
+    if (!this.post || !this.authService.isAuthenticated()) {
+      alert('Пожалуйста, войдите в систему, чтобы начать чат');
+      this.router.navigate(['/login']);
+      return;
+    }
+    try {
+      // Set the default message in the textarea if needed
+      this.messageText = this.buttons[this.selectedIndex];
+      // Optionally, you can initiate a chat with an empty message or a default one
+      // For example, start a chat with a default message
+      await this.chatService.startChatWithPost(this.post._id, this.messageText);
+      alert('Чат начат! Напишите сообщение ниже.');
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      alert('Ошибка при начале чата');
+    }
+  }
 
-  selectedIndex: number = 0;
-  messageText: string = this.buttons[this.selectedIndex];
+  async sendMessage(): Promise<void> {
+    if (!this.post || !this.authService.isAuthenticated()) {
+      alert('Пожалуйста, войдите в систему, чтобы отправить сообщение');
+      this.router.navigate(['/login']);
+      return;
+    }
+    if (!this.messageText.trim()) {
+      alert('Введите сообщение');
+      return;
+    }
+    try {
+      await this.chatService.startChatWithPost(this.post._id, this.messageText);
+      alert('Сообщение отправлено!');
+      this.messageText = ''; // Clear the textarea
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Ошибка при отправке сообщения');
+    }
+  }
 
   onSelect(index: number): void {
     this.selectedIndex = index;
     this.messageText = this.buttons[index];
   }
 
-  
   private setMetaTags(): void {
     if (!this.post) return;
-
-    
     const title = `Купить б/у ${this.post.brand} ${this.post.model} ${this.post.generation} ${this.post.modification} ${this.post.engine} ${this.post.transmission} в Назрани: ${this.post.color} БМВ ${this.post.model} ${this.post.bodyType} ${this.post.year} года по цене ${this.formatPrice(this.post.price)} на OushAuto.ру`;
-
-    
-    const shortDescription = this.post.description.length > 100 
-      ? this.post.description.substring(0, 100) + '...' 
+    const shortDescription = this.post.description.length > 100
+      ? this.post.description.substring(0, 100) + '...'
       : this.post.description;
-
     const metaDescription = `Продается ${this.post.brand} ${this.post.model} ${this.post.year}, ${this.post.color}, ${this.post.bodyType}, ${this.post.engine}, ${this.formatPrice(this.post.price)}. ${shortDescription}`;
-
-    
     this.titleService.setTitle(title);
-
-    
     this.metaService.updateTag({ name: 'description', content: metaDescription });
     this.metaService.updateTag({ name: 'keywords', content: `${this.post.brand}, ${this.post.model}, б/у, купить, ${this.post.year}, ${this.post.color}, автомобиль, Назрань` });
     this.metaService.updateTag({ name: 'og:title', content: title });
     this.metaService.updateTag({ name: 'og:description', content: metaDescription });
     this.metaService.updateTag({ name: 'og:type', content: 'website' });
-    this.metaService.updateTag({ name: 'og:image', content: this.post.photos[0] || '' }); 
+    this.metaService.updateTag({ name: 'og:image', content: this.post.photos[0] ? `http://localhost:8080/${this.post.photos[0]}` : '' });
   }
 
   prevImage(): void {
     if (this.post && this.post.photos.length > 0) {
-      this.currentImageIndex =
-        (this.currentImageIndex - 1 + this.post.photos.length) % this.post.photos.length;
+      this.currentImageIndex = (this.currentImageIndex - 1 + this.post.photos.length) % this.post.photos.length;
     }
   }
 
@@ -218,16 +231,13 @@ export class CarsComponent implements OnInit {
     this.startSlider(productIndex);
   }
 
-
   toggleFavorite(event: Event) {
-    event.stopPropagation(); 
-    
+    event.stopPropagation();
   }
 
   nextImage(): void {
     if (this.post && this.post.photos.length > 0) {
-      this.currentImageIndex =
-        (this.currentImageIndex + 1) % this.post.photos.length;
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.post.photos.length;
     }
   }
 
@@ -245,7 +255,7 @@ export class CarsComponent implements OnInit {
     return new Date(dateString).toLocaleDateString('ru-RU', {
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 }

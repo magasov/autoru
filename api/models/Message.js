@@ -2,19 +2,14 @@ import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema(
   {
-    senderId: {
+    sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    recipientId: {
+    recipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
-    },
-    postId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
       required: true,
     },
     content: {
@@ -22,10 +17,9 @@ const MessageSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    status: {
+    chatId: {
       type: String,
-      enum: ["sent", "delivered", "read"],
-      default: "sent",
+      required: true,
     },
   },
   { timestamps: true }

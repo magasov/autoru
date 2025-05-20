@@ -1,3 +1,4 @@
+// index.js
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -27,14 +28,15 @@ import {
 } from "./controllers/FavoriteController.js";
 import {
   initializeWebSocket,
-  getChatHistory,
-  getUserChats,
+  getMessages,
+  getChats,
+  getUser,
 } from "./controllers/ChatController.js";
 
 dotenv.config();
 
 const app = express();
-const server = createServer(app); // Создаём HTTP-сервер для WebSocket
+const server = createServer(app);
 app.use(express.json());
 app.use(cors());
 
@@ -77,6 +79,10 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+// Initialize WebSocket
+initializeWebSocket(server);
+
+// Routes
 app.get("/", (req, res) => {
   res.send("Сервер работает!");
 });
@@ -93,14 +99,14 @@ app.delete("/posts/:id", checkAuth, deletePost);
 
 app.post("/favorites", checkAuth, addToFavorites);
 app.get("/favorites", checkAuth, getUserFavorites);
-app.delete("/favorites/:postId", checkAuth, removeFromFavorites);
+app.delete("/favorites/:postId-", checkAuth, removeFromFavorites);
 
-app.get("/chat/history", checkAuth, getChatHistory);
-app.get("/chat/chats", checkAuth, getUserChats);
+// Chat route
+app.get("/messages", checkAuth, getMessages);
+app.get("/chats", checkAuth, getChats);
+app.get("/users/:id", checkAuth, getUser);
 
 app.use("/uploads", express.static("uploads"));
-
-initializeWebSocket(server);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

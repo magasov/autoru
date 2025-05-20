@@ -1,110 +1,198 @@
 <div [ngClass]="{'message': true, 'select__chats': isChatSelect}">
-
-    <div class="message__one">
-      <div class="message__one-title">
-        <div class="close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path fill="#000" d="M18.692 5.308a1.05 1.05 0 0 0-1.487 0L12 10.513 6.795 5.308a1.052 1.052 0 0 0-1.487 1.487L10.513 12l-5.205 5.205a1.052 1.052 0 1 0 1.487 1.487L12 13.487l5.205 5.205a1.051 1.051 0 1 0 1.487-1.487L13.487 12l5.205-5.205c.41-.41.41-1.076 0-1.487"/>
-          </svg>
-        </div>
-        <h2>Сообщения</h2>
+  <div class="message__one">
+    <div class="message__one-title">
+      <div class="close">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#000"
+            d="M18.692 5.308a1.05 1.05 0 0 0-1.487 0L12 10.513 6.795 5.308a1.052 1.052 0 0 0-1.487 1.487L10.513 12l-5.205 5.205a1.052 1.052 0 1 0 1.487 1.487L12 13.487l5.205 5.205a1.051 1.051 0 1 0 1.487-1.487L13.487 12l5.205-5.205c.41-.41.41-1.076 0-1.487"
+          />
+        </svg>
       </div>
-      <div class="message__one-settings">
-        <button>Включить уведомления</button>
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="ChatListTabs__icon-fL_YG">
-            <path fill="currentColor" d="M12 2c-4.962 0-9 4.037-9 9v4c0 1.654 1.346 3 3 3h3v-8H5.08C5.568 6.614 8.481 4 12 4s6.432 2.614 6.92 6H15v8h3c.161 0 .315-.023.469-.047C17.782 19.168 16.493 20 15 20h-4v2h4c3.309 0 6-2.691 6-6v-5c0-4.963-4.038-9-9-9M7 16H6c-.551 0-1-.448-1-1v-3h2zm12-1c0 .552-.449 1-1 1h-1v-4h2z"></path>
-          </svg> Чат с поддержкой
-        </button>
-      </div>
-  
-      <div class="message__one-chats">
-        <div class="chat" *ngFor="let chat of chats" (click)="selectChat(chat); setClass()">
-          <img [src]="chat.avatar" alt="avatar">
-          <div class="chat__right">
-            <div class="chat__right-head">
-              <p>{{ chat.sellerType }}</p>
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="ChatSnippet2__icon-RyE3A ChatSnippet2__icon_checked-Ctfwp">
-                  <path fill="currentColor" d="M11 4.643 4.997 12 1 8.765l.999-1.121 2.78 2.25 5.059-6.2zm2.838-.949-5.059 6.2-.466-.377-.948 1.162L8.997 12 15 4.643z"></path>
-                </svg> {{ chat.lastMessageTime }}
-              </span>
-            </div>
-            <div class="chat__right-main">
-              <p class="name">{{ chat.carName }}</p>
-              <p class="price">· <span>{{ chat.price }}</span></p>
-            </div>
-            <div class="chat__right-foot">
-              <p>{{ chat.lastMessage }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <h2>Сообщения</h2>
     </div>
-    <div class="message__two" *ngIf="selectedChat">
-      <div class="message__two-head">
-        <h3>{{ selectedChat.sellerType }}</h3>
-        <div class="two__head-right">
-          <p>Был(а) 05 мая</p>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path fill="currentColor" fill-rule="evenodd" d="M16 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0" clip-rule="evenodd"/>
-          </svg>
-        </div>
-      </div>
-      <div class="message__two-select">
-        <img [src]="selectedChat.avatar" alt="">
-        <div class="select__info">
-          <p>{{ selectedChat.price }}</p>
-          <a [routerLink]="['/']" target="_blank">{{ selectedChat.carName }}</a>
-        </div>
-      </div>
-      <div class="message__two-chat">
-        <div class="chat__message">
-          <div class="chatDateDivider">Сегодня</div>
-          <div *ngFor="let message of messages" [ngClass]="message.sender === 'user' ? 'chat__sms' : 'interlocutor'">
-            <div class="chat_message">
-              <p class="chat_message-text">{{ message.text }}</p>
-              <div class="message__absolute">
-                <p>{{ message.time }}</p>
-                <span class="status">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
-                    <path fill="currentColor" d="M1.475 7.346a.75.75 0 0 1 1.06.01L4.55 9.41l4.826-5.886a.75.75 0 0 1 1.16.952l-5.357 6.532a.75.75 0 0 1-1.115.05L1.464 8.405a.75.75 0 0 1 .011-1.06M7 10l1-1 .5.5 4.875-5.976a.75.75 0 0 1 1.16.952l-5.357 6.532a.75.75 0 0 1-1.035.12z"/>
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="chat__footer">
-          <div class="chat__footer-placeholder">
-            <p>Здравствуйте</p>
-            <p>Ещё продается?</p>
-            <p>Обмен интересует?</p>
-            <p>Торг возможен?</p>
-            <p>Где можно посмотреть?</p>
-            <p>Какая причина продажи?</p>
-          </div>
-          <div class="chat__footer-input">
-            <div class="trigger">
-              <div class="file">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M17.462 15.4a.976.976 0 0 1 1.375.012 1 1 0 0 1 .012 1.392l-3.122 3.16A6.83 6.83 0 0 1 10.87 22a6.83 6.83 0 0 1-4.858-2.036A7 7 0 0 1 4 15.048c0-1.844.724-3.612 2.012-4.915l5.552-5.617a4.9 4.9 0 0 1 1.593-1.113 4.86 4.86 0 0 1 5.406 1.051 5 5 0 0 1 1.072 1.631 5.02 5.02 0 0 1-1.133 5.452l-5.55 5.618a2.93 2.93 0 0 1-2.082.873c-.78 0-1.53-.314-2.082-.872a3 3 0 0 1-.862-2.107c0-.79.31-1.548.862-2.107l4.51-4.564a.98.98 0 0 1 .694-.291.97.97 0 0 1 .694.29 1 1 0 0 1 .288.703 1 1 0 0 1-.287.702l-4.511 4.564a1 1 0 0 0-.288.703 1 1 0 0 0 .288.702.98.98 0 0 0 .694.29.97.97 0 0 0 .694-.29l5.55-5.618a2.98 2.98 0 0 0 .9-2.117 3 3 0 0 0-.863-2.133 2.94 2.94 0 0 0-2.107-.872 2.91 2.91 0 0 0-2.092.909L7.4 11.538a5 5 0 0 0-1.393 3.498 5 5 0 0 0 1.437 3.479 4.88 4.88 0 0 0 3.438 1.454 4.88 4.88 0 0 0 3.456-1.41z"/>
-                </svg>
-              </div>
-              <div class="map">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" fill="none" viewBox="0 0 14 18">
-                  <path fill="currentColor" fill-rule="evenodd" d="M1.676 11.545a7 7 0 1 1 10.568.092L7 18zM7 10.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" clip-rule="evenodd"/>
-                </svg>
-              </div>
-            </div>
-            <textarea rows="1" placeholder="Напишите сообщение..."></textarea>
-            <button class="send">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path fill="#fff" d="M4.467 21.914 22.241 13c1.012-.5 1.012-1.5 0-2L4.467 2.086a1.05 1.05 0 0 0-1.382.56c-.073.172-.1.362-.077.55l.898 6.082a1 1 0 0 0 .827.84L16.165 12 4.733 13.882a1 1 0 0 0-.827.84l-.898 6.083a1.06 1.06 0 0 0 .915 1.187c.185.023.373-.004.544-.078"/>
+    <div class="message__one-settings">
+      <button>Включить уведомления</button>
+      <button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          class="ChatListTabs__icon-fL_YG"
+        >
+          <path
+            fill="currentColor"
+            d="M12 2c-4.962 0-9 4.037-9 9v4c0 1.654 1.346 3 3 3h3v-8H5.08C5.568 6.614 8.481 4 12 4s6.432 2.614 6.92 6H15v8h3c.161 0 .315-.023.469-.047C17.782 19.168 16.493 20 15 20h-4v2h4c3.309 0 6-2.691 6-6v-5c0-4.963-4.038-9-9-9M7 16H6c-.551 0-1-.448-1-1v-3h2zm12-1c0 .552-.449 1-1 1h-1v-4h2z"
+          ></path>
+        </svg>
+        Чат с поддержкой
+      </button>
+    </div>
+
+    <div class="message__one-chats">
+      <div
+        class="chat"
+        *ngFor="let chat of chats"
+        (click)="selectChat(chat)"
+      >
+        <img [src]="chat.avatar" alt="avatar" />
+        <div class="chat__right">
+          <div class="chat__right-head">
+            <p>{{ chat.sellerType }}</p>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="none"
+                viewBox="0 0 16 16"
+                class="ChatSnippet2__icon-RyE3A ChatSnippet2__icon_checked-Ctfwp"
+              >
+                <path
+                  fill="currentColor"
+                  d="M11 4.643 4.997 12 1 8.765l.999-1.121 2.78 2.25 5.059-6.2zm2.838-.949-5.059 6.2-.466-.377-.948 1.162L8.997 12 15 4.643z"
+                ></path>
               </svg>
-            </button>
+              {{ chat.lastMessageTime }}
+            </span>
+          </div>
+          <div class="chat__right-main">
+            <p class="name">{{ chat.carName }}</p>
+            <p class="price">· <span>{{ chat.price }}</span></p>
+          </div>
+          <div class="chat__right-foot">
+            <p>{{ chat.lastMessage }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="message__two" *ngIf="selectedChat">
+    <div class="message__two-head">
+      <h3>{{ selectedChat.sellerType }}</h3>
+      <div class="two__head-right">
+        <p>Был(а) 05 мая</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M16 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+    <div class="message__two-select">
+      <img [src]="selectedChat.avatar" alt="" />
+      <div class="select__info">
+        <p>{{ selectedChat.price }}</p>
+        <a [routerLink]="['/']" target="_blank">{{ selectedChat.carName }}</a>
+      </div>
+    </div>
+    <div class="message__two-chat">
+      <div class="chat__message">
+        <div class="chatDateDivider">Сегодня</div>
+        <div *ngFor="let message of messages" [ngClass]="getMessageClass(message)">
+          <div class="chat_message">
+            <p class="chat_message-text">{{ message.content }}</p>
+            <div class="message__absolute">
+              <p>{{ message.time }}</p>
+              <span class="status">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M1.475 7.346a.75.75 0 0 1 1.06.01L4.55 9.41l4.826-5.886a.75.75 0 0 1 1.16.952l-5.357 6.532a.75.75 0 0 1-1.115.05L1.464 8.405a.75.75 0 0 1 .011-1.06M7 10l1-1 .5.5 4.875-5.976a.75.75 0 0 1 1.16.952l-5.357 6.532a.75.75 0 0 1-1.035.12z"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat__footer">
+        <div class="chat__footer-placeholder">
+          <p>Здравствуйте</p>
+          <p>Ещё продается?</p>
+          <p>Обмен интересует?</p>
+          <p>Торг возможен?</p>
+          <p>Где можно посмотреть?</p>
+          <p>Какая причина продажи?</p>
+        </div>
+        <div class="chat__footer-input">
+          <div class="trigger">
+            <div class="file">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M17.462 15.4a.976.976 0 0 1 1.375.012 1 1 0 0 1 .012 1.392l-3.122 3.16A6.83 6.83 0 0 1 10.87 22a6.83 6.83 0 0 1-4.858-2.036A7 7 0 0 1 4 15.048c0-1.844.724-3.612 2.012-4.915l5.552-5.617a4.9 4.9 0 0 1 1.593-1.113 4.86 4.86 0 0 1 5.406 1.051 5 5 0 0 1 1.072 1.631 5.02 5.02 0 0 1-1.133 5.452l-5.55 5.618a2.93 2.93 0 0 1-2.082.873c-.78 0-1.53-.314-2.082-.872a3 3 0 0 1-.862-2.107c0-.79.31-1.548.862-2.107l4.51-4.564a.98.98 0 0 1 .694-.291.97.97 0 0 1 .694.29 1 1 0 0 1 .288.703 1 1 0 0 1-.287.702l-4.511 4.564a1 1 0 0 0-.288.703 1 1 0 0 0 .288.702.98.98 0 0 0 .694.29.97.97 0 0 0 .694-.29l5.55-5.618a2.98 2.98 0 0 0 .9-2.117 3 3 0 0 0-.863-2.133 2.94 2.94 0 0 0-2.107-.872 2.91 2.91 0 0 0-2.092.909L7.4 11.538a5 5 0 0 0-1.393 3.498 5 5 0 0 0 1.437 3.479 4.88 4.88 0 0 0 3.438 1.454 4.88 4.88 0 0 0 3.456-1.41z"
+                />
+              </svg>
+            </div>
+            <div class="map">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="18"
+                fill="none"
+                viewBox="0 0 14 18"
+              >
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  d="M1.676 11.545a7 7 0 1 1 10.568.092L7 18zM7 10.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+          <textarea
+            rows="1"
+            placeholder="Напишите сообщение..."
+            [(ngModel)]="messageInput"
+            (keydown.enter)="sendMessage(); $event.preventDefault()"
+          ></textarea>
+          <button class="send" (click)="sendMessage()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#fff"
+                d="M4.467 21.914 22.241 13c1.012-.5 1.012-1.5 0-2L4.467 2.086a1.05 1.05 0 0 0-1.382.56c-.073.172-.1.362-.077.55l.898 6.082a1 1 0 0 0 .827.84L16.165 12 4.733 13.882a1 1 0 0 0-.827.84l-.898 6.083a1.06 1.06 0 0 0 .915 1.187c.185.023.373-.004.544-.078"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
