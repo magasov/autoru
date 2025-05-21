@@ -9,6 +9,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { PostService } from '../services/post.service';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
+import { NgxSonnerToaster, toast } from 'ngx-sonner'; 
 
 interface Post {
   _id: string;
@@ -42,7 +43,16 @@ interface Post {
 
 @Component({
   selector: 'app-cars',
-  imports: [HeaderComponent, RouterLink, NgFor, NgIf, CommonModule, FormsModule, FooterComponent],
+  imports: [
+    HeaderComponent,
+    RouterLink,
+    NgFor,
+    NgIf,
+    CommonModule,
+    FormsModule,
+    FooterComponent,
+    NgxSonnerToaster, 
+  ],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
   standalone: true,
@@ -66,7 +76,7 @@ export class CarsComponent implements OnInit {
     'Где и когда можно посмотреть?',
   ];
   selectedIndex: number = 0;
-  notification: string | null = null;
+  protected readonly toast = toast; 
 
   constructor(
     private route: ActivatedRoute,
@@ -100,6 +110,7 @@ export class CarsComponent implements OnInit {
     } else {
       this.error = 'No post ID provided';
       this.loading = false;
+      this.toast.error('No post ID provided'); 
     }
   }
 
@@ -111,7 +122,7 @@ export class CarsComponent implements OnInit {
     try {
       const response = await axios.get(`http://localhost:8080/posts/${id}`);
       this.post = response.data.post;
-      console.log('Post data:', this.post); 
+      console.log('Post data:', this.post);
       this.loading = false;
 
       if (this.post) {
@@ -126,6 +137,7 @@ export class CarsComponent implements OnInit {
     } catch (err) {
       this.error = 'Failed to load post data';
       this.loading = false;
+      this.toast.error('Failed to load post data'); 
       console.error(err);
     }
   }
@@ -136,51 +148,49 @@ export class CarsComponent implements OnInit {
     if (!confirmed) return;
     try {
       await this.postService.deletePost(this.post._id);
-      alert('Объявление удалено');
+      this.toast.success('Объявление удалено'); 
       this.router.navigate(['/']);
     } catch (error) {
-      alert('Ошибка при удалении');
+      this.toast.error('Ошибка при удалении'); 
       console.error(error);
     }
   }
 
   async sendMessage(): Promise<void> {
     if (!this.post || !this.authService.isAuthenticated()) {
-      alert('Пожалуйста, войдите в систему, чтобы отправить сообщение');
+      this.toast.error('Пожалуйста, войдите в систему, чтобы отправить сообщение'); 
       this.router.navigate(['/login']);
       return;
     }
     if (!this.messageText.trim()) {
-      alert('Введите сообщение');
+      this.toast.error('Введите сообщение'); 
       return;
     }
     try {
-      console.log('Отправка сообщения с postId:', this.post._id, 'lastSeen:', this.post.userId.lastSeen); 
+      console.log('Отправка сообщения с postId:', this.post._id, 'lastSeen:', this.post.userId.lastSeen);
       await this.chatService.startChatWithPost(this.post._id, this.messageText, this.post.userId.lastSeen);
-      this.notification = 'Сообщение отправлено!';
+      this.toast.success('Сообщение отправлено!'); 
       this.messageText = '';
-      setTimeout(() => (this.notification = null), 3000);
     } catch (error) {
       console.error('Error sending message:', error);
-      alert('Ошибка при отправке сообщения');
+      this.toast.error('Ошибка при отправке сообщения'); 
     }
   }
 
   async startChat(): Promise<void> {
     if (!this.post || !this.authService.isAuthenticated()) {
-      alert('Пожалуйста, войдите в систему, чтобы начать чат');
+      this.toast.error('Пожалуйста, войдите в систему, чтобы начать чат'); 
       this.router.navigate(['/login']);
       return;
     }
     try {
-      console.log('Начало чата с postId:', this.post._id, 'lastSeen:', this.post.userId.lastSeen); 
+      console.log('Начало чата с postId:', this.post._id, 'lastSeen:', this.post.userId.lastSeen);
       await this.chatService.startChatWithPost(this.post._id, this.messageText || 'Начало чата', this.post.userId.lastSeen);
-      this.notification = 'Чат начат! Перейдите в раздел сообщений, чтобы продолжить.';
+      this.toast.success('Чат начат! Перейдите в раздел сообщений, чтобы продолжить.'); 
       this.messageText = '';
-      setTimeout(() => (this.notification = null), 3000);
     } catch (error) {
       console.error('Error starting chat:', error);
-      alert('Ошибка при открытии чата');
+      this.toast.error('Ошибка при открытии чата'); 
     }
   }
 

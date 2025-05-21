@@ -5,6 +5,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'; 
 import axios from 'axios';
 
 @Component({
@@ -13,6 +14,7 @@ import axios from 'axios';
   styleUrls: ['./message.component.scss'],
   standalone: true,
   imports: [RouterLink, NgClass, FormsModule, NgIf, NgFor],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], 
 })
 export class MessageComponent implements OnInit, OnDestroy {
   chats: Chat[] = [];
@@ -20,6 +22,15 @@ export class MessageComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   isChatSelect: boolean = false;
   messageInput: string = '';
+  showEmojiPicker: boolean = false;
+  placeholders: string[] = [
+    'Здравствуйте',
+    'Ещё продается?',
+    'Обмен интересует?',
+    'Торг возможен?',
+    'Где можно посмотреть?',
+    'Какая причина продажи?',
+  ];
   private messageSubscription: Subscription | null = null;
   private chatsSubscription: Subscription | null = null;
   private userId: string | null = null;
@@ -56,7 +67,7 @@ export class MessageComponent implements OnInit, OnDestroy {
                   lastMessage: '',
                   lastMessageTime: '',
                   avatar: user.avatar || 'https://example.com/default-avatar.png',
-                  lastSeen: user.lastSeen || '', 
+                  lastSeen: user.lastSeen || '',
                   carName: 'Unknown Car',
                   price: '0 ₽',
                 };
@@ -91,53 +102,53 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   getLastSeenText(): string {
-  if (!this.selectedChat?.lastSeen) {
-    return 'время неизвестно';
+    if (!this.selectedChat?.lastSeen) {
+      return 'время неизвестно';
+    }
+
+    const lastSeenDate = new Date(this.selectedChat.lastSeen);
+    if (isNaN(lastSeenDate.getTime())) {
+      return 'время неизвестно';
+    }
+
+    const now = new Date();
+    const lastSeenDay = lastSeenDate.getDate();
+    const lastSeenMonth = lastSeenDate.getMonth();
+    const lastSeenYear = lastSeenDate.getFullYear();
+
+    const nowDay = now.getDate();
+    const nowMonth = now.getMonth();
+    const nowYear = now.getFullYear();
+
+    const isToday = lastSeenDay === nowDay && lastSeenMonth === nowMonth && lastSeenYear === nowYear;
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday =
+      lastSeenDay === yesterday.getDate() &&
+      lastSeenMonth === yesterday.getMonth() &&
+      lastSeenYear === yesterday.getFullYear();
+
+    const hours = lastSeenDate.getHours().toString().padStart(2, '0');
+    const minutes = lastSeenDate.getMinutes().toString().padStart(2, '0');
+
+    if ((now.getTime() - lastSeenDate.getTime()) < 60000) {
+      return 'в сети';
+    }
+
+    if (isToday) {
+      return `был(а) в сети сегодня в ${hours}:${minutes}`;
+    } else if (isYesterday) {
+      return `был(а) в сети вчера в ${hours}:${minutes}`;
+    } else {
+      const dateStr = lastSeenDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+      return `был(а) в сети ${dateStr} в ${hours}:${minutes}`;
+    }
   }
-
-  const lastSeenDate = new Date(this.selectedChat.lastSeen);
-  if (isNaN(lastSeenDate.getTime())) {
-    return 'время неизвестно';
-  }
-
-  const now = new Date();
-  const lastSeenDay = lastSeenDate.getDate();
-  const lastSeenMonth = lastSeenDate.getMonth();
-  const lastSeenYear = lastSeenDate.getFullYear();
-
-  const nowDay = now.getDate();
-  const nowMonth = now.getMonth();
-  const nowYear = now.getFullYear();
-
-  const isToday = lastSeenDay === nowDay && lastSeenMonth === nowMonth && lastSeenYear === nowYear;
-
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const isYesterday =
-    lastSeenDay === yesterday.getDate() &&
-    lastSeenMonth === yesterday.getMonth() &&
-    lastSeenYear === yesterday.getFullYear();
-
-  const hours = lastSeenDate.getHours().toString().padStart(2, '0');
-  const minutes = lastSeenDate.getMinutes().toString().padStart(2, '0');
-
-  if ((now.getTime() - lastSeenDate.getTime()) < 60000) {
-    return 'в сети';
-  }
-
-  if (isToday) {
-    return `был(а) в сети сегодня в ${hours}:${minutes}`;
-  } else if (isYesterday) {
-    return `был(а) в сети вчера в ${hours}:${minutes}`;
-  } else {
-    const dateStr = lastSeenDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-    return `был(а) в сети ${dateStr} в ${hours}:${minutes}`;
-  }
-}
-
 
   async selectChat(chat: Chat) {
     this.selectedChat = chat;
+    this.showEmojiPicker = false;
     try {
       this.messages = await this.chatService.getMessages(chat.recipientId);
     } catch (error) {
@@ -150,6 +161,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     try {
       await this.chatService.sendMessage(this.selectedChat.recipientId, this.messageInput);
       this.messageInput = '';
+      this.showEmojiPicker = false;
     } catch (error) {
       console.error('Ошибка отправки сообщения:', error);
     }
@@ -161,5 +173,21 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   getMessageClass(message: Message): string {
     return message.sender === this.userId ? 'chat__sms' : 'interlocutor';
+  }
+
+  insertPlaceholder(placeholder: string) {
+    this.messageInput = placeholder;
+    this.showEmojiPicker = false;
+  }
+
+  toggleEmojiPicker() {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  addEmoji(event: any) {
+    this.messageInput += event.detail.unicode;
+  }
+
+  onInputChange() {
   }
 }

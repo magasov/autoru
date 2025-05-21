@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import 'emoji-picker-element';
 
 import { routes } from './app.routes';
 
