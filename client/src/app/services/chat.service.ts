@@ -7,12 +7,13 @@ export interface Chat {
   id: string;
   avatar: string;
   sellerType: string;
+  lastSeen: string;
   lastMessageTime: string;
   carName: string;
   price: string;
   lastMessage: string;
   recipientId: string;
-  postId?: string; 
+  postId?: string;
 }
 
 export interface Message {
@@ -21,7 +22,7 @@ export interface Message {
   recipient: string;
   content: string;
   time: string;
-  postId?: string; 
+  postId?: string;
 }
 
 @Injectable({
@@ -67,7 +68,7 @@ export class ChatService {
             hour: '2-digit',
             minute: '2-digit',
           }),
-          postId: message.postId || null, 
+          postId: message.postId || null,
         };
         this.messageSubject.next(formattedMessage);
         await this.updateChatList(message);
@@ -79,7 +80,6 @@ export class ChatService {
         console.log('WebSocket closed');
       };
 
-      
       await this.fetchChats();
     } catch (error) {
       console.error('Failed to initialize WebSocket:', error);
@@ -95,9 +95,46 @@ export class ChatService {
       const response = await axios.get(`${this.apiUrl}/chats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      this.chats = response.data.chats;
+      this.chats = await Promise.all(
+        response.data.chats.map(async (chat: any) => {
+          const recipientId = chat.recipientId._id || chat.recipientId;
+          try {
+            const userResponse = await axios.get(`${this.apiUrl}/users/${recipientId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const user = userResponse.data.user;
+            console.log('User data for recipient', recipientId, ':', user);
+            return {
+              id: chat._id,
+              recipientId: recipientId,
+              avatar: user.avatar || 'https://example.com/default-avatar.png',
+              sellerType: user.name ? 'Частное лицо' : 'Неизвестно',
+              lastMessage: chat.lastMessage || '',
+              lastMessageTime: chat.lastMessageTime || '',
+              lastSeen: user.lastSeen || 'unknown',
+              carName: chat.carName || 'Unknown Car',
+              price: chat.price || '0 ₽',
+              postId: chat.postId || null,
+            };
+          } catch (error) {
+            console.error(`Ошибка получения данных пользователя ${recipientId}:`, error);
+            return {
+              id: chat._id,
+              recipientId: recipientId,
+              avatar: 'https://example.com/default-avatar.png',
+              sellerType: 'Неизвестно',
+              lastMessage: chat.lastMessage || '',
+              lastMessageTime: chat.lastMessageTime || '',
+              lastSeen: 'unknown',
+              carName: chat.carName || 'Unknown Car',
+              price: chat.price || '0 ₽',
+              postId: chat.postId || null,
+            };
+          }
+        })
+      );
+      console.log('Updated chats:', this.chats);
       this.chatsSubject.next(this.chats);
-      console.log(response);
       return this.chats;
     } catch (error: any) {
       console.error('Error fetching chats:', error);
@@ -108,14 +145,50 @@ export class ChatService {
   async updateChatList(message: any) {
     const recipientId =
       message.sender._id === this.userId ? message.recipient._id : message.sender._id;
-    const chats = await this.fetchChats();
-    const chatIndex = chats.findIndex((chat) => chat.recipientId === recipientId);
-    if (chatIndex === -1) {
-      
-      await this.fetchChats();
-    } else {
-      this.chats = chats;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token not found');
+    }
+    try {
+      const userResponse = await axios.get(`${this.apiUrl}/users/${recipientId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const user = userResponse.data.user;
+      console.log('User data for recipient', recipientId, ':', user);
+
+      const chatIndex = this.chats.findIndex((chat) => chat.recipientId === recipientId);
+      if (chatIndex !== -1) {
+        this.chats[chatIndex] = {
+          ...this.chats[chatIndex],
+          lastSeen: user.lastSeen || 'unknown',
+          lastMessage: message.content,
+          lastMessageTime: new Date(message.createdAt).toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        };
+      } else {
+        const newChat: Chat = {
+          id: message._id,
+          recipientId: recipientId,
+          avatar: user.avatar || 'https://example.com/default-avatar.png',
+          sellerType: user.name ? 'Частное лицо' : 'Неизвестно',
+          lastMessage: message.content,
+          lastMessageTime: new Date(message.createdAt).toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          lastSeen: user.lastSeen || 'unknown',
+          carName: 'Unknown Car',
+          price: '0 ₽',
+          postId: message.postId || null,
+        };
+        this.chats.push(newChat);
+      }
+      console.log('Updated chats after message:', this.chats);
       this.chatsSubject.next(this.chats);
+    } catch (error) {
+      console.error('Error updating chat list:', error);
     }
   }
 
@@ -127,40 +200,51 @@ export class ChatService {
     return this.chatsSubject.asObservable();
   }
 
- async sendMessage(recipientId: string, content: string, postId?: string): Promise<void> {
-  if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-    throw new Error('WebSocket is not connected');
-  }
-  
-  const existingMessages = await this.getMessages(recipientId);
-  if (existingMessages.length > 0) {
-    
-    this.ws.send(JSON.stringify({ recipientId, content }));
-  } else {
-    
-    this.ws.send(JSON.stringify({ recipientId, content, postId }));
-  }
-  await this.fetchChats(); 
-}
-
-async startChatWithPost(postId: string, content: string): Promise<void> {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('Token not found');
+  async sendMessage(recipientId: string, content: string, postId?: string, lastSeen?: string): Promise<void> {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      throw new Error('WebSocket is not connected');
     }
-    
-    const postResponse = await axios.get(`${this.apiUrl}/posts/${postId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const recipientId = postResponse.data.post.userId._id;
-    
-    await this.sendMessage(recipientId, content, postId);
-  } catch (error: any) {
-    console.error('Error starting chat:', error);
-    throw new Error(error.response?.data?.message || 'Server error');
+    const existingMessages = await this.getMessages(recipientId);
+    const messageData: any = { recipientId, content };
+    if (postId && existingMessages.length === 0) {
+      messageData.postId = postId;
+    }
+    console.log('Sending message:', messageData, 'lastSeen:', lastSeen);
+    this.ws.send(JSON.stringify(messageData));
+   
+    const chatIndex = this.chats.findIndex((chat) => chat.recipientId === recipientId);
+    if (chatIndex !== -1 && lastSeen) {
+      this.chats[chatIndex] = {
+        ...this.chats[chatIndex],
+        lastSeen: lastSeen || 'unknown',
+        lastMessage: content,
+        lastMessageTime: new Date().toLocaleTimeString('ru-RU', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      };
+      this.chatsSubject.next(this.chats);
+    }
+    await this.fetchChats();
   }
-}
+
+  async startChatWithPost(postId: string, content: string, lastSeen?: string): Promise<void> {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found');
+      }
+      const postResponse = await axios.get(`${this.apiUrl}/posts/${postId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const recipientId = postResponse.data.post.userId._id;
+      console.log('Post response:', postResponse.data.post, 'lastSeen provided:', lastSeen);
+      await this.sendMessage(recipientId, content, postId, lastSeen || postResponse.data.post.userId.lastSeen);
+    } catch (error: any) {
+      console.error('Error starting chat:', error);
+      throw new Error(error.response?.data?.message || 'Server error');
+    }
+  }
 
   async getMessages(recipientId: string): Promise<Message[]> {
     try {
@@ -181,15 +265,13 @@ async startChatWithPost(postId: string, content: string): Promise<void> {
           hour: '2-digit',
           minute: '2-digit',
         }),
-        postId: msg.postId || null, 
+        postId: msg.postId || null,
       }));
     } catch (error: any) {
       console.error('Error fetching messages:', error);
       throw new Error(error.response?.data?.message || 'Server error');
     }
   }
-
-
 
   disconnectWebSocket() {
     if (this.ws) {

@@ -78,8 +78,8 @@ export const initializeWebSocket = (server) => {
         console.log("Сообщение сохранено:", message);
 
         const populatedMessage = await Message.findById(message._id)
-          .populate("sender", "email name avatar")
-          .populate("recipient", "email name avatar")
+          .populate("sender", "email name avatar lastSeen")
+          .populate("recipient", "email name avatar lastSeen")
           .populate("postId", "brand model price photos");
 
         const recipientWs = clients.get(recipientId);
@@ -121,8 +121,8 @@ export const getMessages = async (req, res) => {
         { sender: recipientId, recipient: userId },
       ],
     })
-      .populate("sender", "email name avatar")
-      .populate("recipient", "email name avatar")
+      .populate("sender", "email name avatar lastSeen")
+      .populate("recipient", "email name avatar lastSeen")
       .populate("postId", "brand model price photos")
       .sort({ createdAt: 1 });
 
@@ -148,11 +148,11 @@ export const getChats = async (req, res) => {
     })
       .populate({
         path: "sender",
-        select: "email name avatar",
+        select: "email name avatar lastSeen",
       })
       .populate({
         path: "recipient",
-        select: "email name avatar",
+        select: "email name avatar lastSeen",
       })
       .populate({
         path: "postId",
@@ -187,6 +187,7 @@ export const getChats = async (req, res) => {
           id: recipientId,
           recipientId,
           sellerType: recipient.name ? "Частное лицо" : "Неизвестно",
+          lastSeen: recipient.lastSeen ? recipient.lastSeen.toISOString() : "unknown", 
           lastMessage: message.content || "",
           lastMessageTime: new Date(message.createdAt).toLocaleTimeString(
             "ru-RU",
@@ -217,11 +218,19 @@ export const getChats = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("email name avatar");
+    const user = await User.findById(id).select("email name avatar lastSeen"); 
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
-    res.status(200).json({ user });
+    res.status(200).json({
+      user: {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        lastSeen: user.lastSeen ? user.lastSeen.toISOString() : "unknown", 
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Ошибка сервера", error: error.message });
   }

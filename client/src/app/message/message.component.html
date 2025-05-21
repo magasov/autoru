@@ -79,7 +79,7 @@
     <div class="message__two-head">
       <h3>{{ selectedChat.sellerType }}</h3>
       <div class="two__head-right">
-        <p>Был(а) 05 мая</p>
+        <p *ngIf="selectedChat">{{ getLastSeenText() }}</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

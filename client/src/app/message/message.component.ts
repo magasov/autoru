@@ -33,8 +33,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     try {
       const userData = await this.authService.getMe();
-      
-      
       this.userId = userData.user._id;
       this.chatsSubscription = this.chatService.getChatsObservable().subscribe((chats) => {
         this.chats = chats;
@@ -58,6 +56,7 @@ export class MessageComponent implements OnInit, OnDestroy {
                   lastMessage: '',
                   lastMessageTime: '',
                   avatar: user.avatar || 'https://example.com/default-avatar.png',
+                  lastSeen: user.lastSeen || '', 
                   carName: 'Unknown Car',
                   price: '0 ₽',
                 };
@@ -89,6 +88,28 @@ export class MessageComponent implements OnInit, OnDestroy {
     this.messageSubscription?.unsubscribe();
     this.chatsSubscription?.unsubscribe();
     this.chatService.disconnectWebSocket();
+  }
+
+  getLastSeenText(): string {
+    if (!this.selectedChat?.lastSeen) {
+      return 'время неизвестно';
+    }
+    const lastSeenDate = new Date(this.selectedChat.lastSeen);
+    if (isNaN(lastSeenDate.getTime())) {
+      return 'время неизвестно';
+    }
+    const now = new Date();
+    const diffInMs = now.getTime() - lastSeenDate.getTime();
+    const diffInMinutes = diffInMs / 60000;
+
+    if (diffInMinutes < 1) {
+      return 'в сети';
+    }
+
+    const hours = lastSeenDate.getHours().toString().padStart(2, '0');
+    const minutes = lastSeenDate.getMinutes().toString().padStart(2, '0');
+    const dateStr = lastSeenDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    return `был в сети ${dateStr}, ${hours}:${minutes}`;
   }
 
   async selectChat(chat: Chat) {

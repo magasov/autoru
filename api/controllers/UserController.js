@@ -76,6 +76,7 @@ export const verifyAuthCode = async (req, res) => {
 
     user.verificationCode = undefined;
     user.isVerified = true;
+    user.lastSeen = new Date();
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
@@ -137,6 +138,9 @@ export const getMe = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
+
+    user.lastSeen = new Date(); 
+    await user.save();
 
     res.status(200).json({
       message: "Данные пользователя получены",
