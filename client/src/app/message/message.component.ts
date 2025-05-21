@@ -91,26 +91,50 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   getLastSeenText(): string {
-    if (!this.selectedChat?.lastSeen) {
-      return 'время неизвестно';
-    }
-    const lastSeenDate = new Date(this.selectedChat.lastSeen);
-    if (isNaN(lastSeenDate.getTime())) {
-      return 'время неизвестно';
-    }
-    const now = new Date();
-    const diffInMs = now.getTime() - lastSeenDate.getTime();
-    const diffInMinutes = diffInMs / 60000;
-
-    if (diffInMinutes < 1) {
-      return 'в сети';
-    }
-
-    const hours = lastSeenDate.getHours().toString().padStart(2, '0');
-    const minutes = lastSeenDate.getMinutes().toString().padStart(2, '0');
-    const dateStr = lastSeenDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-    return `был в сети ${dateStr}, ${hours}:${minutes}`;
+  if (!this.selectedChat?.lastSeen) {
+    return 'время неизвестно';
   }
+
+  const lastSeenDate = new Date(this.selectedChat.lastSeen);
+  if (isNaN(lastSeenDate.getTime())) {
+    return 'время неизвестно';
+  }
+
+  const now = new Date();
+  const lastSeenDay = lastSeenDate.getDate();
+  const lastSeenMonth = lastSeenDate.getMonth();
+  const lastSeenYear = lastSeenDate.getFullYear();
+
+  const nowDay = now.getDate();
+  const nowMonth = now.getMonth();
+  const nowYear = now.getFullYear();
+
+  const isToday = lastSeenDay === nowDay && lastSeenMonth === nowMonth && lastSeenYear === nowYear;
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  const isYesterday =
+    lastSeenDay === yesterday.getDate() &&
+    lastSeenMonth === yesterday.getMonth() &&
+    lastSeenYear === yesterday.getFullYear();
+
+  const hours = lastSeenDate.getHours().toString().padStart(2, '0');
+  const minutes = lastSeenDate.getMinutes().toString().padStart(2, '0');
+
+  if ((now.getTime() - lastSeenDate.getTime()) < 60000) {
+    return 'в сети';
+  }
+
+  if (isToday) {
+    return `был(а) в сети сегодня в ${hours}:${minutes}`;
+  } else if (isYesterday) {
+    return `был(а) в сети вчера в ${hours}:${minutes}`;
+  } else {
+    const dateStr = lastSeenDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    return `был(а) в сети ${dateStr} в ${hours}:${minutes}`;
+  }
+}
+
 
   async selectChat(chat: Chat) {
     this.selectedChat = chat;

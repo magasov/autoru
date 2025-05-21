@@ -1,21 +1,10 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
+import transporter from "../utils/mailer.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASS,
-  },
-});
 
 const generateCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -24,7 +13,7 @@ const generateCode = () => {
 const sendVerificationEmail = async (email, code) => {
   try {
     const mailOptions = {
-      from: `"Autoru Magasov" <${EMAIL_USER}>`,
+      from: `"Oushauto" <${EMAIL_USER}>`,
       to: email,
       subject: "Код верификации",
       text: `Ваш код верификации: ${code}`,
@@ -139,7 +128,7 @@ export const getMe = async (req, res) => {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
-    user.lastSeen = new Date(); 
+    user.lastSeen = new Date();
     await user.save();
 
     res.status(200).json({

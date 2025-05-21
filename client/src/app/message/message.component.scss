@@ -8,9 +8,7 @@
   z-index: 999;
   box-shadow: 0 2px 10px 0 #0000004d;
   transition: transform 0.5s ease;
-    transform: translateX(calc(900px - 360px));
-
-    
+  transform: translateX(calc(900px - 360px));
 
   &__one {
     display: flex;
@@ -200,6 +198,11 @@
         gap: 20px;
         color: #1c212899;
         font-size: 15px;
+
+        .online {
+          color: #28a745;
+          transition: color 0.3s ease;
+        }
 
         svg {
           color: #1c212899;
@@ -431,5 +434,4 @@
 
 .select__chats {
   transform: translateX(0);
-  
 }

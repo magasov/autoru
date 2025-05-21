@@ -2,8 +2,70 @@ import { WebSocketServer } from "ws";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
+import transporter from "../utils/mailer.js";
 
 const clients = new Map();
+
+const sendMessageNotificationEmail = async (
+  recipientEmail,
+  senderName,
+  content,
+  post
+) => {
+  try {
+    const mailOptions = {
+      from: `"Oushauto" <${process.env.EMAIL_USER}>`,
+      to: recipientEmail,
+      subject: "Новое сообщение в чате",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; border-radius: 10px;">
+          <div style="background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+            <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 20px; text-align: center;">
+              Новое сообщение от ${senderName || "пользователя"}
+            </h1>
+            <p style="color: #333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+              ${content}
+            </p>
+            ${
+              post
+                ? `
+                  <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                    <h2 style="color: #1a1a1a; font-size: 18px; margin: 0 0 10px;">
+                      Объявление
+                    </h2>
+                    <p style="color: #333; font-size: 16px; margin: 5px 0;">
+                      <strong>Автомобиль:</strong> ${post.brand} ${post.model}
+                    </p>
+                    <p style="color: #333; font-size: 16px; margin: 5px 0;">
+                      <strong>Цена:</strong> ${post.price.toLocaleString(
+                        "ru-RU"
+                      )} ₽
+                    </p>
+                  </div>`
+                : ""
+            }
+            <div style="text-align: center;">
+              <a href="http://localhost:4200/chat" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
+                Ответить в чате
+              </a>
+            </div>
+            <p style="color: #666; font-size: 14px; text-align: center; margin-top: 20px;">
+              Это автоматическое письмо, пожалуйста, не отвечайте на него.
+            </p>
+          </div>
+          <div style="text-align: center; color: #999; font-size: 12px; margin-top: 20px;">
+            © 2025 Oushauto. Все права защищены.
+          </div>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Уведомление отправлено на ${recipientEmail}`);
+  } catch (error) {
+    console.error(`Ошибка при отправке уведомления: ${error.message}`);
+  }
+};
 
 export const initializeWebSocket = (server) => {
   const wss = new WebSocketServer({ server });
@@ -81,6 +143,20 @@ export const initializeWebSocket = (server) => {
           .populate("sender", "email name avatar lastSeen")
           .populate("recipient", "email name avatar lastSeen")
           .populate("postId", "brand model price photos");
+
+        // Отправка уведомления на email получателя асcинхрооыо (без await)
+        sendMessageNotificationEmail(
+          recipient.email,
+          sender.name || sender.email,
+          content,
+          populatedMessage.postId
+            ? {
+                brand: populatedMessage.postId.brand,
+                model: populatedMessage.postId.model,
+                price: populatedMessage.postId.price,
+              }
+            : null
+        );
 
         const recipientWs = clients.get(recipientId);
         if (recipientWs) {
@@ -187,7 +263,9 @@ export const getChats = async (req, res) => {
           id: recipientId,
           recipientId,
           sellerType: recipient.name ? "Частное лицо" : "Неизвестно",
-          lastSeen: recipient.lastSeen ? recipient.lastSeen.toISOString() : "unknown", 
+          lastSeen: recipient.lastSeen
+            ? recipient.lastSeen.toISOString()
+            : "unknown",
           lastMessage: message.content || "",
           lastMessageTime: new Date(message.createdAt).toLocaleTimeString(
             "ru-RU",
@@ -218,7 +296,7 @@ export const getChats = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("email name avatar lastSeen"); 
+    const user = await User.findById(id).select("email name avatar lastSeen");
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
@@ -228,7 +306,7 @@ export const getUser = async (req, res) => {
         email: user.email,
         name: user.name,
         avatar: user.avatar,
-        lastSeen: user.lastSeen ? user.lastSeen.toISOString() : "unknown", 
+        lastSeen: user.lastSeen ? user.lastSeen.toISOString() : "unknown",
       },
     });
   } catch (error) {
