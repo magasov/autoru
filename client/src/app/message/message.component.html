@@ -199,6 +199,7 @@
           
           <button
             class="send"
+           *ngIf="messageInput && messageInput.trim().length > 0"
             [ngClass]="{'visible': messageInput.trim()}"
             (click)="sendMessage()"
           >
