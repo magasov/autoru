@@ -22,12 +22,12 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "uploads/defaults/avatar.png",
+      default: "http://localhost:8080/uploads/defaults/avatar.png",
     },
     lastSeen: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
     timestamps: true,

@@ -39,6 +39,7 @@ interface Post {
   phone: string;
   price: number;
   createdAt: string;
+  views: string
 }
 
 @Component({

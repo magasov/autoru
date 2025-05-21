@@ -24,6 +24,7 @@ const postSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   price: { type: Number, required: true },
+  views: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 

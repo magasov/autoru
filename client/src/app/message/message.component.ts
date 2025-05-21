@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'; 
 import axios from 'axios';
+import { IsPopupMessageService } from '../services/ispopupmessage.service';
 
 @Component({
   selector: 'app-message',
@@ -38,7 +39,8 @@ export class MessageComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private popupService2: IsPopupMessageService
   ) {}
 
   async ngOnInit() {
@@ -173,6 +175,11 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   getMessageClass(message: Message): string {
     return message.sender === this.userId ? 'chat__sms' : 'interlocutor';
+  }
+
+    toggleMessage(event: Event) {
+    event.preventDefault(); 
+    this.popupService2.toggle();
   }
 
   insertPlaceholder(placeholder: string) {

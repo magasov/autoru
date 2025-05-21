@@ -1,7 +1,7 @@
 <div [ngClass]="{'message': true, 'select__chats': isChatSelect}">
   <div class="message__one">
     <div class="message__one-title">
-      <div class="close">
+      <div (click)="toggleMessage($event)" class="close">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
