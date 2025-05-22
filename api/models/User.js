@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "http://localhost:8080/uploads/defaults/avatar.png",
     },
+    balance: {
+      type: Number,
+      default: 0
+    },
     lastSeen: {
       type: Date,
       default: Date.now,
