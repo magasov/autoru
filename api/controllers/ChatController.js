@@ -70,105 +70,67 @@ const sendMessageNotificationEmail = async (
 export const initializeWebSocket = (server) => {
   const wss = new WebSocketServer({ server });
 
-  wss.on("connection", async (ws, req) => {
-    const urlParams = new URLSearchParams(req.url.split("?")[1]);
-    const userId = urlParams.get("userId");
+wss.on("connection", async (ws, req) => {
+  const urlParams = new URLSearchParams(req.url.split("?")[1]);
+  const userId = urlParams.get("userId");
 
-    if (!userId) {
-      ws.send(JSON.stringify({ error: "User ID is required" }));
-      ws.close();
+  if (!userId) {
+    ws.send(JSON.stringify({ error: "User ID is required" }));
+    ws.close();
+    return;
+  }
+
+  clients.set(userId, ws);
+  console.log(`Клиент ${userId} подключён. Текущие клиенты:`, Array.from(clients.keys()));
+
+ws.on("message", async (data) => {
+  try {
+    const message = JSON.parse(data);
+    const { type, recipientId, content, postId, sdp, candidate } = message;
+
+    if (!recipientId) {
+      ws.send(JSON.stringify({ error: "recipientId обязателен" }));
       return;
     }
 
-    clients.set(userId, ws);
-    console.log(`Клиент ${userId} подключён`);
+    const sender = await User.findById(userId);
+    const recipient = await User.findById(recipientId);
 
-    ws.on("message", async (data) => {
-      try {
-        const { recipientId, content, postId } = JSON.parse(data);
-        console.log("Получено сообщение:", { recipientId, content, postId });
+    if (!sender || !recipient) {
+      ws.send(JSON.stringify({ error: "Пользователь не найден" }));
+      return;
+    }
 
-        if (!recipientId || !content) {
-          ws.send(
-            JSON.stringify({ error: "recipientId и content обязательны" })
-          );
-          return;
-        }
-
-        const sender = await User.findById(userId);
-        const recipient = await User.findById(recipientId);
-
-        if (!sender || !recipient) {
-          ws.send(JSON.stringify({ error: "Пользователь не найден" }));
-          return;
-        }
-
-        const chatId = [userId, recipientId].sort().join("_");
-
-        let validPostId = null;
-        if (postId) {
-          const post = await Post.findById(postId);
-          if (post) {
-            validPostId = post._id;
-            console.log(`Валидный postId: ${validPostId}`);
-          } else {
-            console.warn(`Post with ID ${postId} not found`);
-          }
-        } else {
-          const existingChat = await Message.findOne({ chatId })
-            .sort({ createdAt: 1 })
-            .select("postId");
-          if (existingChat && existingChat.postId) {
-            validPostId = existingChat.postId;
-            console.log(
-              `Используется postId из существующего чата: ${validPostId}`
-            );
-          } else {
-            console.log("Чат новый, postId не передан и не найден");
-          }
-        }
-
-        const message = new Message({
-          sender: userId,
-          recipient: recipientId,
-          content,
-          chatId,
-          postId: validPostId,
-        });
-
-        await message.save();
-        console.log("Сообщение сохранено:", message);
-
-        const populatedMessage = await Message.findById(message._id)
-          .populate("sender", "email name avatar lastSeen")
-          .populate("recipient", "email name avatar lastSeen")
-          .populate("postId", "brand model price photos");
-
-        // Отправка уведомления на email получателя асcинхрооыо (без await)
-        sendMessageNotificationEmail(
-          recipient.email,
-          sender.name || sender.email,
-          content,
-          populatedMessage.postId
-            ? {
-                brand: populatedMessage.postId.brand,
-                model: populatedMessage.postId.model,
-                price: populatedMessage.postId.price,
-              }
-            : null
-        );
-
-        const recipientWs = clients.get(recipientId);
-        if (recipientWs) {
-          recipientWs.send(JSON.stringify(populatedMessage));
-        }
-
-        ws.send(JSON.stringify(populatedMessage));
-      } catch (error) {
-        console.error("Ошибка обработки сообщения:", error);
-        ws.send(JSON.stringify({ error: "Ошибка сервера" }));
+    const recipientWs = clients.get(recipientId);
+    if (type === "call") {
+      if (!recipientWs) {
+        console.log(`Получатель ${recipientId} не в сети`);
+        ws.send(JSON.stringify({ error: "Получатель не в сети" }));
+        return;
       }
-    });
+
+      console.log(`Отправка сообщения звонка от ${userId} к ${recipientId}:`, { sdp, candidate, content });
+      recipientWs.send(
+        JSON.stringify({
+          type: "call",
+          senderId: userId,
+          recipientId,
+          sdp,
+          candidate,
+          content,
+        })
+      );
+      console.log(`Сообщение звонка успешно отправлено ${recipientId}`);
+    } else if (type === "message") {
+      
+    } else {
+      ws.send(JSON.stringify({ error: "Недопустимый тип сообщения" }));
+    }
+  } catch (error) {
+    console.error("Ошибка обработки сообщения:", error);
+    ws.send(JSON.stringify({ error: "Ошибка сервера" }));
+  }
+});
 
     ws.on("close", () => {
       clients.delete(userId);

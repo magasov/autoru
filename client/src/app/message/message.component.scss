@@ -208,6 +208,18 @@
           color: #1c212899;
           cursor: pointer;
         }
+
+        .phone {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          svg {
+            width: 20px;
+            height: 20px;
+            color: rgba(28, 33, 40, 0.6);
+          }
+        }
       }
     }
 
@@ -238,6 +250,86 @@
         }
       }
     }
+
+    .video-call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+
+  video {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    margin: 10px 0;
+    background-color: #000;
+  }
+}
+
+.call-button, .end-call-button, .accept-button, .decline-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.end-call-button, .decline-button {
+  background-color: #dc3545;
+
+  &:hover {
+    background-color: #c82333;
+  }
+}
+
+.phone {
+  display: flex;
+  align-items: center;
+}
+
+.incoming-call-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+
+    h3 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+}
 
     &-chat {
       display: flex;

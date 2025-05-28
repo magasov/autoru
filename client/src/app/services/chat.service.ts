@@ -17,12 +17,15 @@ export interface Chat {
 }
 
 export interface Message {
-  id: string;
+  id?: string;
   sender: string;
   recipient: string;
-  content: string;
-  time: string;
+  content?: string;
+  time?: string;
   postId?: string;
+  type?: string; 
+  sdp?: any; 
+  candidate?: any; 
 }
 
 @Injectable({
@@ -59,19 +62,33 @@ export class ChatService {
           console.error('WebSocket error:', message.error);
           return;
         }
-        const formattedMessage: Message = {
-          id: message._id,
-          sender: message.sender._id,
-          recipient: message.recipient._id,
-          content: message.content,
-          time: new Date(message.createdAt).toLocaleTimeString('ru-RU', {
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
-          postId: message.postId || null,
-        };
-        this.messageSubject.next(formattedMessage);
-        await this.updateChatList(message);
+
+        if (message.type === 'call') {
+          
+          const callMessage: Message = {
+            type: 'call',
+            sender: message.senderId,
+            recipient: message.recipientId,
+            sdp: message.sdp,
+            candidate: message.candidate,
+          };
+          this.messageSubject.next(callMessage);
+        } else {
+          
+          const formattedMessage: Message = {
+            id: message._id,
+            sender: message.sender._id,
+            recipient: message.recipient._id,
+            content: message.content,
+            time: new Date(message.createdAt).toLocaleTimeString('ru-RU', {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            postId: message.postId || null,
+          };
+          this.messageSubject.next(formattedMessage);
+          await this.updateChatList(message);
+        }
       };
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
@@ -204,28 +221,52 @@ export class ChatService {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       throw new Error('WebSocket is not connected');
     }
-    const existingMessages = await this.getMessages(recipientId);
-    const messageData: any = { recipientId, content };
-    if (postId && existingMessages.length === 0) {
-      messageData.postId = postId;
+
+    let messageData: any;
+    try {
+      
+      messageData = JSON.parse(content);
+      if (!messageData.type) {
+        
+        messageData = { type: 'message', recipientId, content };
+        if (postId) {
+          const existingMessages = await this.getMessages(recipientId);
+          if (existingMessages.length === 0) {
+            messageData.postId = postId;
+          }
+        }
+      }
+    } catch (error) {
+      
+      messageData = { type: 'message', recipientId, content };
+      if (postId) {
+        const existingMessages = await this.getMessages(recipientId);
+        if (existingMessages.length === 0) {
+          messageData.postId = postId;
+        }
+      }
     }
+
     console.log('Sending message:', messageData, 'lastSeen:', lastSeen);
     this.ws.send(JSON.stringify(messageData));
-   
-    const chatIndex = this.chats.findIndex((chat) => chat.recipientId === recipientId);
-    if (chatIndex !== -1 && lastSeen) {
-      this.chats[chatIndex] = {
-        ...this.chats[chatIndex],
-        lastSeen: lastSeen || 'unknown',
-        lastMessage: content,
-        lastMessageTime: new Date().toLocaleTimeString('ru-RU', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-      };
-      this.chatsSubject.next(this.chats);
+
+    
+    if (messageData.type === 'message') {
+      const chatIndex = this.chats.findIndex((chat) => chat.recipientId === recipientId);
+      if (chatIndex !== -1 && lastSeen) {
+        this.chats[chatIndex] = {
+          ...this.chats[chatIndex],
+          lastSeen: lastSeen || 'unknown',
+          lastMessage: messageData.content,
+          lastMessageTime: new Date().toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        };
+        this.chatsSubject.next(this.chats);
+      }
+      await this.fetchChats();
     }
-    await this.fetchChats();
   }
 
   async startChatWithPost(postId: string, content: string, lastSeen?: string): Promise<void> {

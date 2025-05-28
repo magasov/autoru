@@ -38,6 +38,7 @@ export class MainComponent implements OnInit {
     const favoritePostIds = await this.favoriteService.getUserFavorites();
     this.favoritelength = favoritePostIds.length
     
+    
 
     this.products = this.products.map((product) => ({
       ...product,
