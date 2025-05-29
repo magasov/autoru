@@ -102,6 +102,7 @@ ws.on("message", async (data) => {
     }
 
     const recipientWs = clients.get(recipientId);
+
     if (type === "call") {
       if (!recipientWs) {
         console.log(`Получатель ${recipientId} не в сети`);
@@ -122,7 +123,76 @@ ws.on("message", async (data) => {
       );
       console.log(`Сообщение звонка успешно отправлено ${recipientId}`);
     } else if (type === "message") {
-      
+      // Проверка на пустое сообщение
+      if (!content || content.trim() === "") {
+        ws.send(JSON.stringify({ error: "Сообщение не может быть пустым" }));
+        return;
+      }
+
+      // Сохранение сообщения в базе данных
+      const post = postId ? await Post.findById(postId) : null;
+      const newMessage = new Message({
+        sender: userId,
+        recipient: recipientId,
+        content,
+        postId: postId || null,
+        chatId: [userId, recipientId].sort().join("_"),
+        createdAt: new Date(),
+      });
+
+      await newMessage.save();
+
+      // Формирование ответа с ID сообщения
+      const messageData = {
+        type: "message",
+        id: newMessage._id,
+        senderId: userId,
+        recipientId,
+        content,
+        postId: postId || null,
+        createdAt: newMessage.createdAt,
+      };
+
+      // Отправка сообщения отправителю и получателю
+      [userId, recipientId].forEach((id) => {
+        const clientWs = clients.get(id);
+        if (clientWs) {
+          clientWs.send(JSON.stringify(messageData));
+          console.log(`Сообщение отправлено ${id}`);
+        } else {
+          console.log(`Клиент ${id} не в сети, сообщение сохранено в БД`);
+        }
+      });
+
+      // Отправка email-уведомления получателю
+      await sendMessageNotificationEmail(
+        recipient.email,
+        sender.name || "Пользователь",
+        content,
+        post
+      );
+
+      // Уведомление всех клиентов об обновлении чата
+      const chatUpdate = {
+        type: "chatUpdate",
+        chatId: newMessage.chatId,
+        recipientId: userId === recipientId ? sender._id : recipient._id,
+        lastMessage: content,
+        lastMessageTime: new Date(newMessage.createdAt).toLocaleTimeString("ru-RU", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        postId: postId || null,
+        carName: post ? `${post.brand} ${post.model}` : "Unknown Car",
+        price: post ? `${post.price.toLocaleString("ru-RU")} ₽` : "0 ₽",
+      };
+
+      [userId, recipientId].forEach((id) => {
+        const clientWs = clients.get(id);
+        if (clientWs) {
+          clientWs.send(JSON.stringify(chatUpdate));
+        }
+      });
     } else {
       ws.send(JSON.stringify({ error: "Недопустимый тип сообщения" }));
     }

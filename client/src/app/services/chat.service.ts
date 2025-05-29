@@ -57,39 +57,39 @@ export class ChatService {
         console.log('WebSocket connected');
       };
       this.ws.onmessage = async (event) => {
-        const message = JSON.parse(event.data);
-        if (message.error) {
-          console.error('WebSocket error:', message.error);
-          return;
-        }
+  const message = JSON.parse(event.data);
+  if (message.error) {
+    console.error("WebSocket error:", message.error);
+    return;
+  }
 
-        if (message.type === 'call') {
-          
-          const callMessage: Message = {
-            type: 'call',
-            sender: message.senderId,
-            recipient: message.recipientId,
-            sdp: message.sdp,
-            candidate: message.candidate,
-          };
-          this.messageSubject.next(callMessage);
-        } else {
-          
-          const formattedMessage: Message = {
-            id: message._id,
-            sender: message.sender._id,
-            recipient: message.recipient._id,
-            content: message.content,
-            time: new Date(message.createdAt).toLocaleTimeString('ru-RU', {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            postId: message.postId || null,
-          };
-          this.messageSubject.next(formattedMessage);
-          await this.updateChatList(message);
-        }
-      };
+  if (message.type === "call") {
+    const callMessage: Message = {
+      type: "call",
+      sender: message.senderId,
+      recipient: message.recipientId,
+      sdp: message.sdp,
+      candidate: message.candidate,
+    };
+    this.messageSubject.next(callMessage);
+  } else if (message.type === "chatUpdate") {
+    await this.updateChatList(message);
+  } else {
+    const formattedMessage: Message = {
+      id: message._id,
+      sender: message.senderId, 
+      recipient: message.recipientId, 
+      content: message.content,
+      time: new Date(message.createdAt).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      postId: message.postId || null,
+    };
+    this.messageSubject.next(formattedMessage);
+    await this.updateChatList(message);
+  }
+};
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
       };
