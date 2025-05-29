@@ -9,7 +9,8 @@ import { FooterComponent } from '../footer/footer.component';
 import { PostService } from '../services/post.service';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
-import { NgxSonnerToaster, toast } from 'ngx-sonner'; 
+import { NgxSonnerToaster, toast } from 'ngx-sonner';
+import { MainComponent } from "../main/main.component"; 
 
 interface Post {
   _id: string;
@@ -52,8 +53,9 @@ interface Post {
     CommonModule,
     FormsModule,
     FooterComponent,
-    NgxSonnerToaster, 
-  ],
+    NgxSonnerToaster,
+    MainComponent
+],
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
   standalone: true,
@@ -65,6 +67,7 @@ export class CarsComponent implements OnInit {
   desctop: boolean = false;
   loading: boolean = true;
   author: boolean = false;
+  showPhone: boolean = false;
   headerstickey: boolean = false;
   adssticky: boolean = false;
   error: string | null = null;
@@ -249,6 +252,10 @@ export class CarsComponent implements OnInit {
   toggleFavorite(event: Event) {
     event.stopPropagation();
   }
+  
+  togglePhone(): void {
+  this.showPhone = !this.showPhone;
+}
 
   nextImage(): void {
     if (this.post && this.post.photos.length > 0) {
