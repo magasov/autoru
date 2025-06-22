@@ -256,3 +256,46 @@ header {
     }
   }
 }
+
+
+.popup__search {
+  display: flex;
+  background: #fff;
+  position: absolute;
+  width: 100%;
+  top: 76px;
+  z-index: 999;
+      left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 calc(50% - 410px) 16px;
+    border-radius: 0;
+    box-shadow: 0 10px 10px #00000014;
+
+    &-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+
+        .text {
+          p {
+            font-size: 15px;
+          }
+
+          span {
+            color: #1c212899;
+          }
+        }
+      }
+    }
+}

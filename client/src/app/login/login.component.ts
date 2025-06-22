@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('codeInput2') codeInput2!: ElementRef;
   @ViewChild('codeInput3') codeInput3!: ElementRef;
   @ViewChild('codeInput4') codeInput4!: ElementRef;
-  @ViewChild('codeInput5') codeInput5!: ElementRef;
+  @ViewChild('codeInput5') codeInput5!: ElementRef; 
   @ViewChild('codeInput6') codeInput6!: ElementRef;
 
   constructor(

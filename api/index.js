@@ -96,7 +96,7 @@ app.delete("/posts/:id", checkAuth, deletePost);
 
 app.post("/favorites", checkAuth, addToFavorites);
 app.get("/favorites", checkAuth, getUserFavorites);
-app.delete("/favorites/:postId-", checkAuth, removeFromFavorites);
+app.delete("/favorites/:postId", checkAuth, removeFromFavorites);
 
 app.get("/messages", checkAuth, getMessages);
 app.get("/chats", checkAuth, getChats);

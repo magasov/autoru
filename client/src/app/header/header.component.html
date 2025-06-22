@@ -9,9 +9,11 @@
             <a routerLink="/">
              <img src="assets/icons/logo.svg" alt="logo" class="logo">
             </a>
-            <div class="search">
-                <svg class="search__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="#767778" d="M21.707 20.293 16.314 14.9A7.96 7.96 0 0 0 18 10a8 8 0 1 0-8 8 7.96 7.96 0 0 0 4.9-1.686l5.393 5.393zM10 16c-3.308 0-6-2.692-6-6s2.692-6 6-6 6 2.692 6 6-2.692 6-6 6"/></svg>
-                <input type="text" placeholder="Поиск по объявлениям">
+           <div class="search" (click)="toggleSearch($event)">
+                <svg class="search__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path fill="#767778" d="M21.707 20.293 16.314 14.9A7.96 7.96 0 0 0 18 10a8 8 0 1 0-8 8 7.96 7.96 0 0 0 4.9-1.686l5.393 5.393zM10 16c-3.308 0-6-2.692-6-6s2.692-6 6-6 6 2.692 6 6-2.692 6-6 6"/>
+                </svg>
+                <input type="text" placeholder="Поиск по объявлениям" [(ngModel)]="searchQuery" (input)="onSearchInput()">
             </div>
 
             <nav class="navbar__one">
@@ -27,7 +29,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="m16 12-1.414-1.414L17.172 8H3V6h14.172l-2.586-2.586L16 2l5 5zm-8 0 1.414 1.414L6.828 16H21v2H6.828l2.586 2.586L8 22l-5-5z" clip-rule="evenodd"></path></svg>
                     Сравнения
                 </a>
-                <a  (click)="toggleMessage($event)">
+                <a (click)="toggleMessage($event)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z" clip-rule="evenodd"></path></svg>
                     Сообщения
                 </a>
@@ -56,7 +58,7 @@
                         <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgMyOffers IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" d="M18 8h-5V6h5zm4-3v14c0 1.654-1.346 3-3 3H5c-1.654 0-3-1.346-3-3V5c0-1.654 1.346-3 3-3h14c1.654 0 3 1.346 3 3M4 14h5v-2H4zm4.367-4-.759-1.707C6.884 8.199 5.705 8.084 4 8.03V10zM20 5c0-.552-.449-1-1-1H5c-.551 0-1 .448-1 1v1.03c3.536.107 5 .47 5 .47l2 4.5v7H9l-.667-2H4v3c0 .552.449 1 1 1h14c.551 0 1-.448 1-1z"></path></svg>Мои объявления</a>
                         <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgFavoriteMOutline IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" fill-rule="evenodd" d="M18.893 11.69A3.6 3.6 0 0 0 20 9.088C20 7.095 18.397 5.5 16.444 5.5a3.54 3.54 0 0 0-2.842 1.432L12 9.077l-1.602-2.145A3.54 3.54 0 0 0 7.556 5.5C5.603 5.5 4 7.095 4 9.088c0 1.027.424 1.948 1.108 2.603L12 19.48zM12 22.5l-8.276-9.365A5.6 5.6 0 0 1 2 9.088C2 6.002 4.487 3.5 7.556 3.5c1.093 0 2.113.318 2.973.867A5.6 5.6 0 0 1 12 5.735a5.6 5.6 0 0 1 1.47-1.368 5.5 5.5 0 0 1 2.974-.867C19.513 3.5 22 6.002 22 9.088a5.6 5.6 0 0 1-1.723 4.045z" clip-rule="evenodd"></path></svg> Избранное</a>
                         <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgChatMOutline IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" fill-rule="evenodd" d="M20 12c0-5.786-4.35-7-8-7s-8 1.214-8 7c0 1.705.244 2.299.674 3.202l.276.578-.111.631-.374 2.123 2.361-.416.584-.103.546.232c1.258.535 2.43.753 4.044.753 3.65 0 8-1.214 8-7M2 12c0-6 4-9 10-9s10 3 10 9-4 9-10 9c-2 0-3.415-.312-4.826-.912L2 21l.87-4.936C2.313 14.897 2 14 2 12m5-1h2v2H7zm8 0h2v2h-2zm-2 0h-2v2h2z" clip-rule="evenodd"></path></svg> Сообщения</a>
-                        <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgWalletMOutline IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" d="M14 13h3v2h-3z"></path><path fill="currentColor" fill-rule="evenodd" d="M6 3h11v4h4v14H6c-1.654 0-3-1.346-3-3V6c0-1.654 1.346-3 3-3m0 2c-.551 0-1 .449-1 1v1h10V5zm0 14h13V9H5v9c0 .551.449 1 1 1" clip-rule="evenodd"></path></svg> Кошелёк</a>
+                        <a routerLink="/my/wallet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgWalletMOutline IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" d="M14 13h3v2h-3z"></path><path fill="currentColor" fill-rule="evenodd" d="M6 3h11v4h4v14H6c-1.654 0-3-1.346-3-3V6c0-1.654 1.346-3 3-3m0 2c-.551 0-1 .449-1 1v1h10V5zm0 14h13V9H5v9c0 .551.449 1 1 1" clip-rule="evenodd"></path></svg> Кошелёк</a>
                         <a routerLink="/profile"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgProfileOutlineM IconSvg_size_24 HeaderUserMenu__linkIcon"><g fill="currentColor" fill-rule="evenodd" clip-path="url(#profile_outline_m_svg__a)" clip-rule="evenodd"><path d="M12 14.5a5 5 0 1 0 0-10 5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path><path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12m7.68-5.596A9.96 9.96 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12a9.96 9.96 0 0 0 2.32 6.404C6.321 16.898 9.044 16 12 16s5.678.898 7.68 2.404m-1.45 1.419C16.63 18.71 14.447 18 12 18s-4.63.71-6.23 1.823A9.96 9.96 0 0 0 12 22a9.96 9.96 0 0 0 6.23-2.177"></path></g><defs><clipPath id="profile_outline_m_svg__a"><path fill="#fff" d="M0 0h24v24H0z"></path></clipPath></defs></svg> Профиль</a>
                         <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgNotificationsOutline IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" d="M14 22h-4v-2h4zM12 4C9.716 4 7.777 5.783 7.587 8.06L6.923 16h10.153l-.664-7.94C16.223 5.783 14.284 4 12 4m0-2a6.43 6.43 0 0 1 6.406 5.893L19 15l2 1.5V18H3v-1.5L5 15l.594-7.107A6.43 6.43 0 0 1 12 2"></path></svg> Настройка уведомлений</a>
                         <a routerLink="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="IconSvg IconSvg_name_SvgSettingsM IconSvg_size_24 HeaderUserMenu__linkIcon"><path fill="currentColor" d="M12 10c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2m0-2a4 4 0 1 0 0 8 4 4 0 0 0 0-8m1.004-4 .789 2.155 2.34 1.32 2.432-.424 1.004 1.739-1.598 1.912V13.3l1.598 1.912-1.004 1.739-2.432-.424-2.34 1.32L13.004 20h-2.008l-.789-2.155-2.34-1.32-2.432.425-1.004-1.74 1.598-1.912V10.7L4.431 8.79l1.004-1.74 2.432.424 2.34-1.32L10.996 4zm1.398-2H9.598L8.582 4.775l-1.075.606-3.105-.541L2 9l2.029 2.427v1.146L2 15l2.402 4.16 3.105-.542 1.076.606L9.598 22h4.804l1.016-2.775 1.076-.606 3.105.542L22 15l-2.029-2.427v-1.146L22 9l-2.402-4.16-3.105.542-1.076-.606z"></path></svg> Настройки</a>
@@ -104,3 +106,18 @@
         </div>
     </nav>
 </header>
+
+
+<div class="popup__search" *ngIf="isSearchOpen" (click)="closeSearchOnOutsideClick($event)">
+    <div class="popup__search-content">
+        <ng-container *ngFor="let brand of filteredBrands | slice:0:10">
+            <a [routerLink]="brand.link">
+                <img [src]="brand.image || 'https://via.placeholder.com/64'" [alt]="brand.name">
+                <div class="text">
+                    <p>{{ brand.name }}</p>
+                    <span>Автомобили <span>{{ brand.count }}</span></span>
+                </div>
+            </a>
+        </ng-container>
+    </div>
+</div>
